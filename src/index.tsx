@@ -12,6 +12,7 @@ import { BoardPage } from './views/Board/BoardPage';
 import { BoardsPage } from './views/Boards/BoardsPage';
 import { ErrorPage } from './views/Error/ErrorPage';
 import { ERROR_CODE_NOT_FOUND } from './utils/constants/errors.constants';
+import './utils/helpres/i18n';
 
 const container = document.getElementById('root');
 if (container) {
