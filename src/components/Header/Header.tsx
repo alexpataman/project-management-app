@@ -1,10 +1,11 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 
-import { navigation } from '../../utils/constants/navigation.constants';
+import { LanguageSwitcher } from '..';
 import { NavigationItem } from '../../types/navigation';
-import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
+import { navigation } from '../../utils/constants/navigation.constants';
+
 import './Header.scss';
 
 export const Header = () => {

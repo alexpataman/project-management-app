@@ -1,18 +1,17 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { navigation } from './utils/constants/navigation.constants';
-import './index.scss';
-import { HomePage } from './views/Home/HomePage';
-import { BoardPage } from './views/Board/BoardPage';
-import { BoardsPage } from './views/Boards/BoardsPage';
-import { ErrorPage } from './views/Error/ErrorPage';
+import { store } from './store';
 import { ERROR_CODE_NOT_FOUND } from './utils/constants/errors.constants';
+import { navigation } from './utils/constants/navigation.constants';
 import './utils/helpres/i18n';
+import { BoardPage, BoardsPage, ErrorPage, HomePage } from './views';
+
+import './index.scss';
 
 const container = document.getElementById('root');
 if (container) {
