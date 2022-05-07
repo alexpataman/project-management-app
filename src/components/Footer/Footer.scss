@@ -1,0 +1,51 @@
+@import '../../App.variables.scss';
+
+.Footer {
+  margin-top: 50px;
+  padding: 10px 0;
+  background: $base-color;
+
+  & > .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .rs-link {
+      display: block;
+      width: 61px;
+      height: 23px;
+      background-image: url('../../assets/svg/logo_rss.svg');
+      background-size: 61px 23px;
+      font-size: 0;
+    }
+
+    .copy-link {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .credentials {
+      color: #fff;
+      a {
+        color: #fff;
+        align-items: center;
+        padding-right: 10px;
+
+        .nickname {
+          line-height: 24px;
+        }
+      }
+    }
+
+    @media screen and (max-width: 540px) {
+      flex-direction: column;
+      row-gap: 20px;
+      align-items: center;
+    }
+  }
+}

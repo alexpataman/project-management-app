@@ -1,3 +1,18 @@
+@import './App.variables.scss';
+
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  & > main {
+    flex-grow: 1;
+  }
+
+  .container {
+    max-width: 1344px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 }
