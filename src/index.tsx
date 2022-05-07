@@ -4,11 +4,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './App';
+import { ERROR_CODE_NOT_FOUND, PATH } from './constants';
+import './helpres/i18n';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
-import { ERROR_CODE_NOT_FOUND } from './utils/constants/errors.constants';
-import { navigation } from './utils/constants/navigation.constants';
-import './utils/helpres/i18n';
 import { BoardPage, BoardsPage, ErrorPage, HomePage } from './views';
 
 import './index.scss';
@@ -21,10 +20,10 @@ if (container) {
       <Provider store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path={navigation.home.link} element={<App />}>
+            <Route path={PATH.home} element={<App />}>
               <Route index element={<HomePage />} />
-              <Route path={navigation.boards.link} element={<BoardsPage />} />
-              <Route path={navigation.board.link}>
+              <Route path={PATH.boards} element={<BoardsPage />} />
+              <Route path={PATH.board}>
                 <Route path=":id" element={<BoardPage />} />
               </Route>
               <Route path="*" element={<ErrorPage code={ERROR_CODE_NOT_FOUND} />} />
