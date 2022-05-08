@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './App';
 import { ERROR_CODE_NOT_FOUND, PATH } from './constants';
-import './helpres/i18n';
+import './helpers/i18n';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
 import { BoardPage, BoardsPage, ErrorPage, HomePage } from './views';
