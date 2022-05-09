@@ -1,6 +1,7 @@
 export const LOGIN_VIEWS = {
   signIn: 'SignIn',
   signUp: 'SignUp',
+  logOut: 'LogOut',
 };
 
 export const FIELD_IS_REQUIRED = 'This field is required';
@@ -10,7 +11,9 @@ export const USER_HAS_ACCOUNT_TEXT = 'I already have an account';
 export const USER_HAS_NO_ACCOUNT_TEXT = "I don't have an account";
 export const SUBMIT_BUTTON_TEXT = 'Submit';
 export const LOGIN_TEXT = 'Login';
+export const LOGOUT_TEXT = 'Logout';
 export const REGISTRATION_TEXT = 'Registration';
+export const LOGGED_IN_TEXT = 'You are logged in';
 
 export const FIELD_LABEL_NAME = 'Name';
 export const FIELD_LABEL_EMAIL = 'E-mail';

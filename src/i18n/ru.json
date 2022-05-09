@@ -5,6 +5,7 @@
     "Boards": "Доски",
     "Board": "Доска",
     "Login": "Вход",
+    "Logout": "Выход",
     "Registration": "Регистрация",
     "I already have an account": "У меня уже есть учетная запись",
     "I don't have an account": "У меня нет учетной записи",
@@ -13,6 +14,7 @@
     "Name": "Имя",
     "E-mail": "Электронная почта",
     "Password": "Пароль",
-    "Enter a valid email": "Введите корректный адрес"
+    "Enter a valid email": "Введите корректный адрес",
+    "You are logged in": "Вы авторизированы"
   }
 }

@@ -4,11 +4,14 @@ import { NavLink } from 'react-router-dom';
 
 import { LanguageSwitcher } from '..';
 import { LINKS } from '../../constants';
+import { useIsGuest } from '../../hooks/useIsGuest';
 
 import './Header.scss';
 
 export const Header = () => {
   const { t } = useTranslation();
+  const isGuest = useIsGuest();
+
   return (
     <header className="Header">
       <div className="container">
@@ -20,6 +23,7 @@ export const Header = () => {
           ))}
         </nav>
         <LanguageSwitcher />
+        {isGuest ? 'Гость' : 'Авторизирован'}
       </div>
     </header>
   );

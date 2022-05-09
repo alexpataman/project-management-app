@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './App';
+import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import { ERROR_CODE_NOT_FOUND, PATH } from './constants';
 import './helpers/i18n';
 import reportWebVitals from './reportWebVitals';
@@ -29,7 +30,14 @@ if (container) {
               <Route path={PATH.home} element={<App />}>
                 <Route index element={<HomePage />} />
                 <Route path={PATH.login} element={<LoginPage />} />
-                <Route path={PATH.boards} element={<BoardsPage />} />
+                <Route
+                  path={PATH.boards}
+                  element={
+                    <PrivateRoute>
+                      <BoardsPage />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path={PATH.board}>
                   <Route path=":id" element={<BoardPage />} />
                 </Route>
