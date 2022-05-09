@@ -13,4 +13,8 @@ export const LINKS = [
     to: PATH.boards,
     title: 'Boards',
   },
+  {
+    to: PATH.login,
+    title: 'Login',
+  },
 ];

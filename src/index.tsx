@@ -16,6 +16,7 @@ if (container) {
   const HomePage = lazy(() => import('./views/Home/HomePage'));
   const BoardPage = lazy(() => import('./views/Board/BoardPage'));
   const BoardsPage = lazy(() => import('./views/Boards/BoardsPage'));
+  const LoginPage = lazy(() => import('./views/Login/LoginPage'));
   const ErrorPage = lazy(() => import('./views/Error/ErrorPage'));
 
   const root = createRoot(container);
@@ -27,6 +28,7 @@ if (container) {
             <Routes>
               <Route path={PATH.home} element={<App />}>
                 <Route index element={<HomePage />} />
+                <Route path={PATH.login} element={<LoginPage />} />
                 <Route path={PATH.boards} element={<BoardsPage />} />
                 <Route path={PATH.board}>
                   <Route path=":id" element={<BoardPage />} />

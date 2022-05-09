@@ -3,6 +3,16 @@
     "Home": "Главная",
     "HomePage": "Главная страница",
     "Boards": "Доски",
-    "Board": "Доска"
+    "Board": "Доска",
+    "Login": "Вход",
+    "Registration": "Регистрация",
+    "I already have an account": "У меня уже есть учетная запись",
+    "I don't have an account": "У меня нет учетной записи",
+    "Submit": "Отправить",
+    "This field is required": "Данное поле является обязательным",
+    "Name": "Имя",
+    "E-mail": "Электронная почта",
+    "Password": "Пароль",
+    "Enter a valid email": "Введите корректный адрес"
   }
 }
