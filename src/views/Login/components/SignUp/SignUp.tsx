@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { authorization } from '../../../../api/Backend';
+import { authorization } from '../../../../api/backend';
 import { AlreadyExistsError } from '../../../../errors/AlreadyExistsError';
 import { useAppDispatch } from '../../../../store/hooks';
 import { signIn } from '../../../../store/user/user.slice';

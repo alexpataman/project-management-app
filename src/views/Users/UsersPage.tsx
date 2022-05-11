@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { users } from '../../api/Backend';
+import { users } from '../../api/backend';
 import { Loader } from '../../components';
 import { useAuthControl } from '../../hooks/useAuthControl';
 import { User } from '../../types/api';
