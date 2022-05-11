@@ -1,17 +1,7 @@
-export type Tokens = {
-  token: string;
-  refreshToken: string;
-};
-
-export type GetTokens = () => Tokens;
-export type SetTokens = (tokens: Tokens) => void;
-
-export type AuthorizationResponse = {
-  message: string;
-  token: string;
-  refreshToken: string;
-  userId: string;
+export type User = {
+  id: string;
   name: string;
+  login: string;
 };
 
 export type SignUpRequest = {
@@ -33,11 +23,4 @@ export type LoginRequest = {
 
 export type LoginResponse = {
   token: string;
-};
-
-export type UserResponse = {
-  id: string;
-  name: string;
-  email: string;
-  password?: string;
 };

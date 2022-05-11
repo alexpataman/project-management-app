@@ -1,6 +1,8 @@
-import * as ru from './ru.json';
+import en from './_en';
+import ru from './_ru';
 
 const resources = {
+  en,
   ru,
 };
 

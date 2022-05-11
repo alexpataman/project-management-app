@@ -15,6 +15,10 @@ export const LINKS = [
   },
   {
     to: PATH.login,
-    title: 'Login',
+    title: 'User',
+  },
+  {
+    to: PATH.users,
+    title: 'Users',
   },
 ];

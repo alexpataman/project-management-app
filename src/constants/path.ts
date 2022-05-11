@@ -3,4 +3,5 @@ export const PATH = {
   boards: '/boards',
   board: '/board',
   login: '/login',
+  users: '/users',
 };

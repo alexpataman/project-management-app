@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from '../../../../store/hooks';
 import { logOut } from '../../../../store/user/user.slice';
-import { LOGGED_IN_TEXT, LOGOUT_TEXT } from '../../utils/constants';
 
 interface LogOut {}
 
@@ -30,7 +29,7 @@ export const LogOut: React.FC<LogOut> = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          {t(LOGGED_IN_TEXT)}
+          {t('LANG_LOGGED_IN_TEXT')}
         </Typography>
         <Button
           type="submit"
@@ -39,7 +38,7 @@ export const LogOut: React.FC<LogOut> = () => {
           sx={{ mt: 3, mb: 2 }}
           onClick={() => dispatch(logOut())}
         >
-          {t(LOGOUT_TEXT)}
+          {t('LANG_LOGOUT_TEXT')}
         </Button>
       </Box>
     </Container>
