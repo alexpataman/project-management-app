@@ -1,3 +1,5 @@
-export const BoardPage = () => {
+const BoardPage = () => {
   return <>BoardPage</>;
 };
+
+export default BoardPage;

@@ -1,1 +1,6 @@
+export const ERROR_CODE_UNAUTHORIZED = 401;
+export const ERROR_CODE_FORBIDDEN = 403;
 export const ERROR_CODE_NOT_FOUND = 404;
+export const ERROR_CODE_CONFLICT = 409;
+export const ERROR_CODE_AlREADY_EXISTS = 417;
+export const ERROR_CODE_VALIDATION_ERROR = 422;
