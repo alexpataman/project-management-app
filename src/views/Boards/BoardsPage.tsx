@@ -97,3 +97,5 @@ export const BoardsPage = () => {
     </section>
   );
 };
+
+export default BoardsPage;
