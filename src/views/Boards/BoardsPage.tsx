@@ -12,6 +12,7 @@ export const BoardsPage = () => {
   const { t } = useTranslation();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isInputFilled, setIsInputFilled] = useState(false);
   const [selectedBG, setSelectedBG] = useState(0);
   const [boards, setBoards] = useState([] as IBoard[]);
 
@@ -21,10 +22,13 @@ export const BoardsPage = () => {
 
   const closeCreationModal = () => {
     setSelectedBG(0);
+    setIsInputFilled(false);
     setIsModalOpened(false);
   };
 
   const createBoard = (e: React.FormEvent) => {
+    if (!isInputFilled) return;
+
     e.preventDefault();
     const titleInput = document.querySelector('input');
     const title = String(titleInput?.value);
@@ -36,6 +40,20 @@ export const BoardsPage = () => {
 
     setBoards([...boards, boardInfo]);
     closeCreationModal();
+  };
+
+  const deleteBoard = (index: number) => {
+    const boardsCopy = boards.slice();
+
+    boardsCopy.splice(index, 1);
+    setBoards(boardsCopy);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent) => {
+    const input = e.currentTarget as HTMLInputElement;
+    const value = Boolean(input.value);
+
+    setIsInputFilled(value);
   };
 
   return (
@@ -54,7 +72,7 @@ export const BoardsPage = () => {
               <h4 className="modal__title">
                 Заголовок доски<span>*</span>
               </h4>
-              <input type="text" className="title-input" />
+              <input type="text" className="title-input" onChange={handleInputChange} />
               <h5 className="modal__title">👋 Укажите название доски.</h5>
             </div>
 
@@ -71,7 +89,7 @@ export const BoardsPage = () => {
               </div>
             </div>
 
-            <button className="modal__submit" onClick={createBoard}>
+            <button className="modal__submit" onClick={createBoard} disabled={!isInputFilled}>
               Создать
             </button>
           </div>
@@ -85,7 +103,7 @@ export const BoardsPage = () => {
             <div className="board__overlay"></div>
             <h2 className="board__title">{board.title}</h2>
 
-            <div className="board__delete"></div>
+            <div className="board__delete" onClick={() => deleteBoard(i)}></div>
           </div>
         ))}
 
