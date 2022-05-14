@@ -1,0 +1,245 @@
+@import '../../App.variables.scss';
+
+.BoardsPage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .BoardPage__title {
+    color:rgba(0, 0, 0, 0.5);
+    font-size: 24px;
+  }
+
+  .modal-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    animation: modalAnim 0.2s ease;
+  }
+
+  @keyframes modalAnim {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.75);
+    } 100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  .title-input {
+    display: block;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    border: 3px solid $base-color;
+    transition: 0.2s ease;
+
+    &:focus {
+      border: 3px solid $base-color-hover;
+    }
+  }
+
+  .modal__title-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+  }
+
+  .modal__title {
+    margin: 0;
+    color:rgba(0, 0, 0, 0.5);
+  }
+
+  h3.modal__title {
+    font-size: 20px;
+  }
+
+  h4.modal__title {
+    font-size: 16px;
+    font-weight: 500;
+
+    span {
+      color: #df4545;
+    }
+  }
+
+  h5.modal__title {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .modal__close {
+    width: 30px;
+    height: 30px;
+    outline: none;
+    border: none;
+    background: none;
+    background-image: url('../../assets/svg/close.svg');
+    background-size: cover;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: 0.2s ease;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .modal__submit {
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 5px;
+    background: $base-color;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 20px;
+    transition: 0.2s ease;
+
+    &:hover {
+      background: $base-color-hover;
+    }
+
+    &:disabled {
+      filter: grayscale(1) opacity(0.5);
+    }
+  }
+
+  .background-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 285px;
+    gap: 15px;
+  }
+
+  .bg-select {
+    position: relative;
+    width: 85px;
+    height: 56px;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('../../assets/svg/selected.svg');
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      background-position: center;
+      backdrop-filter: brightness(0.75);
+      opacity: 0;
+      transition: 0.3s ease;
+    }
+
+    &.selected::after {
+      opacity: 1;
+    }
+  }
+
+  .bg-0 {
+    background: darkcyan;
+  }
+  .bg-1 {
+    background: orange;
+  }
+  .bg-2 {
+    background: green;
+  }
+  .bg-3 {
+    background: red;
+  }
+  .bg-4 {
+    background: purple;
+  }
+  .bg-5 {
+    background: pink;
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    padding: 0;
+  }
+
+  .board {
+    position: relative;
+    width: 200px;
+    height: 100px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #fff;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+      .board__overlay {
+        opacity: 1;
+      }
+      .board__delete {
+        opacity: 1;
+      }
+    }
+      
+
+    .board__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+      backdrop-filter: brightness(0.85);
+      transition: 0.3s ease;
+    }
+
+    .board__title {
+      position: relative;
+      font-size: 18px;
+      margin: 0;
+      z-index: 2;
+    }
+
+    .board__delete {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      opacity: 0;
+      background-image: url('../../assets/svg/delete.svg');
+      background-size: cover;
+      z-index: 2;
+      transition: 0.3s ease;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  .board__create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #d6d6d6;
+
+    .board__title {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
