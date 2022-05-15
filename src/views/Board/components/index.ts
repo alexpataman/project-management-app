@@ -1,7 +1,7 @@
-import { TaskList } from './TaskList';
 import { Confirmation } from './ModalConfirmation';
-import { TaskItem } from './TaskItem';
 import { ModalEdit } from './ModalEdit';
 import { ModalForm } from './ModalForm';
+import { TaskItem } from './TaskItem';
+import { TaskList } from './TaskList';
 
-export { TaskList, Confirmation, TaskItem, ModalEdit, ModalForm };
+export { Confirmation, ModalEdit, ModalForm, TaskItem, TaskList };
