@@ -1,0 +1,16 @@
+.TaskList {
+  width: 300px;
+  position: relative;
+
+  form {
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+
+  .delete-icon {
+    position: absolute;
+    bottom: 8px;
+    right: 0;
+  }
+}

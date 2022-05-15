@@ -1,0 +1,65 @@
+.overlay {
+  width: 100vw;
+  height: 100vh;
+	position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+	backdrop-filter: blur(3px);
+  z-index: 5;
+  cursor: pointer;
+}
+
+.ModalForm {
+  width: 40%;
+  height: 350px;
+  min-width: 300px;
+  max-width: 1000px;
+  padding: 20px;
+  position: relative;
+  border-radius: 4px;
+  align-items: center;
+  background-color: white;
+  z-index: 10;
+  cursor: default;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  h4{
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .close-icon {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 40px;
+    align-items: center;
+    height: 70%;
+  }
+  
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    align-items: center;
+  }
+
+  .buttons {
+    display: flex;
+    column-gap: 10px;
+  }
+  
+}
