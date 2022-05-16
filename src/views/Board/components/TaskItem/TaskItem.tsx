@@ -1,7 +1,8 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
+import { Box, IconButton, Modal } from '@mui/material';
 import { useState } from 'react';
 
+import { modalStyle } from '../../utils/modalStyle';
 import { ModalEdit } from '../ModalEdit';
 
 import './TaskItem.scss';
@@ -15,28 +16,27 @@ const TaskItem = ({
   renameTask: (oldName: string, newName: string) => void;
   deleteTask: (task: string) => void;
 }) => {
-  const [isEdit, setIsEdit] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
   return (
     <div className="TaskItem">
       <p>{taskName}</p>
-      <IconButton
-        className="edit-icon"
-        onClick={() => {
-          setIsEdit(true);
-        }}
-        size="small"
-      >
+      <IconButton className="edit-icon" onClick={handleOpen} size="small">
         <EditIcon />
       </IconButton>
-      {isEdit && (
-        <ModalEdit
-          name={taskName}
-          saveName={(newName: string) => renameTask(taskName, newName)}
-          deleteTask={() => deleteTask(taskName)}
-          closeModal={() => setIsEdit(false)}
-        />
-      )}
+      <Modal open={isOpen} onClose={handleClose}>
+        <Box sx={modalStyle}>
+          <ModalEdit
+            name={taskName}
+            saveName={(newName: string) => renameTask(taskName, newName)}
+            deleteTask={() => deleteTask(taskName)}
+            closeModal={handleClose}
+          />
+        </Box>
+      </Modal>
     </div>
   );
 };

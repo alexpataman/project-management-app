@@ -1,33 +1,12 @@
-.overlay {
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(3px);
-  z-index: 5;
-  cursor: pointer;
-}
-
 .ModalEdit {
-  width: 40%;
-  height: 40%;
-  max-width: 1000px;
-  max-height: 800px;
-  min-height: 350px;
-  min-width: 300px;
-  padding: 20px;
-  position: relative;
-  border-radius: 4px;
   align-items: center;
   background-color: white;
-  z-index: 10;
-  cursor: default;
   text-align: center;
+  margin: 0;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 
   h4 {
     width: 85%;
@@ -42,7 +21,6 @@
 
   form {
     display: flex;
-    margin-top: 30px;
     flex-direction: column;
     justify-content: space-between;
     row-gap: 40px;

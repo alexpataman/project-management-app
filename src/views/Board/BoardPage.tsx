@@ -1,8 +1,10 @@
 import AddIcon from '@mui/icons-material/Add';
-import { IconButton, Stack } from '@mui/material';
+import { IconButton, Modal, Stack } from '@mui/material';
+import { Box } from '@mui/system';
 import { useState } from 'react';
 
 import { ModalForm, TaskList } from '../Board/components';
+import { modalStyle } from './utils/modalStyle';
 import { ListType } from './utils/types';
 
 import './BoardPage.scss';
@@ -19,6 +21,9 @@ const initialValue = [
 const BoardsPage = () => {
   const [lists, setLists] = useState<ListType[]>(initialValue);
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
   // TODO: rewrite add/delete functions with api requests @saratovkin
 
@@ -104,13 +109,22 @@ const BoardsPage = () => {
             aria-label="add"
             size="large"
             sx={{ height: 50, width: 50, backgroundColor: '#ebecf0' }}
-            onClick={() => setIsOpen(true)}
+            onClick={handleOpen}
           >
             <AddIcon />
           </IconButton>
         )}
       </Stack>
-      {isOpen && <ModalForm saveTask={addList} closeModal={() => setIsOpen(false)} />}
+      <Modal
+        open={isOpen}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <ModalForm saveTask={addList} closeModal={handleClose} />
+        </Box>
+      </Modal>
     </section>
   );
 };

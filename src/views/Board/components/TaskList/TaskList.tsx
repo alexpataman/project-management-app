@@ -3,11 +3,13 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   IconButton,
+  Modal,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -15,12 +17,15 @@ import Fade from '@mui/material/Fade';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { modalStyle } from '../../utils/modalStyle';
 import { ListType } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
 import { ModalForm } from '../ModalForm';
 import { TaskItem } from '../TaskItem';
 
 import './TaskList.scss';
+
+const CARD_BG_COLOR = '#ebecf0';
 
 const TaskList = ({
   list,
@@ -65,7 +70,7 @@ const TaskList = ({
   };
 
   return (
-    <Card className="TaskList" sx={{ backgroundColor: '#ebecf0' }}>
+    <Card className="TaskList" sx={{ backgroundColor: CARD_BG_COLOR }}>
       <CardContent>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} onInput={() => setIsEdit(true)}>
           <TextField
@@ -103,7 +108,7 @@ const TaskList = ({
           )}
         </form>
       </CardContent>
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', rowGap: '10px' }}>
+      <CardContent className="tasks">
         {tasks.map((task, index) => (
           <TaskItem taskName={task} key={index} deleteTask={deleteTask} renameTask={renameTask} />
         ))}
@@ -116,10 +121,16 @@ const TaskList = ({
       <IconButton className="delete-icon" onClick={() => setIsDelete(true)} size="small">
         <DeleteIcon />
       </IconButton>
-      {isAdd && <ModalForm saveTask={saveTask} closeModal={() => setIsAdd(false)} />}
-      {isDelete && (
-        <Confirmation deleteCallback={deleteList} closeModal={() => setIsDelete(false)} />
-      )}
+      <Modal open={isAdd} onClose={() => setIsAdd(false)}>
+        <Box sx={modalStyle}>
+          <ModalForm saveTask={saveTask} closeModal={() => setIsAdd(false)} />
+        </Box>
+      </Modal>
+      <Modal open={isDelete} onClose={() => setIsDelete(false)}>
+        <Box sx={modalStyle}>
+          <Confirmation deleteCallback={deleteList} closeModal={() => setIsDelete(false)} />
+        </Box>
+      </Modal>
     </Card>
   );
 };

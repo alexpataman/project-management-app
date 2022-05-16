@@ -1,32 +1,8 @@
-.overlay {
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(3px);
-  z-index: 5;
-  cursor: pointer;
-}
-
 .Confirmation {
-  width: 40%;
-  height: 25%;
-  max-width: 1000px;
-  max-height: 800px;
-  min-height: 150px;
-  min-width: 300px;
-  padding: 20px;
-  position: relative;
-  border-radius: 4px;
-  align-items: center;
+  width: 95%;
+  height: 200px;
+  margin: 0 auto;
   background-color: white;
-  z-index: 10;
-  cursor: default;
   text-align: center;
   display: flex;
   flex-direction: column;
