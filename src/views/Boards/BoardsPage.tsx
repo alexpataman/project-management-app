@@ -1,19 +1,23 @@
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { Box, Button, Container, Grid, Modal, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import BoardsList from './components/BoardsList';
+import BoardsModal from './components/BoardsModal';
+
 import './BoardsPage.scss';
 
-interface IBoard {
+export interface IBoard {
   title: string;
   background: number;
 }
 
-export const BoardsPage = () => {
+const BoardsPage = () => {
   const { t } = useTranslation();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [isInputFilled, setIsInputFilled] = useState(false);
-  const [selectedBG, setSelectedBG] = useState(0);
   const [boards, setBoards] = useState([] as IBoard[]);
 
   const openCreationModal = () => {
@@ -21,21 +25,13 @@ export const BoardsPage = () => {
   };
 
   const closeCreationModal = () => {
-    setSelectedBG(0);
-    setIsInputFilled(false);
     setIsModalOpened(false);
   };
 
-  const createBoard = (e: React.FormEvent) => {
-    if (!isInputFilled) return;
-
-    e.preventDefault();
-    const titleInput = document.querySelector('input');
-    const title = String(titleInput?.value);
-
+  const createBoard = (title: string, background: number) => {
     const boardInfo: IBoard = {
       title: title,
-      background: selectedBG,
+      background: background,
     };
 
     setBoards([...boards, boardInfo]);
@@ -49,70 +45,24 @@ export const BoardsPage = () => {
     setBoards(boardsCopy);
   };
 
-  const handleInputChange = (e: React.ChangeEvent) => {
-    const input = e.currentTarget as HTMLInputElement;
-    const value = Boolean(input.value);
-
-    setIsInputFilled(value);
-  };
-
   return (
-    <section className="BoardsPage">
-      <>
-        {!isModalOpened ? (
-          ''
-        ) : (
-          <div className="modal-container">
-            <div className="modal__title-wrapper">
-              <h3 className="modal__title">Создать доску</h3>
-              <button className="modal__close" onClick={closeCreationModal}></button>
-            </div>
+    <Container component="main">
+      <BoardsModal
+        isModalOpened={isModalOpened}
+        closeModal={closeCreationModal}
+        createBoard={createBoard}
+      ></BoardsModal>
 
-            <div className="modal__wrapper">
-              <h4 className="modal__title">
-                Заголовок доски<span>*</span>
-              </h4>
-              <input type="text" className="title-input" onChange={handleInputChange} />
-              <h5 className="modal__title">👋 Укажите название доски.</h5>
-            </div>
+      <Typography variant="h1" component="h1" className="board-list__title">
+        Ваши доски:
+      </Typography>
 
-            <div className="modal__wrapper">
-              <h4 className="modal__title">Фон</h4>
-              <div className="background-container">
-                {Array.from(Array(6).keys()).map((i) => (
-                  <div
-                    className={`bg-select bg-${i} ${i == selectedBG ? 'selected' : ''}`}
-                    key={i}
-                    onClick={() => setSelectedBG(i)}
-                  ></div>
-                ))}
-              </div>
-            </div>
-
-            <button className="modal__submit" onClick={createBoard} disabled={!isInputFilled}>
-              Создать
-            </button>
-          </div>
-        )}
-      </>
-
-      <h2 className="BoardPage__title">ВАШИ РАБОЧИЕ ПРОСТРАНСТВА:</h2>
-      <div className="container">
-        {boards.map((board, i) => (
-          <div className={`board bg-${board.background}`} key={i}>
-            <div className="board__overlay"></div>
-            <h2 className="board__title">{board.title}</h2>
-
-            <div className="board__delete" onClick={() => deleteBoard(i)}></div>
-          </div>
-        ))}
-
-        <div className="board board__create" onClick={openCreationModal}>
-          <div className="board__overlay"></div>
-          <h2 className="board__title">Создать доску</h2>
-        </div>
-      </div>
-    </section>
+      <BoardsList
+        boards={boards}
+        openModal={openCreationModal}
+        deleteBoard={deleteBoard}
+      ></BoardsList>
+    </Container>
   );
 };
 

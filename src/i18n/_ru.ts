@@ -5,6 +5,7 @@ export default {
     LANG_HOMEPAGE: 'Главная страница',
     LANG_BOARDS: 'Доски',
     LANG_BOARD: 'Доска',
+
     // normal values
     LANG_LOGIN_TEXT: 'Вход',
     LANG_LOGOUT_TEXT: 'Выход',
@@ -19,6 +20,12 @@ export default {
     LANG_FIELD_MUST_BE_VALID_EMAIL: 'Введите корректный адрес',
     LANG_LOGGED_IN_TEXT: 'Вы авторизированы',
     LANG_FIELD_LABEL_LOGIN: 'Логин',
+    LANG_CREATE_BUTTON_TEXT: 'Создать',
+    LANG_CREATE_BOARD_BUTTON_TEXT: 'Создать доску',
+    LANG_BOARDS_TITLE_TEXT: 'Название',
+    LANG_ENTER_BOARDS_TITLE: '👋 Укажите название доски.',
+    LANG_SELECT_BOARD_BACKGROUND: '🎨 Укажите фон доски.',
+
     // errors
     LANG_FORBIDDEN_ERROR: 'Логин или пароль не верны',
     LANG_USER_EXISTS_ERROR: 'Пользователь с таким логином уже существует',
