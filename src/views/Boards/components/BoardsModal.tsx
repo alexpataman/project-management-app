@@ -9,29 +9,46 @@ import '../BoardsPage.scss';
 interface IModal {
   isModalOpened: boolean;
   closeModal: () => void;
-  createBoard: (title: string, background: number) => void;
+  createBoard: (title: string, description: string, color: string) => void;
 }
 
 const BoardsModal = (props: IModal) => {
   const { t } = useTranslation();
 
   const [title, setTitle] = useState('');
-  const [selectedBG, setSelectedBG] = useState(0);
+  const [description, setDescription] = useState('');
+  const [color, setColor] = useState('darkcyan');
 
-  const handleInput = (e: React.ChangeEvent) => {
+  const handleTitleInput = (e: React.ChangeEvent) => {
     const input = e.currentTarget as HTMLInputElement;
     const value = input.value;
     setTitle(value);
   };
 
-  const handleBackgroundSelect = (index: number) => {
-    setSelectedBG(index);
+  const handleDescriptionInput = (e: React.ChangeEvent) => {
+    const input = e.currentTarget as HTMLInputElement;
+    const value = input.value;
+    setDescription(value);
+  };
+
+  const handleColorSelect = (color: string) => {
+    setColor(color);
   };
 
   const handleSubmit = () => {
-    props.createBoard(title, selectedBG);
+    props.createBoard(title, description, color);
+    resetValues();
+  };
+
+  const closeModalAndReset = () => {
+    props.closeModal();
+    resetValues();
+  };
+
+  const resetValues = () => {
     setTitle('');
-    setSelectedBG(0);
+    setDescription('');
+    setColor('darkcyan');
   };
 
   return (
@@ -42,7 +59,7 @@ const BoardsModal = (props: IModal) => {
             {t('LANG_CREATE_BOARD_BUTTON_TEXT')}
           </Typography>
 
-          <Button onClick={props.closeModal} className="modal__close">
+          <Button onClick={closeModalAndReset} className="modal__close">
             <CloseRoundedIcon htmlColor="#000" className="close-icon"></CloseRoundedIcon>
           </Button>
         </Box>
@@ -51,27 +68,38 @@ const BoardsModal = (props: IModal) => {
           <TextField
             label={t('LANG_BOARDS_TITLE_TEXT')}
             fullWidth
-            onChange={handleInput}
+            onChange={handleTitleInput}
           ></TextField>
           <Typography variant="h5" component="h5" className="modal__title">
             {t('LANG_ENTER_BOARDS_TITLE')}
           </Typography>
         </Box>
 
+        <Box component="div">
+          <TextField
+            label={t('LANG_BOARDS_DESCRIPTION_TEXT')}
+            fullWidth
+            onChange={handleDescriptionInput}
+          ></TextField>
+          <Typography variant="h5" component="h5" className="modal__title">
+            {t('LANG_ENTER_BOARDS_DESCRIPTION')}
+          </Typography>
+        </Box>
+
         <Box component="div" sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <Grid container spacing={1} justifyContent="center">
-            {['darkcyan', 'orange', 'green'].map((color: string, key: number) => (
-              <Grid item md={4} key={key} onClick={() => handleBackgroundSelect(key)}>
+            {['darkcyan', 'orange', 'green'].map((currentColor: string, key: number) => (
+              <Grid item md={4} key={key} onClick={() => handleColorSelect(currentColor)}>
                 <Box
                   component="div"
                   className="bg__wrapper"
                   sx={{
-                    background: `${color}`,
+                    background: `${currentColor}`,
                   }}
                 >
                   <Box
                     component="div"
-                    className={`modal__bg ${key === selectedBG ? 'selected' : ''}`}
+                    className={`modal__bg ${currentColor === color ? 'selected' : ''}`}
                   >
                     <CheckRoundedIcon htmlColor="#fff"></CheckRoundedIcon>
                   </Box>
@@ -81,18 +109,18 @@ const BoardsModal = (props: IModal) => {
           </Grid>
 
           <Grid container spacing={1} justifyContent="center">
-            {['red', 'purple', 'pink'].map((color: string, key: number) => (
-              <Grid item md={4} key={key} onClick={() => handleBackgroundSelect(key + 3)}>
+            {['red', 'purple', 'pink'].map((currentColor: string, key: number) => (
+              <Grid item md={4} key={key} onClick={() => handleColorSelect(currentColor)}>
                 <Box
                   component="div"
                   className="bg__wrapper"
                   sx={{
-                    background: `${color}`,
+                    background: `${currentColor}`,
                   }}
                 >
                   <Box
                     component="div"
-                    className={`modal__bg ${key + 3 === selectedBG ? 'selected' : ''}`}
+                    className={`modal__bg ${currentColor === color ? 'selected' : ''}`}
                   >
                     <CheckRoundedIcon htmlColor="#fff"></CheckRoundedIcon>
                   </Box>
@@ -108,7 +136,7 @@ const BoardsModal = (props: IModal) => {
         <Button
           variant="contained"
           className="modal__submit"
-          disabled={!title}
+          disabled={!title || !description}
           onClick={handleSubmit}
         >
           {t('LANG_CREATE_BUTTON_TEXT')}

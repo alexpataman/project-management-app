@@ -23,8 +23,11 @@ export default {
     LANG_CREATE_BUTTON_TEXT: 'Создать',
     LANG_CREATE_BOARD_BUTTON_TEXT: 'Создать доску',
     LANG_BOARDS_TITLE_TEXT: 'Название',
-    LANG_ENTER_BOARDS_TITLE: '👋 Укажите название доски.',
+    LANG_BOARDS_DESCRIPTION_TEXT: 'Описание',
+    LANG_ENTER_BOARDS_TITLE: '👋 Введите название доски.',
+    LANG_ENTER_BOARDS_DESCRIPTION: '🧠 Введите описание доски.',
     LANG_SELECT_BOARD_BACKGROUND: '🎨 Укажите фон доски.',
+    LANG_BOARDS_TITLE: 'Ваши доски:',
 
     // errors
     LANG_FORBIDDEN_ERROR: 'Логин или пароль не верны',

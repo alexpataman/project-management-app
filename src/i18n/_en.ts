@@ -23,8 +23,11 @@ export default {
     LANG_CREATE_BUTTON_TEXT: 'Create',
     LANG_CREATE_BOARD_BUTTON_TEXT: 'Create board',
     LANG_BOARDS_TITLE_TEXT: 'Title',
+    LANG_BOARDS_DESCRIPTION_TEXT: 'Description',
     LANG_ENTER_BOARDS_TITLE: '👋 Enter the title of the board.',
+    LANG_ENTER_BOARDS_DESCRIPTION: '🧠 Enter the description of the board.',
     LANG_SELECT_BOARD_BACKGROUND: '🎨 Select the background of the board.',
+    LANG_BOARDS_TITLE: 'Your boards:',
 
     // errors
     LANG_FORBIDDEN_ERROR: 'Your login or password is wrong',

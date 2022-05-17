@@ -1,9 +1,9 @@
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { Box, Button, Container, Grid, Modal, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Container, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { boards } from '../../api/backend/boards';
+import { BoardsCreateRequest, BoardsResponse } from '../../types/api';
 import BoardsList from './components/BoardsList';
 import BoardsModal from './components/BoardsModal';
 
@@ -11,14 +11,24 @@ import './BoardsPage.scss';
 
 export interface IBoard {
   title: string;
-  background: number;
+  description: string;
+  color: string;
 }
 
 const BoardsPage = () => {
   const { t } = useTranslation();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [boards, setBoards] = useState([] as IBoard[]);
+  const [boardsList, setBoardsList] = useState([] as BoardsResponse[]);
+
+  useEffect(() => {
+    getCurrentBoards();
+  }, []);
+
+  const getCurrentBoards = async () => {
+    const data = await boards.getBoards();
+    setBoardsList(data || []);
+  };
 
   const openCreationModal = () => {
     setIsModalOpened(true);
@@ -28,21 +38,22 @@ const BoardsPage = () => {
     setIsModalOpened(false);
   };
 
-  const createBoard = (title: string, background: number) => {
-    const boardInfo: IBoard = {
+  const createBoard = async (title: string, description: string, color: string) => {
+    const boardInfo: BoardsCreateRequest = {
       title: title,
-      background: background,
+      description: description,
+      color: color,
     };
 
-    setBoards([...boards, boardInfo]);
+    await boards.createBoard(boardInfo);
+    getCurrentBoards();
+
     closeCreationModal();
   };
 
-  const deleteBoard = (index: number) => {
-    const boardsCopy = boards.slice();
-
-    boardsCopy.splice(index, 1);
-    setBoards(boardsCopy);
+  const deleteBoard = async (id: string) => {
+    await boards.deleteBoard(id);
+    getCurrentBoards();
   };
 
   return (
@@ -54,11 +65,11 @@ const BoardsPage = () => {
       ></BoardsModal>
 
       <Typography variant="h1" component="h1" className="board-list__title">
-        Ваши доски:
+        {t('LANG_BOARDS_TITLE')}
       </Typography>
 
       <BoardsList
-        boards={boards}
+        boards={boardsList}
         openModal={openCreationModal}
         deleteBoard={deleteBoard}
       ></BoardsList>

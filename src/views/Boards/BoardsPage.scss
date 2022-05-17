@@ -127,25 +127,6 @@
   gap: 50px;
   padding: 0;
 
-  .bg-0 {
-    background: darkcyan;
-  }
-  .bg-1 {
-    background: orange;
-  }
-  .bg-2 {
-    background: green;
-  }
-  .bg-3 {
-    background: red;
-  }
-  .bg-4 {
-    background: purple;
-  }
-  .bg-5 {
-    background: pink;
-  }
-
   .board {
     justify-self: start;
     position: relative;
@@ -182,9 +163,16 @@
 
   .board__title {
     position: relative;
-    font-size: 18px;
     margin: 0;
     z-index: 2;
+  }
+
+  h2.board__title {
+    font-size: 18px;
+  }
+
+  h6.board__title {
+    font-size: 14px;
   }
   
   .board__delete {

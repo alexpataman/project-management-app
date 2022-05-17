@@ -24,3 +24,16 @@ export type LoginRequest = {
 export type LoginResponse = {
   token: string;
 };
+
+export type BoardsResponse = {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+};
+
+export type BoardsCreateRequest = {
+  title: string;
+  description: string;
+  color: string;
+};

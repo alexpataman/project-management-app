@@ -1,13 +1,13 @@
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
-import { Box, Button, Grid, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { IBoard } from '../BoardsPage';
+import { BoardsResponse } from '../../../types/api';
 
 interface IList {
-  boards: IBoard[];
+  boards: BoardsResponse[];
   openModal: () => void;
-  deleteBoard: (i: number) => void;
+  deleteBoard: (id: string) => void;
 }
 
 const BoardsList = (props: IList) => {
@@ -15,14 +15,23 @@ const BoardsList = (props: IList) => {
 
   return (
     <Box className="boards-list">
-      {props.boards.map((board, i) => (
-        <Box className={`board bg-${board.background}`} key={i}>
+      {props.boards.map((board) => (
+        <Box
+          className={`board`}
+          key={board.id}
+          sx={{
+            background: `${board.color}`,
+          }}
+        >
           <Box className="board__overlay"></Box>
           <Typography variant="h2" component="h2" className="board__title">
             {board.title}
           </Typography>
+          <Typography variant="h6" component="h6" className="board__title">
+            {board.description}
+          </Typography>
 
-          <Button className="board__delete" onClick={() => props.deleteBoard(i)}>
+          <Button className="board__delete" onClick={() => props.deleteBoard(board.id)}>
             <DeleteForeverRoundedIcon htmlColor="#fff"></DeleteForeverRoundedIcon>
           </Button>
         </Box>
