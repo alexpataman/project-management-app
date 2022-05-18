@@ -17,32 +17,23 @@ import Fade from '@mui/material/Fade';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { columns, tasks as tasksApi } from '../../../../api/backend';
+import { ColumnResponse } from '../../../../types/api';
+import { BOARD_ID } from '../../TEMP_ID';
 import { modalStyle } from '../../utils/modalStyle';
-import { ListType } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
 import { ModalForm } from '../ModalForm';
 import { TaskItem } from '../TaskItem';
 
-import './TaskList.scss';
+import './Column.scss';
 
 const CARD_BG_COLOR = '#ebecf0';
 
-const TaskList = ({
-  list,
-  addTask,
-  renameTask,
-  deleteTask,
-  renameList,
-  deleteList,
-}: {
-  list: ListType;
-  addTask: (title: string, task: string) => void;
-  renameTask: (oldName: string, newName: string) => void;
-  deleteTask: (task: string) => void;
-  renameList: (title: string) => void;
-  deleteList: () => void;
-}) => {
-  const { title, tasks } = list;
+// temporary id
+const USER_ID = '17522703-d0a3-491a-a00a-c975c72e752b';
+
+const Column = ({ column }: { column: ColumnResponse }) => {
+  const { id, title, order, tasks } = column;
 
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -50,8 +41,21 @@ const TaskList = ({
 
   const { register, reset, handleSubmit } = useForm();
 
-  const saveTask = (task: string) => {
-    addTask(title, task);
+  const renameColumn = (title: string) => {
+    columns.updateColumn(BOARD_ID, id, { title, order });
+  };
+
+  const deleteColumn = () => {
+    columns.deleteColumn(BOARD_ID, column.id);
+  };
+
+  const addTask = async (title: string, description: string) => {
+    const data = {
+      title,
+      description: description || ' ',
+      order: tasks?.length || 0,
+      userId: USER_ID,
+    };
     setIsAdd(false);
   };
 
@@ -65,12 +69,12 @@ const TaskList = ({
   const onSubmit = (data: unknown) => {
     if (data) {
       setIsEdit(false);
-      renameList((data as { name: string }).name);
+      renameColumn((data as { name: string }).name);
     }
   };
 
   return (
-    <Card className="TaskList" sx={{ backgroundColor: CARD_BG_COLOR }}>
+    <Card className="Column" sx={{ backgroundColor: CARD_BG_COLOR }}>
       <CardContent>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} onInput={() => setIsEdit(true)}>
           <TextField
@@ -109,9 +113,11 @@ const TaskList = ({
         </form>
       </CardContent>
       <CardContent className="tasks">
-        {tasks.map((task, index) => (
-          <TaskItem taskName={task} key={index} deleteTask={deleteTask} renameTask={renameTask} />
-        ))}
+        {tasks ? (
+          tasks.map((task, index) => <TaskItem task={task} key={index} column={column} />)
+        ) : (
+          <></>
+        )}
       </CardContent>
       <CardActions>
         <Button variant="text" startIcon={<AddIcon />} size="small" onClick={() => setIsAdd(true)}>
@@ -123,16 +129,16 @@ const TaskList = ({
       </IconButton>
       <Modal open={isAdd} onClose={() => setIsAdd(false)}>
         <Box sx={modalStyle}>
-          <ModalForm saveTask={saveTask} closeModal={() => setIsAdd(false)} />
+          <ModalForm saveTask={addTask} closeModal={() => setIsAdd(false)} />
         </Box>
       </Modal>
       <Modal open={isDelete} onClose={() => setIsDelete(false)}>
         <Box sx={modalStyle}>
-          <Confirmation deleteCallback={deleteList} closeModal={() => setIsDelete(false)} />
+          <Confirmation deleteCallback={deleteColumn} closeModal={() => setIsDelete(false)} />
         </Box>
       </Modal>
     </Card>
   );
 };
 
-export default TaskList;
+export default Column;
