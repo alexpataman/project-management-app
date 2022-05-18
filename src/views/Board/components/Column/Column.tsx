@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
-import { ColumnResponse } from '../../../../types/api';
+import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { BOARD_ID } from '../../TEMP_ID';
 import { modalStyle } from '../../utils/modalStyle';
 import { Confirmation } from '../ModalConfirmation';
@@ -35,18 +35,26 @@ const USER_ID = '17522703-d0a3-491a-a00a-c975c72e752b';
 const Column = ({ column }: { column: ColumnResponse }) => {
   const { id, title, order, tasks } = column;
 
+  const [columnParams, setColumnParams] = useState<ColumnResponse>(column || {});
+  const [taskList, setTaskList] = useState<TaskResponse[]>(tasks || []);
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
 
   const { register, reset, handleSubmit } = useForm();
 
-  const renameColumn = (title: string) => {
-    columns.updateColumn(BOARD_ID, id, { title, order });
+  const renameColumn = async (title: string) => {
+    const newParams = await columns.updateColumn(BOARD_ID, id, { title, order });
+    setColumnParams(newParams);
   };
 
   const deleteColumn = () => {
-    columns.deleteColumn(BOARD_ID, column.id);
+    columns.deleteColumn(BOARD_ID, column.id).then(() => {
+      const title = '';
+      setColumnParams((params) => {
+        return { ...params, title };
+      });
+    });
   };
 
   const addTask = async (title: string, description: string) => {
@@ -56,6 +64,8 @@ const Column = ({ column }: { column: ColumnResponse }) => {
       order: tasks?.length || 0,
       userId: USER_ID,
     };
+    const newTask = await tasksApi.createTask(BOARD_ID, column.id, data);
+    setTaskList((list) => [...list, newTask]);
     setIsAdd(false);
   };
 
@@ -74,70 +84,81 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   };
 
   return (
-    <Card className="Column" sx={{ backgroundColor: CARD_BG_COLOR }}>
-      <CardContent>
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} onInput={() => setIsEdit(true)}>
-          <TextField
-            InputProps={{ disableUnderline: true }}
-            defaultValue={title}
-            variant="standard"
-            {...register('name', { required: true })}
-          />
+    <>
+      {columnParams.title && (
+        <Card className="Column" sx={{ backgroundColor: CARD_BG_COLOR }}>
+          <CardContent>
+            <form
+              autoComplete="off"
+              onSubmit={handleSubmit(onSubmit)}
+              onInput={() => setIsEdit(true)}
+            >
+              <TextField
+                InputProps={{ disableUnderline: true }}
+                defaultValue={title}
+                variant="standard"
+                {...register('name', { required: true })}
+              />
 
-          {isEdit && (
-            <>
-              <Tooltip
-                enterDelay={600}
-                disableFocusListener
-                TransitionComponent={Fade}
-                TransitionProps={{ timeout: 300 }}
-                title="Отменить"
-              >
-                <IconButton aria-label="cancel" onClick={resetTitle}>
-                  <CancelIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip
-                enterDelay={300}
-                disableFocusListener
-                TransitionComponent={Fade}
-                TransitionProps={{ timeout: 300 }}
-                title="Сохранить"
-              >
-                <IconButton aria-label="confirm" type="submit">
-                  <CheckCircleIcon />
-                </IconButton>
-              </Tooltip>
-            </>
-          )}
-        </form>
-      </CardContent>
-      <CardContent className="tasks">
-        {tasks ? (
-          tasks.map((task, index) => <TaskItem task={task} key={index} column={column} />)
-        ) : (
-          <></>
-        )}
-      </CardContent>
-      <CardActions>
-        <Button variant="text" startIcon={<AddIcon />} size="small" onClick={() => setIsAdd(true)}>
-          Добавить карточку
-        </Button>
-      </CardActions>
-      <IconButton className="delete-icon" onClick={() => setIsDelete(true)} size="small">
-        <DeleteIcon />
-      </IconButton>
-      <Modal open={isAdd} onClose={() => setIsAdd(false)}>
-        <Box sx={modalStyle}>
-          <ModalForm saveTask={addTask} closeModal={() => setIsAdd(false)} />
-        </Box>
-      </Modal>
-      <Modal open={isDelete} onClose={() => setIsDelete(false)}>
-        <Box sx={modalStyle}>
-          <Confirmation deleteCallback={deleteColumn} closeModal={() => setIsDelete(false)} />
-        </Box>
-      </Modal>
-    </Card>
+              {isEdit && (
+                <>
+                  <Tooltip
+                    enterDelay={600}
+                    disableFocusListener
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title="Отменить"
+                  >
+                    <IconButton aria-label="cancel" onClick={resetTitle}>
+                      <CancelIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    enterDelay={300}
+                    disableFocusListener
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title="Сохранить"
+                  >
+                    <IconButton aria-label="confirm" type="submit">
+                      <CheckCircleIcon />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
+            </form>
+          </CardContent>
+          <CardContent className="tasks">
+            {taskList.map((task, index) => (
+              <TaskItem task={task} key={index} column={column} />
+            ))}
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="text"
+              startIcon={<AddIcon />}
+              size="small"
+              onClick={() => setIsAdd(true)}
+            >
+              Добавить карточку
+            </Button>
+          </CardActions>
+          <IconButton className="delete-icon" onClick={() => setIsDelete(true)} size="small">
+            <DeleteIcon />
+          </IconButton>
+          <Modal open={isAdd} onClose={() => setIsAdd(false)}>
+            <Box sx={modalStyle}>
+              <ModalForm saveTask={addTask} closeModal={() => setIsAdd(false)} />
+            </Box>
+          </Modal>
+          <Modal open={isDelete} onClose={() => setIsDelete(false)}>
+            <Box sx={modalStyle}>
+              <Confirmation deleteCallback={deleteColumn} closeModal={() => setIsDelete(false)} />
+            </Box>
+          </Modal>
+        </Card>
+      )}
+    </>
   );
 };
 
