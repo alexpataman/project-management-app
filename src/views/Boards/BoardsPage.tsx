@@ -2,8 +2,15 @@ import { Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { boards } from '../../api/backend/boards';
-import { BoardsCreateRequest, BoardsResponse } from '../../types/api';
+import { Loader } from '../../components';
+import {
+  createBoard,
+  deleteBoard,
+  getBoards,
+  getBoardsState,
+} from '../../store/boards/boards.slice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { BoardsCreateRequest } from '../../types/api';
 import BoardsList from './components/BoardsList';
 import BoardsModal from './components/BoardsModal';
 
@@ -17,18 +24,14 @@ export interface IBoard {
 
 const BoardsPage = () => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const { isLoading, boards } = useAppSelector(getBoardsState);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [boardsList, setBoardsList] = useState([] as BoardsResponse[]);
 
   useEffect(() => {
-    getCurrentBoards();
+    dispatch(getBoards());
   }, []);
-
-  const getCurrentBoards = async () => {
-    const data = await boards.getBoards();
-    setBoardsList(data || []);
-  };
 
   const openCreationModal = () => {
     setIsModalOpened(true);
@@ -38,22 +41,19 @@ const BoardsPage = () => {
     setIsModalOpened(false);
   };
 
-  const createBoard = async (title: string, description: string, color: string) => {
+  const handleCreateBoard = async (title: string, description: string, color: string) => {
     const boardInfo: BoardsCreateRequest = {
       title: title,
       description: description,
       color: color,
     };
 
-    await boards.createBoard(boardInfo);
-    getCurrentBoards();
-
+    dispatch(createBoard(boardInfo));
     closeCreationModal();
   };
 
-  const deleteBoard = async (id: string) => {
-    await boards.deleteBoard(id);
-    getCurrentBoards();
+  const handleDeleteBoard = async (id: string) => {
+    dispatch(deleteBoard(id));
   };
 
   return (
@@ -61,18 +61,19 @@ const BoardsPage = () => {
       <BoardsModal
         isModalOpened={isModalOpened}
         closeModal={closeCreationModal}
-        createBoard={createBoard}
+        createBoard={handleCreateBoard}
       ></BoardsModal>
 
       <Typography variant="h1" component="h1" className="board-list__title">
         {t('LANG_BOARDS_TITLE')}
       </Typography>
-
-      <BoardsList
-        boards={boardsList}
-        openModal={openCreationModal}
-        deleteBoard={deleteBoard}
-      ></BoardsList>
+      <Loader isLoading={isLoading}>
+        <BoardsList
+          boards={boards}
+          openModal={openCreationModal}
+          deleteBoard={handleDeleteBoard}
+        ></BoardsList>
+      </Loader>
     </Container>
   );
 };
