@@ -11,7 +11,7 @@ class Tasks extends Base {
     );
   }
 
-  async createTask(boardId: string, columnId: string, data: TaskRequest): Promise<TaskResponse[]> {
+  async createTask(boardId: string, columnId: string, data: TaskRequest): Promise<TaskResponse> {
     const instance = this.getInstance();
     return this.sendRequest(
       instance.post(
