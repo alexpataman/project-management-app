@@ -21,6 +21,7 @@
     "i18next": "^21.7.1",
     "i18next-browser-languagedetector": "^6.1.4",
     "react": "^18.1.0",
+    "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.31.1",
     "react-i18next": "^11.16.9",
