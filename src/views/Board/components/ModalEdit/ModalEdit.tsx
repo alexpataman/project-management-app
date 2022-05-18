@@ -9,13 +9,13 @@ import { Confirmation } from '../ModalConfirmation';
 import './ModalEdit.scss';
 
 const ModalEdit = ({
-  name,
-  saveName,
+  task,
+  updateTask,
   deleteTask,
   closeModal,
 }: {
-  name: string;
-  saveName: (name: string) => void;
+  task: { title: string; description: string };
+  updateTask: (name: string, description: string) => void;
   deleteTask: () => void;
   closeModal: () => void;
 }) => {
@@ -29,7 +29,8 @@ const ModalEdit = ({
 
   const onSubmit = (data: unknown) => {
     if (data) {
-      saveName((data as { name: string }).name);
+      const { name, description } = data as { name: string; description: string };
+      updateTask(name, description);
       closeModal();
     }
   };
@@ -44,8 +45,14 @@ const ModalEdit = ({
           <TextField
             variant="outlined"
             label={'Имя'}
-            defaultValue={name}
+            defaultValue={task.title}
             {...register('name', { required: true })}
+          />
+          <TextField
+            variant="outlined"
+            label={'Описание'}
+            defaultValue={task.description}
+            {...register('description', { required: true })}
           />
         </div>
         <div className="buttons">

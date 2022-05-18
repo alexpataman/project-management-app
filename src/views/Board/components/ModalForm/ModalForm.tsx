@@ -8,14 +8,15 @@ const ModalForm = ({
   saveTask,
   closeModal,
 }: {
-  saveTask: (task: string) => void;
+  saveTask: (title: string, description: string) => void;
   closeModal: () => void;
 }) => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data: unknown) => {
     if (data) {
-      saveTask((data as { name: string }).name);
+      const { title, description } = data as { title: string; description: string };
+      saveTask(title, description);
       closeModal();
     }
   };
@@ -28,11 +29,11 @@ const ModalForm = ({
       </IconButton>
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputs">
-          <TextField variant="outlined" label={'Имя'} {...register('name', { required: true })} />
+          <TextField variant="outlined" label={'Имя'} {...register('title', { required: true })} />
           <TextField
             variant="outlined"
             label={'Описание'}
-            {...register('info', { required: false })}
+            {...register('description', { required: false })}
           />
         </div>
         <div className="buttons">
