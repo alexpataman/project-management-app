@@ -6,7 +6,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width: 400px;
+    max-width: 420px;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -86,9 +86,17 @@
     }
   }
 
-  .bg__wrapper {
+  .color-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .color__wrapper {
+    flex-grow: 1;
+    flex-basis: 85px;
     position: relative;
-    width: 85px;
     height: 56px;
     padding: 0;
     border-radius: 5px;

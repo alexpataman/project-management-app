@@ -8,6 +8,7 @@ import {
   ACTION_GET_BOARDS,
   BOARDS_SLICE_NAME,
 } from '../../constants/store';
+import { useAuthControl } from '../../hooks/useAuthControl';
 import { BoardsCreateRequest } from '../../types/api';
 import { BoardsState } from '../../types/store/boards';
 
@@ -37,13 +38,15 @@ const loading = (state: BoardsState) => {
 };
 
 export const getBoards = createAsyncThunk(ACTION_GET_BOARDS, async () => {
-  return await boards.getBoards();
+  const authControl = useAuthControl();
+  return await authControl(boards.getBoards());
 });
 
 export const createBoard = createAsyncThunk(
   ACTION_CREATE_BOARD,
   async (data: BoardsCreateRequest, { dispatch }) => {
-    await boards.createBoard(data);
+    const authControl = useAuthControl();
+    await authControl(boards.createBoard(data));
     dispatch(getBoards());
   }
 );
@@ -51,7 +54,8 @@ export const createBoard = createAsyncThunk(
 export const deleteBoard = createAsyncThunk(
   ACTION_DELETE_BOARD,
   async (id: string, { dispatch }) => {
-    await boards.deleteBoard(id);
+    const authControl = useAuthControl();
+    await authControl(boards.deleteBoard(id));
     dispatch(getBoards());
   }
 );

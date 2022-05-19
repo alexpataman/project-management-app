@@ -11,16 +11,10 @@ import {
 } from '../../store/boards/boards.slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { BoardsCreateRequest } from '../../types/api';
-import BoardsList from './components/BoardsList';
-import BoardsModal from './components/BoardsModal';
+import BoardsList from './components/BoardsList/BoardsList';
+import BoardsModal from './components/BoardsModal/BoardsModal';
 
 import './BoardsPage.scss';
-
-export interface IBoard {
-  title: string;
-  description: string;
-  color: string;
-}
 
 const BoardsPage = () => {
   const { t } = useTranslation();

@@ -2,20 +2,20 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { BoardsResponse } from '../../../types/api';
+import { BoardsResponse } from '../../../../types/api';
 
-interface IList {
+interface IBoardsList {
   boards: BoardsResponse[];
   openModal: () => void;
   deleteBoard: (id: string) => void;
 }
 
-const BoardsList = (props: IList) => {
+const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
   const { t } = useTranslation();
 
   return (
     <Box className="boards-list">
-      {props.boards.map((board) => (
+      {boards.map((board) => (
         <Box
           className={`board`}
           key={board.id}
@@ -31,13 +31,13 @@ const BoardsList = (props: IList) => {
             {board.description}
           </Typography>
 
-          <Button className="board__delete" onClick={() => props.deleteBoard(board.id)}>
+          <Button className="board__delete" onClick={() => deleteBoard(board.id)}>
             <DeleteForeverRoundedIcon htmlColor="#fff"></DeleteForeverRoundedIcon>
           </Button>
         </Box>
       ))}
 
-      <Button variant="contained" className="board board__create" onClick={props.openModal}>
+      <Button variant="contained" className="board board__create" onClick={openModal}>
         {t('LANG_CREATE_BOARD_BUTTON_TEXT')}
       </Button>
     </Box>
