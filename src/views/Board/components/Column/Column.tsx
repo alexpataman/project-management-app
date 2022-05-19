@@ -1,29 +1,23 @@
-import AddIcon from '@mui/icons-material/Add';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
-  IconButton,
   Modal,
   TextField,
-  Tooltip,
 } from '@mui/material';
-import Fade from '@mui/material/Fade';
 import { useState } from 'react';
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { BOARD_ID } from '../../TEMP_ID';
+import { getItemStyle, reorderTasks } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
 import { Confirmation } from '../ModalConfirmation';
 import { ModalForm } from '../ModalForm';
 import { TaskItem } from '../TaskItem';
+import { EditColumn, UpdateColumn } from './Components';
 
 import './Column.scss';
 
@@ -61,7 +55,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     const data = {
       title,
       description: description || ' ',
-      order: tasks?.length || 0,
+      order: taskList?.length || 0,
       userId: USER_ID,
     };
     const newTask = await tasksApi.createTask(BOARD_ID, column.id, data);
@@ -69,7 +63,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     setIsAdd(false);
   };
 
-  const resetTitle = () => {
+  const resetColumnTitle = () => {
     setIsEdit(false);
     reset({
       name: title,
@@ -81,6 +75,14 @@ const Column = ({ column }: { column: ColumnResponse }) => {
       setIsEdit(false);
       renameColumn((data as { name: string }).name);
     }
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+    const items = reorderTasks(taskList, result.source.index, result.destination.index);
+    setTaskList(items);
   };
 
   return (
@@ -99,53 +101,40 @@ const Column = ({ column }: { column: ColumnResponse }) => {
                 variant="standard"
                 {...register('name', { required: true })}
               />
-
               {isEdit && (
-                <>
-                  <Tooltip
-                    enterDelay={600}
-                    disableFocusListener
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title="Отменить"
-                  >
-                    <IconButton aria-label="cancel" onClick={resetTitle}>
-                      <CancelIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip
-                    enterDelay={300}
-                    disableFocusListener
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title="Сохранить"
-                  >
-                    <IconButton aria-label="confirm" type="submit">
-                      <CheckCircleIcon />
-                    </IconButton>
-                  </Tooltip>
-                </>
+                <EditColumn
+                  titles={{ cancel: 'Отменить', save: 'Сохранить' }}
+                  callback={resetColumnTitle}
+                />
               )}
             </form>
           </CardContent>
           <CardContent className="tasks">
-            {taskList.map((task, index) => (
-              <TaskItem task={task} key={index} column={column} />
-            ))}
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {taskList.map((task, index) => (
+                      <Draggable key={task.id} draggableId={task.id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(provided.draggableProps.style)}
+                          >
+                            {<TaskItem task={task} key={task.id} column={column} />}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           </CardContent>
-          <CardActions>
-            <Button
-              variant="text"
-              startIcon={<AddIcon />}
-              size="small"
-              onClick={() => setIsAdd(true)}
-            >
-              Добавить карточку
-            </Button>
-          </CardActions>
-          <IconButton className="delete-icon" onClick={() => setIsDelete(true)} size="small">
-            <DeleteIcon />
-          </IconButton>
+          <UpdateColumn onAdd={() => setIsAdd(true)} onDelete={() => setIsDelete(true)} />
           <Modal open={isAdd} onClose={() => setIsAdd(false)}>
             <Box sx={modalStyle}>
               <ModalForm saveTask={addTask} closeModal={() => setIsAdd(false)} />
