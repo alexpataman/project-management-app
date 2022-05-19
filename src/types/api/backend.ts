@@ -27,11 +27,15 @@ export type LoginResponse = {
 
 export type BoardRequest = {
   title: string;
+  description: string;
+  color: string;
 };
 
 export type BoardResposne = {
   id: string;
   title: string;
+  description: string;
+  color: string;
   columns?: ColumnResponse[];
 };
 
@@ -54,6 +58,14 @@ export type TaskRequest = {
   userId: string;
   boardId?: string;
   columnId?: string;
+};
+
+export type UpdateTaskRequest = {
+  title: string;
+  order: number;
+  description: string;
+  userId: string;
+  boardId: string;
 };
 
 export type TaskResponse = {

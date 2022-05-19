@@ -1,10 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Modal,
-  TextField,
-} from '@mui/material';
+import { Box, Card, CardContent, Modal, TextField } from '@mui/material';
 import { useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
@@ -12,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { columns, tasks as tasksApi } from '../../../../api/backend';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { BOARD_ID } from '../../TEMP_ID';
-import { getItemStyle, reorderTasks } from '../../utils/dndHelpers';
+import { getItemStyle } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
 import { Confirmation } from '../ModalConfirmation';
 import { ModalForm } from '../ModalForm';
@@ -75,6 +69,18 @@ const Column = ({ column }: { column: ColumnResponse }) => {
       setIsEdit(false);
       renameColumn((data as { name: string }).name);
     }
+  };
+
+  const reorderTasks = (tasks: TaskResponse[], startIndex: number, endIndex: number) => {
+    const result = [...tasks];
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    result.forEach((task) => {
+      const { title, description, userId } = task;
+      const data = { title, description, userId, boardId: BOARD_ID, order: endIndex };
+      tasksApi.updateTask(BOARD_ID, column.id, task.id, data);
+    });
+    return result;
   };
 
   const onDragEnd = (result: DropResult) => {

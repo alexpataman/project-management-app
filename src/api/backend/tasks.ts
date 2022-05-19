@@ -1,4 +1,4 @@
-import { TaskRequest, TaskResponse } from '../../types/api';
+import { TaskRequest, TaskResponse, UpdateTaskRequest } from '../../types/api';
 import { Base } from './Base';
 
 class Tasks extends Base {
@@ -40,7 +40,7 @@ class Tasks extends Base {
     boardId: string,
     columnId: string,
     taskId: string,
-    data: TaskRequest
+    data: UpdateTaskRequest
   ): Promise<TaskResponse> {
     const instance = this.getInstance();
     return this.sendRequest(
