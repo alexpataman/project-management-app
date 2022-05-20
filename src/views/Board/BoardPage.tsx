@@ -29,20 +29,20 @@ const BoardsPage = () => {
     const load = async () => {
       const data = await authControl(boards.getBoardById(BOARD_ID));
       setIsLoading(false);
-      if (data) {
-        if (data.columns) {
-          setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
-        }
-      }
+      if (!data || !data.columns) return;
+      setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
     };
     load();
   }, []);
 
   const addColumn = async (title: string) => {
-    const newColumn = await columnsApi.createColumn(BOARD_ID, {
-      title: title,
-      order: columns.length,
-    });
+    const newColumn = await authControl(
+      columnsApi.createColumn(BOARD_ID, {
+        title: title,
+        order: columns.length,
+      })
+    );
+    if (!newColumn) return;
     setColumns((columns) => [...columns, newColumn]);
   };
 
