@@ -23,33 +23,31 @@ if (container) {
 
   const root = createRoot(container);
   root.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Suspense fallback={<div />}>
-            <Routes>
-              <Route path={PATH.home} element={<App />}>
-                <Route index element={<HomePage />} />
-                <Route path={PATH.login} element={<LoginPage />} />
-                <Route path={PATH.users} element={<UsersPage />} />
-                <Route
-                  path={PATH.boards}
-                  element={
-                    <PrivateRoute>
-                      <BoardsPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route path={PATH.board}>
-                  <Route path=":id" element={<BoardPage />} />
-                </Route>
-                <Route path="*" element={<ErrorPage code={ERROR_CODE_NOT_FOUND} />} />
+    <Provider store={store}>
+      <BrowserRouter>
+        <Suspense fallback={<div />}>
+          <Routes>
+            <Route path={PATH.home} element={<App />}>
+              <Route index element={<HomePage />} />
+              <Route path={PATH.login} element={<LoginPage />} />
+              <Route path={PATH.users} element={<UsersPage />} />
+              <Route
+                path={PATH.boards}
+                element={
+                  <PrivateRoute>
+                    <BoardsPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route path={PATH.board}>
+                <Route path=":id" element={<BoardPage />} />
               </Route>
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </Provider>
-    </React.StrictMode>
+              <Route path="*" element={<ErrorPage code={ERROR_CODE_NOT_FOUND} />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </Provider>
   );
 }
 reportWebVitals();
