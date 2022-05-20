@@ -2,6 +2,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
+import { TaskEditForm } from '../../utils/types';
+
 import './ModalForm.scss';
 
 const ModalForm = ({
@@ -11,12 +13,12 @@ const ModalForm = ({
   saveTask: (title: string, description: string) => void;
   closeModal: () => void;
 }) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<TaskEditForm>();
 
-  const onSubmit = (data: unknown) => {
+  const onSubmit = (data: TaskEditForm) => {
     if (data) {
-      const { title, description } = data as { title: string; description: string };
-      saveTask(title, description);
+      const { name, description } = data;
+      saveTask(name, description);
       closeModal();
     }
   };
@@ -29,7 +31,7 @@ const ModalForm = ({
       </IconButton>
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputs">
-          <TextField variant="outlined" label={'Имя'} {...register('title', { required: true })} />
+          <TextField variant="outlined" label={'Имя'} {...register('name', { required: true })} />
           <TextField
             variant="outlined"
             label={'Описание'}

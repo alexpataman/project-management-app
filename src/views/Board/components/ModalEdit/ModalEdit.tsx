@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { modalStyle } from '../../utils/modalStyle';
+import { TaskEditForm } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
 
 import './ModalEdit.scss';
@@ -25,11 +26,11 @@ const ModalEdit = ({
     setIsOpen(false);
     closeModal;
   };
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<TaskEditForm>();
 
-  const onSubmit = (data: unknown) => {
+  const onSubmit = (data: TaskEditForm) => {
     if (data) {
-      const { name, description } = data as { name: string; description: string };
+      const { name, description } = data;
       updateTask(name, description);
       closeModal();
     }

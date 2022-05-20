@@ -10,6 +10,7 @@ import { BOARD_ID, USER_ID } from '../../TEMP_ID';
 import { BASE_GREY } from '../../utils/constants';
 import { getItemStyle } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
+import { ColumnEditForm } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
 import { ModalForm } from '../ModalForm';
 import { TaskItem } from '../TaskItem';
@@ -19,10 +20,12 @@ import './Column.scss';
 
 const Column = ({ column }: { column: ColumnResponse }) => {
   const authControl = useAuthControl();
-  const { register, reset, handleSubmit } = useForm();
+  const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
   const { id, title, order, tasks } = column;
   const [columnParams, setColumnParams] = useState<ColumnResponse>(column || {});
-  const [taskList, setTaskList] = useState<TaskResponse[]>(tasks || []);
+  const [taskList, setTaskList] = useState<TaskResponse[]>(
+    tasks?.sort((a, b) => a.order - b.order) || []
+  );
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -64,10 +67,10 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     });
   };
 
-  const onSubmit = (data: unknown) => {
+  const onSubmit = (data: ColumnEditForm) => {
     if (data) {
       setIsEdit(false);
-      renameColumn((data as { name: string }).name);
+      renameColumn(data.name);
     }
   };
 
@@ -75,9 +78,9 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     const result = [...tasks];
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
-    result.forEach((task) => {
+    result.forEach((task, index) => {
       const { title, description, userId } = task;
-      const data = { title, description, userId, boardId: BOARD_ID, order: endIndex };
+      const data = { title, description, userId, boardId: BOARD_ID, order: index };
       tasksApi.updateTask(BOARD_ID, column.id, task.id, data);
     });
     return result;
