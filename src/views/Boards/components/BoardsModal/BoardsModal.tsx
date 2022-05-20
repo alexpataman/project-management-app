@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { MODAL_DEFAULT_VALUES } from './constants';
+import { COLORS_ARRAY, MODAL_DEFAULT_VALUES } from './constants';
 
 interface IBoardsModal {
   isModalOpened: boolean;
@@ -17,7 +17,7 @@ interface IBoardsModal {
 const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) => {
   const { t } = useTranslation();
 
-  const [color, setColor] = useState('darkcyan');
+  const [color, setColor] = useState(MODAL_DEFAULT_VALUES.color);
 
   const validationSchema = yup.object({
     title: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -82,26 +82,24 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
         ></TextField>
 
         <Box component="div" className="color-container">
-          {['darkcyan', 'orange', 'green', 'red', 'purple', 'pink'].map(
-            (currentColor: string, key: number) => (
+          {COLORS_ARRAY.map((currentColor: string, key: number) => (
+            <Box
+              key={key}
+              component="div"
+              className="color__wrapper"
+              sx={{
+                background: `${currentColor}`,
+              }}
+              onClick={() => setColor(currentColor)}
+            >
               <Box
-                key={key}
                 component="div"
-                className="color__wrapper"
-                sx={{
-                  background: `${currentColor}`,
-                }}
-                onClick={() => setColor(currentColor)}
+                className={`modal__bg ${currentColor === color ? 'selected' : ''}`}
               >
-                <Box
-                  component="div"
-                  className={`modal__bg ${currentColor === color ? 'selected' : ''}`}
-                >
-                  <CheckRoundedIcon htmlColor="#fff"></CheckRoundedIcon>
-                </Box>
+                <CheckRoundedIcon htmlColor="#fff"></CheckRoundedIcon>
               </Box>
-            )
-          )}
+            </Box>
+          ))}
         </Box>
 
         <Button type="submit" variant="contained" className="modal__submit">

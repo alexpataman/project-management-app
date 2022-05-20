@@ -3,3 +3,5 @@ export const MODAL_DEFAULT_VALUES = {
   description: '',
   color: 'darkcyan',
 };
+
+export const COLORS_ARRAY = ['darkcyan', 'orange', 'green', 'red', 'purple', 'pink'];
