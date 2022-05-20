@@ -11,7 +11,7 @@ class Boards extends Base {
 
   async createBoard(data: BoardRequest): Promise<BoardResposne> {
     const instance = this.getInstance();
-    return this.sendRequest(instance.post(`${this.API_PATH_BOARDS}`, data, this.defaultHeaders));
+    return this.sendRequest(instance.post(`${this.API_PATH_BOARDS}`, data));
   }
 
   async getBoardById(id: string): Promise<BoardResposne> {

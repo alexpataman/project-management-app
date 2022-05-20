@@ -11,9 +11,7 @@ class Columns extends Base {
 
   async createColumn(boardId: string, data: ColumnRequest): Promise<ColumnResponse> {
     const instance = this.getInstance();
-    return this.sendRequest(
-      instance.post(`${this.API_PATH_BOARDS}/${boardId}/columns`, data, this.defaultHeaders)
-    );
+    return this.sendRequest(instance.post(`${this.API_PATH_BOARDS}/${boardId}/columns`, data));
   }
 
   async getColumnsById(boardId: string, columnId: string): Promise<ColumnResponse> {
@@ -35,11 +33,7 @@ class Columns extends Base {
   ): Promise<ColumnResponse> {
     const instance = this.getInstance();
     return this.sendRequest(
-      instance.put(
-        `${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}`,
-        data,
-        this.defaultHeaders
-      )
+      instance.put(`${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}`, data)
     );
   }
 }

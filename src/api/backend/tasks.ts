@@ -14,11 +14,7 @@ class Tasks extends Base {
   async createTask(boardId: string, columnId: string, data: TaskRequest): Promise<TaskResponse> {
     const instance = this.getInstance();
     return this.sendRequest(
-      instance.post(
-        `${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks`,
-        data,
-        this.defaultHeaders
-      )
+      instance.post(`${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks`, data)
     );
   }
 
@@ -44,11 +40,7 @@ class Tasks extends Base {
   ): Promise<TaskResponse> {
     const instance = this.getInstance();
     return this.sendRequest(
-      instance.put(
-        `${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`,
-        data,
-        this.defaultHeaders
-      )
+      instance.put(`${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`, data)
     );
   }
 }
