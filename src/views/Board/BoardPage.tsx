@@ -9,6 +9,7 @@ import { useAuthControl } from '../../hooks/useAuthControl';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
 import { BOARD_ID } from './TEMP_ID';
+import { BASE_GREY } from './utils/constants';
 import { modalStyle } from './utils/modalStyle';
 
 import './BoardPage.scss';
@@ -56,7 +57,7 @@ const BoardsPage = () => {
             <IconButton
               aria-label="add"
               size="large"
-              sx={{ height: 50, width: 50, backgroundColor: '#ebecf0' }}
+              sx={{ height: 50, width: 50, backgroundColor: BASE_GREY }}
               onClick={handleOpen}
             >
               <AddIcon />

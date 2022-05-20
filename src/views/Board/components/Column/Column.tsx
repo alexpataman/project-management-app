@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
-import { BOARD_ID } from '../../TEMP_ID';
+import { BOARD_ID, USER_ID } from '../../TEMP_ID';
+import { BASE_GREY } from '../../utils/constants';
 import { getItemStyle } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
 import { Confirmation } from '../ModalConfirmation';
@@ -14,11 +15,6 @@ import { TaskItem } from '../TaskItem';
 import { EditColumn, UpdateColumn } from './Components';
 
 import './Column.scss';
-
-const CARD_BG_COLOR = '#ebecf0';
-
-// temporary id
-const USER_ID = '17522703-d0a3-491a-a00a-c975c72e752b';
 
 const Column = ({ column }: { column: ColumnResponse }) => {
   const { id, title, order, tasks } = column;
@@ -94,7 +90,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   return (
     <>
       {columnParams.title && (
-        <Card className="Column" sx={{ backgroundColor: CARD_BG_COLOR }}>
+        <Card className="Column" sx={{ backgroundColor: BASE_GREY }}>
           <CardContent>
             <form
               autoComplete="off"
