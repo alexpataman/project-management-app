@@ -2,13 +2,13 @@ import AddIcon from '@mui/icons-material/Add';
 import { IconButton, Modal, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { boards, columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
 import { useAuthControl } from '../../hooks/useAuthControl';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
-import { BOARD_ID } from './TEMP_ID';
 import { BASE_GREY } from './utils/constants';
 import { modalStyle } from './utils/modalStyle';
 
@@ -17,6 +17,8 @@ import './BoardPage.scss';
 const COLUMNS_LIMIT = 5;
 
 const BoardsPage = () => {
+  const params = useParams();
+  const boardId = params.id || '';
   const authControl = useAuthControl();
   const [columns, setColumns] = useState<ColumnResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +29,7 @@ const BoardsPage = () => {
 
   useEffect(() => {
     const load = async () => {
-      const data = await authControl(boards.getBoardById(BOARD_ID));
+      const data = await authControl(boards.getBoardById(boardId));
       setIsLoading(false);
       if (!data || !data.columns) return;
       setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
@@ -37,7 +39,7 @@ const BoardsPage = () => {
 
   const addColumn = async (title: string) => {
     const newColumn = await authControl(
-      columnsApi.createColumn(BOARD_ID, {
+      columnsApi.createColumn(boardId, {
         title: title,
         order: columns.length,
       })

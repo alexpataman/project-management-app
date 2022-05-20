@@ -2,11 +2,12 @@ import { Box, Card, CardContent, Modal, TextField } from '@mui/material';
 import { useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
 import { useAuthControl } from '../../../../hooks/useAuthControl';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
-import { BOARD_ID, USER_ID } from '../../TEMP_ID';
+import { USER_ID } from '../../TEMP_ID';
 import { BASE_GREY } from '../../utils/constants';
 import { getItemStyle } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
@@ -20,6 +21,8 @@ import './Column.scss';
 
 const Column = ({ column }: { column: ColumnResponse }) => {
   const authControl = useAuthControl();
+  const params = useParams();
+  const boardId = params.id || '';
   const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
   const { id, title, order, tasks } = column;
   const [columnParams, setColumnParams] = useState<ColumnResponse>(column || {});
@@ -31,14 +34,14 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   const [isDelete, setIsDelete] = useState(false);
 
   const renameColumn = async (title: string) => {
-    const newParams = await authControl(columns.updateColumn(BOARD_ID, id, { title, order }));
+    const newParams = await authControl(columns.updateColumn(boardId, id, { title, order }));
     if (!newParams) return;
     setColumnParams(newParams);
   };
 
   const deleteColumn = () => {
     authControl(
-      columns.deleteColumn(BOARD_ID, column.id).then(() => {
+      columns.deleteColumn(boardId, column.id).then(() => {
         const title = '';
         setColumnParams((params) => {
           return { ...params, title };
@@ -54,7 +57,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
       order: taskList?.length || 0,
       userId: USER_ID,
     };
-    const newTask = await authControl(tasksApi.createTask(BOARD_ID, column.id, data));
+    const newTask = await authControl(tasksApi.createTask(boardId, column.id, data));
     if (!newTask) return;
     setTaskList((list) => [...list, newTask]);
     setIsAdd(false);
@@ -80,8 +83,8 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     result.splice(endIndex, 0, removed);
     result.forEach((task, index) => {
       const { title, description, userId } = task;
-      const data = { title, description, userId, boardId: BOARD_ID, order: index };
-      tasksApi.updateTask(BOARD_ID, column.id, task.id, data);
+      const data = { title, description, userId, boardId, order: index };
+      tasksApi.updateTask(boardId, column.id, task.id, data);
     });
     return result;
   };
