@@ -10,7 +10,7 @@ import {
   getBoardsState,
 } from '../../store/boards/boards.slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { BoardsCreateRequest } from '../../types/api';
+import { BoardRequest } from '../../types/api';
 import BoardsList from './components/BoardsList/BoardsList';
 import BoardsModal from './components/BoardsModal/BoardsModal';
 
@@ -36,7 +36,7 @@ const BoardsPage = () => {
   };
 
   const handleCreateBoard = async (title: string, description: string, color: string) => {
-    const boardInfo: BoardsCreateRequest = {
+    const boardInfo: BoardRequest = {
       title: title,
       description: description,
       color: color,

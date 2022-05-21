@@ -1,0 +1,8 @@
+.BoardPage {
+  margin-top: 50px;
+
+  .Columns {
+    overflow-y: scroll;
+    align-items: flex-start;
+  }
+}

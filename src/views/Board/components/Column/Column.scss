@@ -1,0 +1,22 @@
+.Column {
+  width: 300px;
+  position: relative;
+
+  form {
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+
+  .tasks {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+  }
+
+  .delete-icon {
+    position: absolute;
+    bottom: 8px;
+    right: 0;
+  }
+}

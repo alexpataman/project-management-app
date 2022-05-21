@@ -2,10 +2,10 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { BoardsResponse } from '../../../../types/api';
+import { BoardResponse } from '../../../../types/api';
 
 interface IBoardsList {
-  boards: BoardsResponse[];
+  boards: BoardResponse[];
   openModal: () => void;
   deleteBoard: (id: string) => void;
 }

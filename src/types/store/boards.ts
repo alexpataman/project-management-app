@@ -1,6 +1,6 @@
-import { BoardsResponse } from '../api';
+import { BoardResponse } from '../api';
 
 export interface BoardsState {
   isLoading: boolean;
-  boards: BoardsResponse[];
+  boards: BoardResponse[];
 }

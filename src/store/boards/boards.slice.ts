@@ -8,7 +8,7 @@ import {
   ACTION_GET_BOARDS,
   BOARDS_SLICE_NAME,
 } from '../../constants/store';
-import { BoardsCreateRequest } from '../../types/api';
+import { BoardRequest } from '../../types/api';
 import { BoardsState } from '../../types/store/boards';
 
 export const initialState: BoardsState = {
@@ -42,7 +42,7 @@ export const getBoards = createAsyncThunk(ACTION_GET_BOARDS, async () => {
 
 export const createBoard = createAsyncThunk(
   ACTION_CREATE_BOARD,
-  async (data: BoardsCreateRequest, { dispatch }) => {
+  async (data: BoardRequest, { dispatch }) => {
     await boards.createBoard(data);
     dispatch(getBoards());
   }
