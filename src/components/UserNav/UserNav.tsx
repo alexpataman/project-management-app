@@ -40,6 +40,7 @@ export const UserNav = () => {
         onClick={handleMenu}
         color="inherit"
         sx={{ textTransform: 'none' }}
+        className="user-nav"
       >
         <AccountCircle sx={{ mr: '5px' }} />
         <Typography>{name}</Typography>
