@@ -1,9 +1,12 @@
+import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
+
+import './LanguageSwitcher.scss';
 
 // TODO: temp version, just to test translations
 const lngs: { [key: string]: string } = {
-  en: 'English',
-  ru: 'Russian',
+  en: 'En',
+  ru: 'Ru',
 };
 
 export const LanguageSwitcher = () => {
@@ -12,14 +15,13 @@ export const LanguageSwitcher = () => {
   return (
     <div className="LanguageSwitcher">
       {Object.keys(lngs).map((lng) => (
-        <button
+        <a
           key={lng}
-          style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal' }}
-          type="submit"
           onClick={() => i18n.changeLanguage(lng)}
+          className={classnames('link', { active: i18n.resolvedLanguage === lng })}
         >
           {lngs[lng]}
-        </button>
+        </a>
       ))}
     </div>
   );

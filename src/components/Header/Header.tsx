@@ -1,30 +1,52 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { useScrollTrigger } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Toolbar from '@mui/material/Toolbar';
+import classnames from 'classnames';
+import * as React from 'react';
+import { Link } from 'react-router-dom';
 
-import { LanguageSwitcher } from '..';
-import { LINKS } from '../../constants';
+import { UserNav } from '..';
+import { GuestNav } from '..';
+import { APP_NAME, PATH } from '../../constants';
 import { useIsGuest } from '../../hooks/useIsGuest';
+import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
 
 import './Header.scss';
 
 export const Header = () => {
-  const { t } = useTranslation();
   const isGuest = useIsGuest();
+  const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
 
   return (
-    <header className="Header">
-      <div className="container">
-        <nav className="navigation">
-          {LINKS.map((page, index: number) => (
-            <NavLink to={page.to} key={index} className="navigation-link">
-              {t(page.title)}
-            </NavLink>
-          ))}
-        </nav>
-        <LanguageSwitcher />
-        {isGuest ? 'Гость' : 'Авторизирован'}
-      </div>
-    </header>
+    <AppBar
+      position="sticky"
+      className={classnames('Header', { sticky: trigger })}
+      color="transparent"
+    >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'inline' } }}>
+            <Box component={Link} to={PATH.home} className="logo">
+              {APP_NAME}
+            </Box>
+          </Box>
+
+          <Button
+            component={Link}
+            to="/"
+            className="logo"
+            sx={{ flexGrow: 1, display: { xs: 'inline', md: 'none' } }}
+          >
+            RSLang
+          </Button>
+
+          <LanguageSwitcher />
+          {isGuest ? <GuestNav /> : <UserNav />}
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };

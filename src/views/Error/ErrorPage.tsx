@@ -1,3 +1,4 @@
+import Container from '@mui/material/Container';
 import React from 'react';
 
 interface IErrorPage {
@@ -5,7 +6,11 @@ interface IErrorPage {
 }
 
 const ErrorPage: React.FC<IErrorPage> = ({ code }) => {
-  return <h1>Error {code}</h1>;
+  return (
+    <Container maxWidth="xl">
+      <h1>Error {code}</h1>
+    </Container>
+  );
 };
 
 export default ErrorPage;

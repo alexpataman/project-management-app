@@ -15,7 +15,7 @@ export const useAuthControl = () => {
       .catch((error) => {
         if (error instanceof UnauthorizedError) {
           dispatch(logOut());
-          navigate(PATH.login);
+          navigate(PATH.home);
         }
       });
   };

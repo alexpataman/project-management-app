@@ -1,0 +1,20 @@
+.LanguageSwitcher {
+  display: flex;
+  gap: 10px;
+  margin-right: 10px;
+
+  .link {
+    border-right: 1px solid #ccc;
+    padding-right: 10px;
+    cursor: pointer;
+
+    &:last-of-type {
+      border: none;
+      padding-right: 0;
+    }
+
+    &.active {
+      font-weight: bold;
+    }
+  }
+}

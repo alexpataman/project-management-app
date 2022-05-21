@@ -11,22 +11,25 @@ import Typography from '@mui/material/Typography';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { authorization } from '../../../../api/backend';
+import { PATH } from '../../../../constants';
 import { AlreadyExistsError } from '../../../../errors/AlreadyExistsError';
 import { useAppDispatch } from '../../../../store/hooks';
 import { signIn } from '../../../../store/user/user.slice';
 import { LOGIN_VIEWS } from '../../utils/constants';
 
 interface SignUp {
-  changeView: (view: string) => void;
+  changeView: (view: LOGIN_VIEWS) => void;
 }
 
 export const SignUp: React.FC<SignUp> = ({ changeView }) => {
   const [alert, setAlert] = useState('');
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
     name: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -45,8 +48,9 @@ export const SignUp: React.FC<SignUp> = ({ changeView }) => {
       try {
         await authorization.signUp(values);
         const { login, password } = values;
-        const response = await authorization.signIn({ login, password });
-        dispatch(signIn(response.token));
+        const { token, name } = await authorization.signIn({ login, password });
+        dispatch(signIn({ token, name }));
+        navigate(PATH.boards);
       } catch (error) {
         if (error instanceof AlreadyExistsError) {
           setAlert(t('LANG_USER_EXISTS_ERROR'));

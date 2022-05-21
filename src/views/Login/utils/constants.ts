@@ -1,5 +1,5 @@
-export const LOGIN_VIEWS = {
-  signIn: 'SignIn',
-  signUp: 'SignUp',
-  logOut: 'LogOut',
-};
+export enum LOGIN_VIEWS {
+  signIn = 'SignIn',
+  signUp = 'SignUp',
+  logOut = 'LogOut',
+}

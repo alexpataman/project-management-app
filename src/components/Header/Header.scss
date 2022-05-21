@@ -1,20 +1,86 @@
 @import '../../App.variables.scss';
+$transition-timeout: 0.5s;
 
 .Header {
-  background: $base-color;
-  padding: 20px 0;
+  padding: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #000 !important;
+  transition: background-color $transition-timeout !important;
 
-  .navigation {
-    display: flex;
-    gap: 20px;
+  &.sticky {
+    background-color: $base-color !important;
+    .logo {
+      padding-left: 0;
 
-    .active {
-      font-weight: bold;
+      &::before {
+        opacity: 0;
+      }
     }
 
-    .navigation-link {
-      color: #fff;
-      text-decoration: none;
+    a {
+      color: #ffffff !important;
+    }
+
+    .user-nav {
+      color: #ffffff !important;
     }
   }
+
+  .username {
+    color: #000;
+  }
+
+  .logo {
+    position: relative;
+    text-decoration: none;
+    color: #000;
+    padding-left: 55px;
+    font-size: 24px;
+    line-height: 50px;
+    margin-top: 10px;
+    transition: all $transition-timeout;
+
+    &::before {
+      content: '';
+      width: 45px;
+      height: 45px;
+      background: url('../../assets/img/logo.png') no-repeat;
+      background-size: 45px;
+      position: absolute;
+      left: 0;
+      transition: all $transition-timeout;
+    }
+  }
+
+  .nav {
+    gap: 50px;
+    margin-right: 50px;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+    transition: color $transition-timeout;
+  }
+
+  .nav span {
+    color: #000;
+    text-decoration: none;
+    font-size: 24px;
+    cursor: pointer;
+
+    @media screen and (max-width: 560px) {
+      font-size: 18px;
+    }
+  }
+
+  .nav span:hover {
+    text-decoration: underline;
+  }
+}
+
+.menu-link {
+  color: #000;
+  text-decoration: none;
 }

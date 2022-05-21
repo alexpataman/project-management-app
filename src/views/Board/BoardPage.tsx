@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { IconButton, Modal, Stack } from '@mui/material';
+import { Container, IconButton, Modal, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -50,33 +50,35 @@ const BoardsPage = () => {
 
   return (
     <Loader isLoading={isLoading}>
-      <section className="BoardPage">
-        <Stack className="Columns" direction="row" spacing={2}>
-          {columns.map((items, index) => (
-            <Column column={items} key={index} />
-          ))}
-          {columns.length < COLUMNS_LIMIT && (
-            <IconButton
-              aria-label="add"
-              size="large"
-              sx={{ height: 50, width: 50, backgroundColor: BASE_GREY }}
-              onClick={handleOpen}
-            >
-              <AddIcon />
-            </IconButton>
-          )}
-        </Stack>
-        <Modal
-          open={isOpen}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={modalStyle}>
-            <ModalForm saveTask={addColumn} closeModal={handleClose} />
-          </Box>
-        </Modal>
-      </section>
+      <Container component="main" maxWidth="xl">
+        <section className="BoardPage">
+          <Stack className="Columns" direction="row" spacing={2}>
+            {columns.map((items, index) => (
+              <Column column={items} key={index} />
+            ))}
+            {columns.length < COLUMNS_LIMIT && (
+              <IconButton
+                aria-label="add"
+                size="large"
+                sx={{ height: 50, width: 50, backgroundColor: BASE_GREY }}
+                onClick={handleOpen}
+              >
+                <AddIcon />
+              </IconButton>
+            )}
+          </Stack>
+          <Modal
+            open={isOpen}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+              <ModalForm saveTask={addColumn} closeModal={handleClose} />
+            </Box>
+          </Modal>
+        </section>
+      </Container>
     </Loader>
   );
 };
