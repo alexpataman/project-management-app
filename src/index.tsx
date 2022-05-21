@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -9,19 +9,13 @@ import { ERROR_CODE_NOT_FOUND, PATH } from './constants';
 import './helpers/i18n';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
+import { BoardPage, BoardsPage, ErrorPage, HomePage, LoginPage, UsersPage } from './views';
 import { LOGIN_VIEWS } from './views/Login/utils/constants';
 
 import './index.scss';
 
 const container = document.getElementById('root');
 if (container) {
-  const HomePage = lazy(() => import('./views/Home/HomePage'));
-  const BoardPage = lazy(() => import('./views/Board/BoardPage'));
-  const BoardsPage = lazy(() => import('./views/Boards/BoardsPage'));
-  const LoginPage = lazy(() => import('./views/Login/LoginPage'));
-  const ErrorPage = lazy(() => import('./views/Error/ErrorPage'));
-  const UsersPage = lazy(() => import('./views/Users/UsersPage'));
-
   const root = createRoot(container);
   root.render(
     <Provider store={store}>

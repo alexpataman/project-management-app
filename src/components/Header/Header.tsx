@@ -40,7 +40,7 @@ export const Header = () => {
             className="logo"
             sx={{ flexGrow: 1, display: { xs: 'inline', md: 'none' } }}
           >
-            RSLang
+            {APP_NAME}
           </Button>
 
           <LanguageSwitcher />
