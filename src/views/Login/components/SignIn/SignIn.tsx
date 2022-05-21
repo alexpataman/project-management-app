@@ -11,22 +11,25 @@ import Typography from '@mui/material/Typography';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { authorization } from '../../../../api/backend';
+import { PATH } from '../../../../constants';
 import { ForbiddenError } from '../../../../errors/ForbiddenError';
 import { useAppDispatch } from '../../../../store/hooks';
 import { signIn } from '../../../../store/user/user.slice';
 import { LOGIN_VIEWS } from '../../utils/constants';
 
 interface SignIn {
-  changeView: (view: string) => void;
+  changeView: (view: LOGIN_VIEWS) => void;
 }
 
 export const SignIn: React.FC<SignIn> = ({ changeView }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [alert, setAlert] = useState('');
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
     login: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -43,6 +46,7 @@ export const SignIn: React.FC<SignIn> = ({ changeView }) => {
       try {
         const response = await authorization.signIn(values);
         dispatch(signIn(response.token));
+        navigate(PATH.boards);
       } catch (error) {
         if (error instanceof ForbiddenError) {
           setAlert(t('LANG_FORBIDDEN_ERROR'));

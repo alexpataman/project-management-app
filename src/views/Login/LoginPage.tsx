@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useIsGuest } from '../../hooks/useIsGuest';
 import { LogOut } from './components/LogOut/LogOut';
@@ -6,11 +6,19 @@ import { SignIn } from './components/SignIn/SignIn';
 import { SignUp } from './components/SignUp/SignUp';
 import { LOGIN_VIEWS } from './utils/constants';
 
-const LoginPage = () => {
-  const [view, setView] = useState(LOGIN_VIEWS.signIn);
+interface ILoginPage {
+  defaultView?: LOGIN_VIEWS;
+}
+
+const LoginPage = ({ defaultView = LOGIN_VIEWS.signIn }: ILoginPage) => {
+  const [view, setView] = useState(defaultView);
   const isGuest = useIsGuest();
 
-  const changeView = (view: string) => {
+  useEffect(() => {
+    setView(defaultView);
+  }, [defaultView]);
+
+  const changeView = (view: LOGIN_VIEWS) => {
     setView(view);
   };
 
