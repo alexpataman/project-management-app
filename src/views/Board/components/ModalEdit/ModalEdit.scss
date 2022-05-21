@@ -1,0 +1,42 @@
+.ModalEdit {
+  align-items: center;
+  background-color: white;
+  text-align: center;
+  margin: 0;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  h4 {
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .close-icon {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 40px;
+    align-items: center;
+    height: 70%;
+  }
+
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    align-items: center;
+  }
+
+  .buttons {
+    display: flex;
+    column-gap: 10px;
+  }
+}

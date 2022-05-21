@@ -1,0 +1,27 @@
+.Confirmation {
+  width: 95%;
+  height: 200px;
+  margin: 0 auto;
+  background-color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  h4 {
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .close-icon {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+  }
+}
