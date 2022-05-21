@@ -31,7 +31,7 @@ export type BoardRequest = {
   color: string;
 };
 
-export type BoardResposne = {
+export type BoardResponse = {
   id: string;
   title: string;
   description: string;
