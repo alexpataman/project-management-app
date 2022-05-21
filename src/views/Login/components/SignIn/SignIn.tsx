@@ -44,8 +44,8 @@ export const SignIn: React.FC<SignIn> = ({ changeView }) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await authorization.signIn(values);
-        dispatch(signIn(response.token));
+        const { token, name } = await authorization.signIn(values);
+        dispatch(signIn({ token, name }));
         navigate(PATH.boards);
       } catch (error) {
         if (error instanceof ForbiddenError) {

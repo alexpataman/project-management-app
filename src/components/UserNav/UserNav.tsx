@@ -7,12 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { PATH } from '../../constants';
-import { useAppDispatch } from '../../store/hooks';
-import { logOut } from '../../store/user/user.slice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { getUserState, logOut } from '../../store/user/user.slice';
 
 export const UserNav = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { t } = useTranslation();
+  const { name } = useAppSelector(getUserState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ export const UserNav = () => {
         sx={{ textTransform: 'none' }}
       >
         <AccountCircle sx={{ mr: '5px' }} />
-        <Typography>{t('LANG_PROFILE_TITLE')}</Typography>
+        <Typography>{name}</Typography>
       </Button>
       <Menu
         id="menu-appbar"

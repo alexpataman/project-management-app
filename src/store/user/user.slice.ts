@@ -8,6 +8,7 @@ import { UserState } from '../../types/store/user';
 
 export const initialState: UserState = {
   isGuest: !storage.get(LOCAL_STORAGE_TOKEN_ID),
+  name: '',
 };
 
 const slice = createSlice({
@@ -16,17 +17,20 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signIn.fulfilled, (state) => {
+      .addCase(signIn.fulfilled, (state, action) => {
         state.isGuest = false;
+        state.name = action.payload;
       })
       .addCase(logOut.fulfilled, (state) => {
         state.isGuest = true;
+        state.name = '';
       });
   },
 });
 
-export const signIn = createAsyncThunk(ACTION_SIGN_IN, (token: string) => {
-  storage.set(LOCAL_STORAGE_TOKEN_ID, token);
+export const signIn = createAsyncThunk(ACTION_SIGN_IN, (data: { token: string; name: string }) => {
+  storage.set(LOCAL_STORAGE_TOKEN_ID, data.token);
+  return data.name;
 });
 
 export const logOut = createAsyncThunk(ACTION_LOG_OUT, () => {

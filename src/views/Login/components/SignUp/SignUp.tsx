@@ -48,8 +48,8 @@ export const SignUp: React.FC<SignUp> = ({ changeView }) => {
       try {
         await authorization.signUp(values);
         const { login, password } = values;
-        const response = await authorization.signIn({ login, password });
-        dispatch(signIn(response.token));
+        const { token, name } = await authorization.signIn({ login, password });
+        dispatch(signIn({ token, name }));
         navigate(PATH.boards);
       } catch (error) {
         if (error instanceof AlreadyExistsError) {
