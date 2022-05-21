@@ -2,6 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, IconButton, Modal, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { modalStyle } from '../../utils/modalStyle';
 import { TaskEditForm } from '../../utils/types';
@@ -27,6 +28,7 @@ const ModalEdit = ({
     closeModal;
   };
   const { register, handleSubmit } = useForm<TaskEditForm>();
+  const { t } = useTranslation();
 
   const onSubmit = (data: TaskEditForm) => {
     if (data) {
@@ -37,7 +39,7 @@ const ModalEdit = ({
   };
   return (
     <div className="ModalEdit">
-      <Typography variant="h5">Изменить карточку</Typography>
+      <Typography variant="h5">{t('BOARD_MODAL_CHANGE_CARD')}</Typography>
       <IconButton className="close-icon" aria-label="delete" onClick={closeModal}>
         <CloseIcon />
       </IconButton>
@@ -45,27 +47,27 @@ const ModalEdit = ({
         <div className="inputs">
           <TextField
             variant="outlined"
-            label={'Имя'}
+            label={t('BOARD_MODAL_NAME')}
             defaultValue={task.title}
             {...register('name', { required: true })}
           />
           <TextField
             variant="outlined"
-            label={'Описание'}
+            label={t('BOARD_MODAL_DESCRIPTION')}
             defaultValue={task.description}
             {...register('description', { required: true })}
           />
         </div>
         <div className="buttons">
           <Button variant="outlined" onClick={closeModal}>
-            Отменить
+            {t('BOARD_MODAL_CANCEL')}
           </Button>
           <Button type="submit" variant="contained">
-            Сохранить
+            {t('BOARD_MODAL_CHANGE')}
           </Button>
         </div>
         <Button variant="outlined" color="error" onClick={handleOpen}>
-          Удалить карточку
+          {t('BOARD_MODAL_DELETE_CARD')}
         </Button>
       </form>
       <Modal open={isOpen} onClose={handleClose}>

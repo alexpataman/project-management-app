@@ -74,7 +74,7 @@ const BoardsPage = () => {
             aria-describedby="modal-modal-description"
           >
             <Box sx={modalStyle}>
-              <ModalForm saveTask={addColumn} closeModal={handleClose} />
+              <ModalForm title="COLUMN" saveTask={addColumn} closeModal={handleClose} />
             </Box>
           </Modal>
         </section>

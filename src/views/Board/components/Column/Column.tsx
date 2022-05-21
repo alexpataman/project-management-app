@@ -2,6 +2,7 @@ import { Box, Card, CardContent, Modal, TextField } from '@mui/material';
 import { useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
@@ -21,6 +22,7 @@ import './Column.scss';
 
 const Column = ({ column }: { column: ColumnResponse }) => {
   const authControl = useAuthControl();
+  const { t } = useTranslation();
   const params = useParams();
   const boardId = params.id || '';
   const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
@@ -115,7 +117,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
               />
               {isEdit && (
                 <EditColumn
-                  titles={{ cancel: 'Отменить', save: 'Сохранить' }}
+                  titles={{ cancel: t('BOARD_MODAL_CANCEL'), save: t('BOARD_MODAL_SAVE') }}
                   callback={resetColumnTitle}
                 />
               )}
@@ -149,7 +151,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
           <UpdateColumn onAdd={() => setIsAdd(true)} onDelete={() => setIsDelete(true)} />
           <Modal open={isAdd} onClose={() => setIsAdd(false)}>
             <Box sx={modalStyle}>
-              <ModalForm saveTask={addTask} closeModal={() => setIsAdd(false)} />
+              <ModalForm title="TASK" saveTask={addTask} closeModal={() => setIsAdd(false)} />
             </Box>
           </Modal>
           <Modal open={isDelete} onClose={() => setIsDelete(false)}>
