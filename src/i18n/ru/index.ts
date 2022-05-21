@@ -1,5 +1,12 @@
+import { ABOUT } from './about';
+import { FEATURES } from './features';
+import { WELCOME } from './welcome';
+
 export default {
   translation: {
+    ...ABOUT,
+    ...FEATURES,
+    ...WELCOME,
     // temp values, will be removed
     LANG_HOME: 'Главная',
     LANG_HOMEPAGE: 'Главная страница',
