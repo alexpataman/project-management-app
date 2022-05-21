@@ -42,7 +42,7 @@ export type BoardResponse = {
 
 export type ColumnRequest = {
   title: string;
-  order: number;
+  order?: number;
 };
 
 export type ColumnResponse = {

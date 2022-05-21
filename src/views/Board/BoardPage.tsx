@@ -2,6 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Container, IconButton, Modal, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 
 import { boards, columns as columnsApi } from '../../api/backend';
@@ -10,6 +11,7 @@ import { useAuthControl } from '../../hooks/useAuthControl';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
 import { BASE_GREY } from './utils/constants';
+import { getColumnStyle, reorderColumns } from './utils/dndHelpers';
 import { modalStyle } from './utils/modalStyle';
 
 import './BoardPage.scss';
@@ -38,11 +40,17 @@ const BoardsPage = () => {
   }, []);
 
   const addColumn = async (title: string) => {
-    const newColumn = await authControl(
-      columnsApi.createColumn(boardId, { title, order: columns.length })
-    );
+    const newColumn = await authControl(columnsApi.createColumn(boardId, { title }));
     if (!newColumn) return;
     setColumns((columns) => [...columns, newColumn]);
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+    const items = reorderColumns(boardId, columns, result.source.index, result.destination.index);
+    setColumns(items);
   };
 
   return (
@@ -50,9 +58,33 @@ const BoardsPage = () => {
       <Container component="main" maxWidth="xl">
         <section className="BoardPage">
           <Stack className="Columns" direction="row" spacing={2}>
-            {columns.map((items, index) => (
-              <Column column={items} key={index} />
-            ))}
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable" direction="horizontal">
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    style={{ display: 'flex' }}
+                  >
+                    {columns.map((column, index) => (
+                      <Draggable key={column.id} draggableId={column.id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getColumnStyle(provided.draggableProps.style)}
+                          >
+                            {<Column column={column} key={index} />}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
             {columns.length < COLUMNS_LIMIT && (
               <IconButton
                 aria-label="add"

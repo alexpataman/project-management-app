@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Modal, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ import { useAuthControl } from '../../../../hooks/useAuthControl';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { USER_ID } from '../../TEMP_ID';
 import { BASE_GREY } from '../../utils/constants';
-import { getItemStyle } from '../../utils/dndHelpers';
+import { getTaskStyle, reorderTasks } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
 import { ColumnEditForm } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
@@ -34,6 +34,10 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+
+  useEffect(() => {
+    setColumnParams(column);
+  }, [column]);
 
   const renameColumn = async (title: string) => {
     const newParams = await authControl(columns.updateColumn(boardId, id, { title, order }));
@@ -78,23 +82,17 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     }
   };
 
-  const reorderTasks = (tasks: TaskResponse[], startIndex: number, endIndex: number) => {
-    const result = [...tasks];
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    result.forEach((task, index) => {
-      const { title, description, userId } = task;
-      const data = { title, description, userId, boardId, order: index + 1 };
-      tasksApi.updateTask(boardId, column.id, task.id, data);
-    });
-    return result;
-  };
-
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
-    const items = reorderTasks(taskList, result.source.index, result.destination.index);
+    const items = reorderTasks(
+      boardId,
+      column.id,
+      taskList,
+      result.source.index,
+      result.destination.index
+    );
     setTaskList(items);
   };
 
@@ -134,7 +132,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            style={getItemStyle(provided.draggableProps.style)}
+                            style={getTaskStyle(provided.draggableProps.style)}
                           >
                             {<TaskItem task={task} key={task.id} column={column} />}
                           </div>
