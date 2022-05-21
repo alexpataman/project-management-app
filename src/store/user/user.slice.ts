@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import type { RootState } from '..';
-import { LOCAL_STORAGE_TOKEN_ID } from '../../constants';
+import { LOCAL_STORAGE_TOKEN_ID, LOCAL_STORAGE_USER_NAME_ID } from '../../constants';
 import { ACTION_LOG_OUT, ACTION_SIGN_IN, USER_SLICE_NAME } from '../../constants/store';
 import { storage } from '../../helpers/storage';
 import { UserState } from '../../types/store/user';
 
 export const initialState: UserState = {
   isGuest: !storage.get(LOCAL_STORAGE_TOKEN_ID),
-  name: '',
+  name: storage.get(LOCAL_STORAGE_USER_NAME_ID),
 };
 
 const slice = createSlice({
@@ -30,11 +30,12 @@ const slice = createSlice({
 
 export const signIn = createAsyncThunk(ACTION_SIGN_IN, (data: { token: string; name: string }) => {
   storage.set(LOCAL_STORAGE_TOKEN_ID, data.token);
+  storage.set(LOCAL_STORAGE_USER_NAME_ID, data.name);
   return data.name;
 });
 
 export const logOut = createAsyncThunk(ACTION_LOG_OUT, () => {
-  storage.remove(LOCAL_STORAGE_TOKEN_ID);
+  storage.clear();
 });
 
 export const {} = slice.actions;

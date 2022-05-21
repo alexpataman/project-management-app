@@ -4,6 +4,7 @@ import InsightsSharpIcon from '@mui/icons-material/InsightsSharp';
 import LockIcon from '@mui/icons-material/Lock';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import { Grid, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import './Features.scss';
@@ -35,7 +36,7 @@ export const Features = () => {
 
   return (
     <section className="Features">
-      <div className="container">
+      <Container maxWidth="xl" className="content">
         <Grid
           container
           justifyContent="space-around"
@@ -50,7 +51,7 @@ export const Features = () => {
             </Grid>
           ))}
         </Grid>
-      </div>
+      </Container>
     </section>
   );
 };

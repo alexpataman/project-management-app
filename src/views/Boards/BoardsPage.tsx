@@ -51,7 +51,7 @@ const BoardsPage = () => {
   };
 
   return (
-    <Container component="main">
+    <Container component="main" maxWidth="xl">
       <BoardsModal
         isModalOpened={isModalOpened}
         closeModal={closeCreationModal}

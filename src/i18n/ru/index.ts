@@ -1,4 +1,5 @@
 import { ABOUT } from './about';
+import { BOARDS } from './boards';
 import { FEATURES } from './features';
 import { USER } from './user';
 import { WELCOME } from './welcome';
@@ -9,10 +10,6 @@ export default {
     ...FEATURES,
     ...WELCOME,
     ...USER,
-    // temp values, will be removed
-    LANG_HOME: 'Главная',
-    LANG_HOMEPAGE: 'Главная страница',
-    LANG_BOARDS: 'Доски',
-    LANG_BOARD: 'Доска',
+    ...BOARDS,
   },
 };

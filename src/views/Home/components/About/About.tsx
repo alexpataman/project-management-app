@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import ava1 from '../../../../assets/img/team_1.jpeg';
@@ -33,7 +34,7 @@ export const About = () => {
   ];
 
   return (
-    <div className="container">
+    <Container maxWidth="xl">
       <div className="About">
         <Typography variant="h2">{t('ABOUT_TITLE')}</Typography>
         <Grid container justifyContent="space-around" spacing={2}>
@@ -49,6 +50,6 @@ export const About = () => {
           ))}
         </Grid>
       </div>
-    </div>
+    </Container>
   );
 };
