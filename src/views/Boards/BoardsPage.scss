@@ -156,6 +156,22 @@
         transform: translateX(0);
       }
     }
+
+    .board__click-area {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 5px;
+      padding: 5px 10px;
+      overflow: hidden;
+    }
+  }
+
+  .board__link {
+    text-decoration: none;
+    color: #fff;
   }
 
   .board__overlay {
@@ -194,6 +210,7 @@
     opacity: 0;
     transform: translateX(10px);
     transition: 0.2s ease;
+    z-index: 10;
   }
   
   .board__create {

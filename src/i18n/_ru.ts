@@ -28,6 +28,9 @@ export default {
     LANG_ENTER_BOARDS_DESCRIPTION: '🧠 Введите описание доски.',
     LANG_SELECT_BOARD_BACKGROUND: '🎨 Укажите фон доски.',
     LANG_BOARDS_TITLE: 'Ваши доски:',
+    LANG_CONFIRMATION_MODAL_TEXT: 'Вы уверены, что хотите удалить этот элемент?',
+    LANG_CONFIRMATION_MODAL_CANCEL: 'Отмена',
+    LANG_CONFIRMATION_MODAL_DELETE: 'Удалить',
 
     // errors
     LANG_FORBIDDEN_ERROR: 'Логин или пароль не верны',

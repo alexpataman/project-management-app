@@ -28,6 +28,9 @@ export default {
     LANG_ENTER_BOARDS_DESCRIPTION: '🧠 Enter the description of the board.',
     LANG_SELECT_BOARD_BACKGROUND: '🎨 Select the background of the board.',
     LANG_BOARDS_TITLE: 'Your boards:',
+    LANG_CONFIRMATION_MODAL_TEXT: 'Are you sure you want to delete this item?',
+    LANG_CONFIRMATION_MODAL_CANCEL: 'Cancel',
+    LANG_CONFIRMATION_MODAL_DELETE: 'Delete',
 
     // errors
     LANG_FORBIDDEN_ERROR: 'Your login or password is wrong',
