@@ -1,20 +1,25 @@
-import { BoardRequest, BoardResposne } from '../../types/api';
+import { BoardRequest, BoardResponse } from '../../types/api';
 import { Base } from './Base';
 
 class Boards extends Base {
   public API_PATH_BOARDS = `${this.API_HOST}/boards`;
 
-  async getBoards(): Promise<BoardResposne[]> {
+  async getBoards(): Promise<BoardResponse[] | null> {
     const instance = this.getInstance();
     return this.sendRequest(instance.get(`${this.API_PATH_BOARDS}`));
   }
 
-  async createBoard(data: BoardRequest): Promise<BoardResposne> {
+  async createBoard(board: BoardRequest): Promise<BoardResponse> {
     const instance = this.getInstance();
-    return this.sendRequest(instance.post(`${this.API_PATH_BOARDS}`, data));
+    return this.sendRequest(instance.post(`${this.API_PATH_BOARDS}`, board));
   }
 
-  async getBoardById(id: string): Promise<BoardResposne> {
+  async deleteBoard(id: string): Promise<BoardResponse[] | null> {
+    const instance = this.getInstance();
+    return this.sendRequest(instance.delete(`${this.API_PATH_BOARDS}/${id}`));
+  }
+
+  async getBoardById(id: string): Promise<BoardResponse | null> {
     const instance = this.getInstance();
     return this.sendRequest(instance.get(`${this.API_PATH_BOARDS}/${id}`));
   }
