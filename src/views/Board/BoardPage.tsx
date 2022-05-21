@@ -39,10 +39,7 @@ const BoardsPage = () => {
 
   const addColumn = async (title: string) => {
     const newColumn = await authControl(
-      columnsApi.createColumn(boardId, {
-        title: title,
-        order: columns.length,
-      })
+      columnsApi.createColumn(boardId, { title, order: columns.length })
     );
     if (!newColumn) return;
     setColumns((columns) => [...columns, newColumn]);

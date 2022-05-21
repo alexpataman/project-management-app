@@ -56,7 +56,6 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     const data = {
       title,
       description: description || ' ',
-      order: taskList?.length || 0,
       userId: USER_ID,
     };
     const newTask = await authControl(tasksApi.createTask(boardId, column.id, data));
@@ -85,7 +84,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     result.splice(endIndex, 0, removed);
     result.forEach((task, index) => {
       const { title, description, userId } = task;
-      const data = { title, description, userId, boardId, order: index };
+      const data = { title, description, userId, boardId, order: index + 1 };
       tasksApi.updateTask(boardId, column.id, task.id, data);
     });
     return result;
