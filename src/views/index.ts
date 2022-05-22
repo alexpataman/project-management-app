@@ -3,6 +3,6 @@ import BoardsPage from './Boards/BoardsPage';
 import ErrorPage from './Error/ErrorPage';
 import HomePage from './Home/HomePage';
 import LoginPage from './Login/LoginPage';
-import UsersPage from './Users/UsersPage';
+import ProfilePage from './Profile/ProfilePage';
 
-export { HomePage, BoardsPage, BoardPage, ErrorPage, UsersPage, LoginPage };
+export { HomePage, BoardsPage, BoardPage, ErrorPage, ProfilePage, LoginPage };

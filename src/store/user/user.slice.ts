@@ -40,6 +40,7 @@ export const signIn = createAsyncThunk(
   (data: { token: string; name: string; id: string }) => {
     storage.set(LOCAL_STORAGE_TOKEN_ID, data.token);
     storage.set(LOCAL_STORAGE_USER_NAME_ID, data.name);
+    storage.set(LOCAL_STORAGE_USER_ID, data.id);
     return { name: data.name, id: data.id };
   }
 );

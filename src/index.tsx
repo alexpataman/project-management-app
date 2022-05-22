@@ -9,7 +9,7 @@ import { ERROR_CODE_NOT_FOUND, PATH } from './constants';
 import './helpers/i18n';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
-import { BoardPage, BoardsPage, ErrorPage, HomePage, LoginPage, UsersPage } from './views';
+import { BoardPage, BoardsPage, ErrorPage, HomePage, LoginPage, ProfilePage } from './views';
 import { LOGIN_VIEWS } from './views/Login/utils/constants';
 
 import './index.scss';
@@ -26,7 +26,14 @@ if (container) {
               <Route index element={<HomePage />} />
               <Route path={PATH.login} element={<LoginPage />} />
               <Route path={PATH.signup} element={<LoginPage defaultView={LOGIN_VIEWS.signUp} />} />
-              <Route path={PATH.users} element={<UsersPage />} />
+              <Route
+                path={PATH.profile}
+                element={
+                  <PrivateRoute>
+                    <ProfilePage />
+                  </PrivateRoute>
+                }
+              />
               <Route
                 path={PATH.boards}
                 element={
@@ -36,7 +43,14 @@ if (container) {
                 }
               />
               <Route path={PATH.board}>
-                <Route path=":id" element={<BoardPage />} />
+                <Route
+                  path=":id"
+                  element={
+                    <PrivateRoute>
+                      <BoardPage />
+                    </PrivateRoute>
+                  }
+                />
               </Route>
               <Route path="*" element={<ErrorPage code={ERROR_CODE_NOT_FOUND} />} />
             </Route>
