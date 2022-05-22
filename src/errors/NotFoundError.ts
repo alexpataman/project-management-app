@@ -1,4 +1,7 @@
-export class NotFoundError extends Error {
+import { ERROR_CODES, ERROR_NAME_NOT_FOUND } from '../constants';
+import { CustomError } from './CustomError';
+
+export class NotFoundError extends CustomError {
   constructor(...params: string[]) {
     super(...params);
 
@@ -6,6 +9,7 @@ export class NotFoundError extends Error {
       Error.captureStackTrace(this, NotFoundError);
     }
 
-    this.name = 'NotFoundError';
+    this.name = ERROR_NAME_NOT_FOUND;
+    this.code = ERROR_CODES[ERROR_NAME_NOT_FOUND];
   }
 }

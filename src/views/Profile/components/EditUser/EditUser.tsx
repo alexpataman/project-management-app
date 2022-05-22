@@ -13,8 +13,8 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { users } from '../../../../api/backend';
-import { AlreadyExistsError } from '../../../../errors/AlreadyExistsError';
-import { useAuthControl } from '../../../../hooks/useAuthControl';
+import { AlreadyExistsError } from '../../../../errors';
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { User } from '../../../../types/api';
 
 interface IEditUser {
@@ -25,7 +25,7 @@ export const EditUser: React.FC<IEditUser> = ({ data }) => {
   const { name, login, id } = data;
   const [alert, setAlert] = useState<{ type: AlertColor; message: string }>();
   const { t } = useTranslation();
-  const authControl = useAuthControl();
+  const backendErrorCatcher = useBackendErrorCatcher();
 
   const validationSchema = yup.object({
     name: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -42,7 +42,7 @@ export const EditUser: React.FC<IEditUser> = ({ data }) => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        await authControl(users.updateUser(id, values));
+        await backendErrorCatcher(users.updateUser(id, values));
         setAlert({ type: 'success', message: t('LANG_EDIT_PROFILE_SUCCESS_TEXT') });
       } catch (error) {
         if (error instanceof AlreadyExistsError) {

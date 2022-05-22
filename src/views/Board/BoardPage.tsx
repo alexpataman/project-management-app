@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import { boards, columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
-import { useAuthControl } from '../../hooks/useAuthControl';
+import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
 import { BASE_GREY } from './utils/constants';
@@ -19,7 +19,7 @@ const COLUMNS_LIMIT = 5;
 const BoardsPage = () => {
   const params = useParams();
   const boardId = params.id || '';
-  const authControl = useAuthControl();
+  const backendErrorCatcher = useBackendErrorCatcher();
   const [columns, setColumns] = useState<ColumnResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ const BoardsPage = () => {
 
   useEffect(() => {
     const load = async () => {
-      const data = await authControl(boards.getBoardById(boardId));
+      const data = await backendErrorCatcher(boards.getBoardById(boardId));
       setIsLoading(false);
       if (!data || !data.columns) return;
       setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
@@ -38,7 +38,7 @@ const BoardsPage = () => {
   }, []);
 
   const addColumn = async (title: string) => {
-    const newColumn = await authControl(
+    const newColumn = await backendErrorCatcher(
       columnsApi.createColumn(boardId, {
         title: title,
         order: columns.length,
