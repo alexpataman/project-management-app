@@ -1,7 +1,9 @@
+import { Container } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import { users } from '../../api/backend';
 import { Loader } from '../../components';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import { useAuthControl } from '../../hooks/useAuthControl';
 import { useAppSelector } from '../../store/hooks';
 import { getUserState } from '../../store/user/user.slice';
@@ -24,9 +26,15 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <>
-      <Loader isLoading={isLoading}>{userData && <EditUser data={userData} />}</Loader>
-    </>
+    <Container component="main" maxWidth="xl">
+      <Loader isLoading={isLoading}>
+        {userData && (
+          <ErrorBoundary>
+            <EditUser data={userData} />
+          </ErrorBoundary>
+        )}
+      </Loader>
+    </Container>
   );
 };
 
