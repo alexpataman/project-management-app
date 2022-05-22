@@ -12,4 +12,5 @@ export const BOARD = {
   BOARD_MODAL_ADD: 'Add',
   BOARD_MODAL_IN_COLUMN: 'in column',
   BOARD_MODAL_NO_DESCRIPTION: 'Open card settings to add a description',
+  BOARD_MODAL_RESPONSIBLE: 'Responsible',
 };

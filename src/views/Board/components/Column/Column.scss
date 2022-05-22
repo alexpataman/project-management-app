@@ -1,6 +1,14 @@
 .Column {
   width: 300px;
   position: relative;
+  max-height: 70vh;
+  overflow-y: scroll !important;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   form {
     height: 50px;
@@ -16,7 +24,7 @@
 
   .delete-icon {
     position: absolute;
-    bottom: 8px;
-    right: 0;
+    top: 8px;
+    right: 2px;
   }
 }

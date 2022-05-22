@@ -20,11 +20,11 @@ import { TaskEditForm } from '../../utils/types';
 import './ModalForm.scss';
 
 const ModalForm = ({
-  title,
+  mode,
   saveTask,
   closeModal,
 }: {
-  title: string;
+  mode: 'column' | 'task';
   saveTask: (title: string, description: string, responsible: string) => void;
   closeModal: () => void;
 }) => {
@@ -51,7 +51,7 @@ const ModalForm = ({
 
   return (
     <div className="ModalForm">
-      <Typography variant="h4">{t(`BOARD_MODAL_ADD_${title}`)}</Typography>
+      <Typography variant="h4">{t(`BOARD_MODAL_ADD_${mode.toUpperCase()}`)}</Typography>
       <IconButton className="close-icon" aria-label="delete" onClick={closeModal}>
         <CloseIcon />
       </IconButton>
@@ -62,16 +62,20 @@ const ModalForm = ({
             label={t('BOARD_MODAL_NAME')}
             {...register('name', { required: true })}
           />
-          <TextField
-            variant="outlined"
-            label={t('BOARD_MODAL_DESCRIPTION')}
-            {...register('description', { required: false })}
-          />
-          {title === 'TASK' && (
-            <>
-              <InputLabel id="select-label">Ответственный за карточку:</InputLabel>
+          {mode === 'task' && (
+            <TextField
+              variant="outlined"
+              label={t('BOARD_MODAL_DESCRIPTION')}
+              multiline
+              {...register('description', { required: false })}
+            />
+          )}
+          {mode === 'task' && (
+            <div className="form-select">
+              <InputLabel id="select-label">{`${t('BOARD_MODAL_RESPONSIBLE')}:`}</InputLabel>
               <Select
                 labelId="select-label"
+                sx={{ minWidth: 120 }}
                 value={responsible}
                 onChange={(e: SelectChangeEvent) => {
                   setResponsible(e.target.value);
@@ -83,7 +87,7 @@ const ModalForm = ({
                   </MenuItem>
                 ))}
               </Select>
-            </>
+            </div>
           )}
         </div>
         <div className="buttons">

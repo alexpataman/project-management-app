@@ -1,12 +1,12 @@
 .Confirmation {
-  width: 95%;
-  height: 200px;
   margin: 0 auto;
+  padding: 40px;
   background-color: white;
-  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  row-gap: 20px;
+  text-align: center;
+  border-radius: 10px;
 
   h4 {
     width: 85%;
@@ -15,10 +15,9 @@
 
   .close-icon {
     position: absolute;
-    right: 10px;
-    top: 20px;
+    right: 30px;
+    top: 5px;
   }
-
   .buttons {
     display: flex;
     justify-content: center;

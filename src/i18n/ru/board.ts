@@ -12,4 +12,5 @@ export const BOARD = {
   BOARD_MODAL_ADD: 'Добавить',
   BOARD_MODAL_IN_COLUMN: 'в колонке',
   BOARD_MODAL_NO_DESCRIPTION: 'Добавьте описание в настройках карточки',
+  BOARD_MODAL_RESPONSIBLE: 'Ответственный',
 };

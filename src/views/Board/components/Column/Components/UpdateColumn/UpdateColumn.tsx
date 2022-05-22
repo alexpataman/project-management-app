@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { Button, CardActions, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +18,7 @@ export const UpdateColumn = ({ onAdd, onDelete }: IUpdateColumn) => {
         </Button>
       </CardActions>
       <IconButton className="delete-icon" onClick={onDelete} size="small">
-        <DeleteIcon />
+        <DeleteForeverRoundedIcon />
       </IconButton>
     </>
   );
