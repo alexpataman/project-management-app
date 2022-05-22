@@ -10,4 +10,6 @@ export const BOARD = {
   BOARD_MODAL_CHANGE: 'Изменить',
   BOARD_MODAL_SAVE: 'Сохранить',
   BOARD_MODAL_ADD: 'Добавить',
+  BOARD_MODAL_IN_COLUMN: 'в колонке',
+  BOARD_MODAL_NO_DESCRIPTION: 'Добавьте описание в настройках карточки',
 };

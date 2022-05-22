@@ -7,6 +7,7 @@ import { tasks } from '../../../../api/backend';
 import { useAuthControl } from '../../../../hooks/useAuthControl';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { modalStyle } from '../../utils/modalStyle';
+import { CardInfo } from '../ModalCardInfo';
 import { ModalEdit } from '../ModalEdit';
 
 import './TaskItem.scss';
@@ -22,7 +23,10 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
     title,
     description,
   });
+  const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const handleEdit = () => setIsEdit(true);
+  const handleSave = () => setIsEdit(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
@@ -45,18 +49,23 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
     <>
       {taskParams.title && (
         <div className="TaskItem">
-          <p>{taskParams.title}</p>
-          <IconButton className="edit-icon" onClick={handleOpen} size="small">
+          <p onClick={handleOpen}>{taskParams.title}</p>
+          <IconButton className="edit-icon" onClick={handleEdit} size="small">
             <EditIcon />
           </IconButton>
-          <Modal open={isOpen} onClose={handleClose}>
+          <Modal open={isEdit} onClose={handleSave}>
             <Box sx={modalStyle}>
               <ModalEdit
                 task={{ title: taskParams.title, description: taskParams.description }}
                 updateTask={updateTask}
                 deleteTask={deleteTask}
-                closeModal={handleClose}
+                closeModal={handleSave}
               />
+            </Box>
+          </Modal>
+          <Modal open={isOpen} onClose={handleClose}>
+            <Box sx={modalStyle}>
+              <CardInfo task={task} column={column.title} closeModal={handleClose} />
             </Box>
           </Modal>
         </div>

@@ -8,4 +8,5 @@ export const modalStyle = {
   transform: 'translate(-50%, -50%)',
   borderRadius: 4,
   margin: 0,
+  outline: 'none',
 };
