@@ -9,12 +9,12 @@ class Users extends Base {
     return this.sendRequest(instance.get(`${this.API_PATH_USERS}`));
   }
 
-  async getUser(id: number): Promise<User | null> {
+  async getUser(id: string): Promise<User | null> {
     const instance = this.getInstance();
     return this.sendRequest(instance.get(`${this.API_PATH_USERS}/${id}`));
   }
 
-  async deleteUser(id: number): Promise<User | null> {
+  async deleteUser(id: string): Promise<User | null> {
     const instance = this.getInstance();
     return this.sendRequest(instance.delete(`${this.API_PATH_USERS}/${id}`));
   }
