@@ -40,7 +40,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "postinstall": "react-scripts build",
+    "build": "react-scripts build",
+    "heroku-postbuild": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
