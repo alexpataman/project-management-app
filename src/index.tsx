@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -20,42 +20,40 @@ if (container) {
   root.render(
     <Provider store={store}>
       <BrowserRouter>
-        <Suspense fallback={<div />}>
-          <Routes>
-            <Route path={PATH.home} element={<App />}>
-              <Route index element={<HomePage />} />
-              <Route path={PATH.login} element={<LoginPage />} />
-              <Route path={PATH.signup} element={<LoginPage defaultView={LOGIN_VIEWS.signUp} />} />
+        <Routes>
+          <Route path={PATH.home} element={<App />}>
+            <Route index element={<HomePage />} />
+            <Route path={PATH.login} element={<LoginPage />} />
+            <Route path={PATH.signup} element={<LoginPage defaultView={LOGIN_VIEWS.signUp} />} />
+            <Route
+              path={PATH.profile}
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={PATH.boards}
+              element={
+                <PrivateRoute>
+                  <BoardsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route path={PATH.board}>
               <Route
-                path={PATH.profile}
+                path=":id"
                 element={
                   <PrivateRoute>
-                    <ProfilePage />
+                    <BoardPage />
                   </PrivateRoute>
                 }
               />
-              <Route
-                path={PATH.boards}
-                element={
-                  <PrivateRoute>
-                    <BoardsPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route path={PATH.board}>
-                <Route
-                  path=":id"
-                  element={
-                    <PrivateRoute>
-                      <BoardPage />
-                    </PrivateRoute>
-                  }
-                />
-              </Route>
-              <Route path="*" element={<ErrorPage code={ERROR_CODE_NOT_FOUND} />} />
             </Route>
-          </Routes>
-        </Suspense>
+            <Route path="*" element={<ErrorPage code={ERROR_CODE_NOT_FOUND} />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </Provider>
   );
