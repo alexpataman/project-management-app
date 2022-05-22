@@ -1,8 +1,20 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, IconButton, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { users as usersApi } from '../../../../api/backend';
+import { User } from '../../../../types/api';
 import { TaskEditForm } from '../../utils/types';
 
 import './ModalForm.scss';
@@ -13,15 +25,26 @@ const ModalForm = ({
   closeModal,
 }: {
   title: string;
-  saveTask: (title: string, description: string) => void;
+  saveTask: (title: string, description: string, responsible: string) => void;
   closeModal: () => void;
 }) => {
+  const [responsible, setResponsible] = useState<string>('');
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const users = await usersApi.getUsers();
+      if (!users) return;
+      setUsers(users);
+    };
+    load();
+  }, []);
   const { register, handleSubmit } = useForm<TaskEditForm>();
   const { t } = useTranslation();
   const onSubmit = (data: TaskEditForm) => {
     if (data) {
       const { name, description } = data;
-      saveTask(name, description);
+      saveTask(name, description, responsible);
       closeModal();
     }
   };
@@ -44,6 +67,24 @@ const ModalForm = ({
             label={t('BOARD_MODAL_DESCRIPTION')}
             {...register('description', { required: false })}
           />
+          {title === 'TASK' && (
+            <>
+              <InputLabel id="select-label">Ответственный за карточку:</InputLabel>
+              <Select
+                labelId="select-label"
+                value={responsible}
+                onChange={(e: SelectChangeEvent) => {
+                  setResponsible(e.target.value);
+                }}
+              >
+                {users.map((user, index) => (
+                  <MenuItem value={user.id} key={index}>
+                    {user.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </>
+          )}
         </div>
         <div className="buttons">
           <Button type="submit" variant="outlined" onClick={closeModal}>

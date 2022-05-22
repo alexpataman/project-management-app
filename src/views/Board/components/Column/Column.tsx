@@ -56,11 +56,11 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     );
   };
 
-  const addTask = async (title: string, description: string) => {
+  const addTask = async (title: string, description: string, responsible: string) => {
     const data = {
       title,
       description: description || ' ',
-      userId: USER_ID,
+      userId: responsible || USER_ID,
     };
     const newTask = await authControl(tasksApi.createTask(boardId, column.id, data));
     if (!newTask) return;
