@@ -43,10 +43,13 @@ const ModalEdit = ({
       const users = await usersApi.getUsers();
       if (!users) return;
       setUsers(users);
-      setResponsible(task.responsible);
     };
     load();
   }, []);
+
+  useEffect(() => {
+    setResponsible(task.responsible);
+  }, [task]);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => {

@@ -12,7 +12,6 @@ import { BoardActions, getBoardById, getBoardState } from '../../store/board/boa
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
-import { BASE_GREY } from './utils/constants';
 import { getColumnStyle, reorderColumns } from './utils/dndHelpers';
 import { modalStyle } from './utils/modalStyle';
 
@@ -24,10 +23,9 @@ const BoardsPage = () => {
   const params = useParams();
   const boardId = params.id || '';
   const backendErrorCatcher = useBackendErrorCatcher();
-  const [isOpen, setIsOpen] = useState(false);
-
   const dispatch = useAppDispatch();
   const [columns, setColumns] = useState<ColumnResponse[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const { isLoading, board } = useAppSelector(getBoardState);
 
   const handleOpen = () => setIsOpen(true);
@@ -95,8 +93,8 @@ const BoardsPage = () => {
             {columns.length < COLUMNS_LIMIT && (
               <IconButton
                 aria-label="add"
+                className="add-column-button"
                 size="large"
-                sx={{ height: 50, width: 50, backgroundColor: BASE_GREY }}
                 onClick={handleOpen}
               >
                 <AddIcon />

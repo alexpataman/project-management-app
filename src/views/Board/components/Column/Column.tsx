@@ -8,9 +8,9 @@ import { useParams } from 'react-router-dom';
 import { columns, tasks as tasksApi } from '../../../../api/backend';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { BoardActions } from '../../../../store/board/board.slice';
-import { useAppDispatch } from '../../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { getUserState } from '../../../../store/user/user.slice';
 import { ColumnResponse } from '../../../../types/api';
-import { USER_ID } from '../../TEMP_ID';
 import { BASE_GREY } from '../../utils/constants';
 import { getTaskStyle, reorderTasks } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
@@ -24,10 +24,12 @@ import './Column.scss';
 
 const Column = ({ column }: { column: ColumnResponse }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const backendErrorCatcher = useBackendErrorCatcher();
+  const dispatch = useAppDispatch();
   const params = useParams();
   const boardId = params.id || '';
+  const userId = useAppSelector(getUserState).id;
+
   const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
 
   const { id, title, order, tasks } = column;
@@ -55,7 +57,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     const data = {
       title,
       description: description || ' ',
-      userId: responsible || USER_ID,
+      userId: responsible || userId,
     };
     const newTask = await backendErrorCatcher(tasksApi.createTask(boardId, id, data));
     if (!newTask) return;
