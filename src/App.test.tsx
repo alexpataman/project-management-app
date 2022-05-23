@@ -1,0 +1,2 @@
+export {};
+test('empty test', () => {});
