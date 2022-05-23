@@ -29,7 +29,7 @@ export const reorderColumns = (
     const data = { title, order: index + 1 };
     columnsApi.updateColumn(boardId, id, data);
   });
-  return result;
+  return result.map((el, idx) => ({ ...el, order: idx + 1 }));
 };
 
 export const reorderTasks = (
@@ -47,5 +47,5 @@ export const reorderTasks = (
     const data = { title, description, userId, boardId, order: index + 1 };
     tasksApi.updateTask(boardId, columnId, task.id, data);
   });
-  return result;
+  return result.map((el, idx) => ({ ...el, order: idx + 1 }));
 };

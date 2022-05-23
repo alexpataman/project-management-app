@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 
-import { boards, columns as columnsApi } from '../../api/backend';
+import { columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
 import { useAuthControl } from '../../hooks/useAuthControl';
+import { BoardActions, getBoardById, getBoardState } from '../../store/board/board.slice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
 import { BASE_GREY } from './utils/constants';
@@ -22,35 +24,36 @@ const BoardsPage = () => {
   const params = useParams();
   const boardId = params.id || '';
   const authControl = useAuthControl();
-  const [columns, setColumns] = useState<ColumnResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const dispatch = useAppDispatch();
+  const [columns, setColumns] = useState<ColumnResponse[]>([]);
+  const { isLoading, board } = useAppSelector(getBoardState);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
   useEffect(() => {
-    const load = async () => {
-      const data = await authControl(boards.getBoardById(boardId));
-      setIsLoading(false);
-      if (!data || !data.columns) return;
-      setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
-    };
-    load();
-  }, []);
+    dispatch(getBoardById(boardId));
+  }, [boardId]);
+
+  useEffect(() => {
+    if (board?.columns) {
+      setColumns(board.columns);
+    }
+  }, [board]);
 
   const addColumn = async (title: string) => {
     const newColumn = await authControl(columnsApi.createColumn(boardId, { title }));
     if (!newColumn) return;
-    setColumns((columns) => [...columns, newColumn]);
+    dispatch(BoardActions.addColumn({ column: newColumn }));
   };
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-    const items = reorderColumns(boardId, columns, result.source.index, result.destination.index);
-    setColumns(items);
+  const onDragEnd = (res: DropResult) => {
+    if (!res.destination) return;
+    if (!columns) return;
+    const items = reorderColumns(boardId, columns, res.source.index, res.destination.index);
+    dispatch(BoardActions.reorderColumns({ columns: items }));
   };
 
   return (
@@ -75,7 +78,7 @@ const BoardsPage = () => {
                             {...provided.dragHandleProps}
                             style={getColumnStyle(provided.draggableProps.style)}
                           >
-                            {<Column column={column} key={index} />}
+                            {<Column column={column} key={column.id} />}
                           </div>
                         )}
                       </Draggable>

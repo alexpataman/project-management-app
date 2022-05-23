@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
 import { useAuthControl } from '../../../../hooks/useAuthControl';
+import { BoardActions, getBoardState } from '../../../../store/board/board.slice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { USER_ID } from '../../TEMP_ID';
 import { BASE_GREY } from '../../utils/constants';
@@ -23,14 +25,14 @@ import './Column.scss';
 const Column = ({ column }: { column: ColumnResponse }) => {
   const authControl = useAuthControl();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const params = useParams();
   const boardId = params.id || '';
   const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
+
   const { id, title, order, tasks } = column;
   const [columnParams, setColumnParams] = useState<ColumnResponse>(column || {});
-  const [taskList, setTaskList] = useState<TaskResponse[]>(
-    tasks?.sort((a, b) => a.order - b.order) || []
-  );
+  const [taskList, setTaskList] = useState<TaskResponse[]>([]);
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -39,15 +41,23 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     setColumnParams(column);
   }, [column]);
 
+  useEffect(() => {
+    if (tasks) {
+      setTaskList([...tasks].sort((a, b) => a.order - b.order));
+    }
+  }, [tasks]);
+
   const renameColumn = async (title: string) => {
     const newParams = await authControl(columns.updateColumn(boardId, id, { title, order }));
     if (!newParams) return;
+    dispatch(BoardActions.editColumn({ columnId: id, column: newParams }));
     setColumnParams(newParams);
   };
 
   const deleteColumn = () => {
     authControl(
-      columns.deleteColumn(boardId, column.id).then(() => {
+      columns.deleteColumn(boardId, id).then(() => {
+        dispatch(BoardActions.deleteColumn({ columnId: id }));
         const title = '';
         setColumnParams((params) => {
           return { ...params, title };
@@ -62,7 +72,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
       description: description || ' ',
       userId: responsible || USER_ID,
     };
-    const newTask = await authControl(tasksApi.createTask(boardId, column.id, data));
+    const newTask = await authControl(tasksApi.createTask(boardId, id, data));
     if (!newTask) return;
     setTaskList((list) => [...list, newTask]);
     setIsAdd(false);
@@ -88,7 +98,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     }
     const items = reorderTasks(
       boardId,
-      column.id,
+      id,
       taskList,
       result.source.index,
       result.destination.index

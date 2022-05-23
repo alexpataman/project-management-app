@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 
 import { tasks } from '../../../../api/backend';
 import { useAuthControl } from '../../../../hooks/useAuthControl';
+import { BoardActions, getBoardState } from '../../../../store/board/board.slice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { modalStyle } from '../../utils/modalStyle';
 import { CardInfo } from '../ModalCardInfo';
@@ -17,6 +19,8 @@ const USER_ID = '17522703-d0a3-491a-a00a-c975c72e752b';
 const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse }) => {
   const params = useParams();
   const boardId = params.id || '';
+  const dispatch = useAppDispatch();
+  const { board } = useAppSelector(getBoardState);
   const authControl = useAuthControl();
   const { title, order, id, description } = task;
   const [taskParams, setTaskParams] = useState<{ title: string; description: string }>({
@@ -35,6 +39,14 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
     const newParams = await authControl(tasks.updateTask(boardId, column.id, id, data));
     if (!newParams) return;
     setTaskParams({ title: newParams.title, description: newParams.description });
+    const updatedColumn = { ...column };
+    updatedColumn.tasks = updatedColumn.tasks
+      ? updatedColumn.tasks.map((task) => {
+          if (task.id !== id) return task;
+          return { ...task, order, title, description };
+        })
+      : [{ ...task, order, title, description }];
+    dispatch(BoardActions.editColumn({ columnId: column.id, column: updatedColumn }));
   };
 
   const deleteTask = () => {
@@ -64,7 +76,7 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
             </Box>
           </Modal>
           <Modal open={isOpen} onClose={handleClose}>
-            <Box sx={modalStyle}>
+            <Box sx={{ ...modalStyle, width: '90%' }}>
               <CardInfo task={task} column={column.title} closeModal={handleClose} />
             </Box>
           </Modal>
