@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { users } from '../../../../api/backend';
+import { Loader } from '../../../../components';
 import { AlreadyExistsError } from '../../../../errors';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { User } from '../../../../types/api';
@@ -26,6 +27,7 @@ export const EditUser: React.FC<IEditUser> = ({ data }) => {
   const [alert, setAlert] = useState<{ type: AlertColor; message: string }>();
   const { t } = useTranslation();
   const backendErrorCatcher = useBackendErrorCatcher();
+  const [isLoading, setIsLoading] = useState(false);
 
   const validationSchema = yup.object({
     name: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -41,15 +43,18 @@ export const EditUser: React.FC<IEditUser> = ({ data }) => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
       try {
         await backendErrorCatcher(users.updateUser(id, values));
         setAlert({ type: 'success', message: t('LANG_EDIT_PROFILE_SUCCESS_TEXT') });
+        setIsLoading(false);
       } catch (error) {
         if (error instanceof AlreadyExistsError) {
           setAlert({ type: 'error', message: t('LANG_USER_EXISTS_ERROR') });
         } else {
           setAlert({ type: 'error', message: t('LANG_SOMETHING_WENT_WRONG_TEXT') });
         }
+        setIsLoading(false);
       }
     },
   });
@@ -119,9 +124,11 @@ export const EditUser: React.FC<IEditUser> = ({ data }) => {
               />
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            {t('LANG_SUBMIT_BUTTON_TEXT')}
-          </Button>
+          <Loader isLoading={isLoading}>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              {t('LANG_SUBMIT_BUTTON_TEXT')}
+            </Button>
+          </Loader>
         </Box>
       </Box>
     </Container>
