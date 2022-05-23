@@ -33,6 +33,7 @@ const BoardsPage = () => {
 
   useEffect(() => {
     dispatch(getBoardById(boardId));
+    // eslint-disable-next-line
   }, [boardId]);
 
   useEffect(() => {

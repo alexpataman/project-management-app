@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, Container, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import './Confirmation.scss';
