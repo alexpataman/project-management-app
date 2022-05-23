@@ -1,3 +1,5 @@
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import { ReactNode } from 'react';
 
 interface ILoader {
@@ -6,5 +8,13 @@ interface ILoader {
 }
 
 export const Loader = ({ children, isLoading }: ILoader) => (
-  <>{isLoading ? 'Loading...' : children}</>
+  <>
+    {isLoading ? (
+      <Box sx={{ display: 'flex' }} justifyContent="center">
+        <CircularProgress />
+      </Box>
+    ) : (
+      children
+    )}
+  </>
 );

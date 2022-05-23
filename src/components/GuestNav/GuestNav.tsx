@@ -25,7 +25,7 @@ export const GuestNav = () => {
       <Button
         size="large"
         aria-label="account of current user"
-        aria-controls="menu-appbar"
+        aria-controls="menu-guest"
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
@@ -36,13 +36,12 @@ export const GuestNav = () => {
         <Typography>{t('LANG_GUEST_TITLE')}</Typography>
       </Button>
       <Menu
-        id="menu-appbar"
+        id="menu-guest"
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
         }}
-        keepMounted
         transformOrigin={{
           vertical: 'top',
           horizontal: 'right',

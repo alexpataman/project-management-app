@@ -1,4 +1,7 @@
-export class AlreadyExistsError extends Error {
+import { ERROR_CODES, ERROR_NAME_AlREADY_EXISTS } from '../constants';
+import { CustomError } from './CustomError';
+
+export class AlreadyExistsError extends CustomError {
   constructor(...params: string[]) {
     super(...params);
 
@@ -6,6 +9,7 @@ export class AlreadyExistsError extends Error {
       Error.captureStackTrace(this, AlreadyExistsError);
     }
 
-    this.name = 'AlreadyExistsError';
+    this.name = ERROR_NAME_AlREADY_EXISTS;
+    this.code = ERROR_CODES[ERROR_NAME_AlREADY_EXISTS];
   }
 }

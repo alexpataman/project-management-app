@@ -6,6 +6,7 @@ export const USER = {
   LANG_LOGOUT_TEXT: 'Выход',
   LANG_BOARDS_TEXT: 'Доски',
   LANG_EDIT_PROFILE_TEXT: 'Изменить профиль',
+  LANG_EDIT_PROFILE_SUCCESS_TEXT: 'Информация успешно изменена',
   LANG_REGISTRATION_TEXT: 'Регистрация',
   LANG_USER_HAS_ACCOUNT_TEXT: 'У меня уже есть учетная запись',
   LANG_USER_HAS_NO_ACCOUNT_TEXT: 'У меня нет учетной записи',

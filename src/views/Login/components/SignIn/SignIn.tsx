@@ -44,8 +44,8 @@ export const SignIn: React.FC<SignIn> = ({ changeView }) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const { token, name } = await authorization.signIn(values);
-        dispatch(signIn({ token, name }));
+        const { token, name, id } = await authorization.signIn(values);
+        dispatch(signIn({ token, name, id }));
         navigate(PATH.boards);
       } catch (error) {
         if (error instanceof ForbiddenError) {
@@ -64,7 +64,7 @@ export const SignIn: React.FC<SignIn> = ({ changeView }) => {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">

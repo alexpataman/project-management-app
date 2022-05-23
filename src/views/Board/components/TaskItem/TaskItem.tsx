@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { tasks } from '../../../../api/backend';
-import { useAuthControl } from '../../../../hooks/useAuthControl';
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { modalStyle } from '../../utils/modalStyle';
 import { ModalEdit } from '../ModalEdit';
@@ -16,7 +16,7 @@ const USER_ID = '17522703-d0a3-491a-a00a-c975c72e752b';
 const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse }) => {
   const params = useParams();
   const boardId = params.id || '';
-  const authControl = useAuthControl();
+  const backendErrorCatcher = useBackendErrorCatcher();
   const { title, order, id, description } = task;
   const [taskParams, setTaskParams] = useState<{ title: string; description: string }>({
     title,
@@ -28,13 +28,13 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
 
   const updateTask = async (title: string, description: string) => {
     const data = { order, title, description, userId: USER_ID, boardId };
-    const newParams = await authControl(tasks.updateTask(boardId, column.id, id, data));
+    const newParams = await backendErrorCatcher(tasks.updateTask(boardId, column.id, id, data));
     if (!newParams) return;
     setTaskParams({ title: newParams.title, description: newParams.description });
   };
 
   const deleteTask = () => {
-    authControl(
+    backendErrorCatcher(
       tasks.deleteTask(boardId, column.id, id).then(() => {
         setTaskParams({ title: '', description: '' });
       })

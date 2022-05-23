@@ -1,6 +1,7 @@
 export interface UserState {
   isGuest: boolean;
   name: string;
+  id: string;
 }
 
 export type SignInPayload = {

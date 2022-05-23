@@ -6,4 +6,5 @@ export const PATH = {
   signup: '/signup',
   users: '/users',
   profile: '/profile',
+  error: '/error',
 };

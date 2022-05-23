@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 
 import { users } from '../../api/backend';
 import { Loader } from '../../components';
-import { useAuthControl } from '../../hooks/useAuthControl';
+import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { User } from '../../types/api';
 
 const UsersPage = () => {
-  const authControl = useAuthControl();
+  const backendErrorCatcher = useBackendErrorCatcher();
   const [userList, setUserList] = useState<User[]>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const data = await authControl(users.getUsers());
+      const data = await backendErrorCatcher(users.getUsers());
       setUserList(data || []);
       setIsLoading(false);
     };
