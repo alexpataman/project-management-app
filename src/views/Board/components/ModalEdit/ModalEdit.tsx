@@ -29,7 +29,7 @@ const ModalEdit = ({
   deleteTask,
   closeModal,
 }: {
-  task: { title: string; description: string; responsible: string };
+  task: { title: string; description: string; userId: string };
   updateTask: (name: string, description: string, responsible: string) => void;
   deleteTask: () => void;
   closeModal: () => void;
@@ -48,7 +48,7 @@ const ModalEdit = ({
   }, []);
 
   useEffect(() => {
-    setResponsible(task.responsible);
+    setResponsible(task.userId);
   }, [task]);
 
   const handleOpen = () => setIsOpen(true);
