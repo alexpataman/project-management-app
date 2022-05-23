@@ -15,8 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { authorization } from '../../../../api/backend';
+import { Loader } from '../../../../components';
 import { PATH } from '../../../../constants';
-import { AlreadyExistsError } from '../../../../errors/AlreadyExistsError';
+import { AlreadyExistsError } from '../../../../errors';
 import { useAppDispatch } from '../../../../store/hooks';
 import { signIn } from '../../../../store/user/user.slice';
 import { LOGIN_VIEWS } from '../../utils/constants';
@@ -30,6 +31,7 @@ export const SignUp: React.FC<SignUp> = ({ changeView }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const validationSchema = yup.object({
     name: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -45,16 +47,19 @@ export const SignUp: React.FC<SignUp> = ({ changeView }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
       try {
         await authorization.signUp(values);
         const { login, password } = values;
         const { token, name, id } = await authorization.signIn({ login, password });
-        dispatch(signIn({ token, name, id }));
+        await dispatch(signIn({ token, name, id }));
+        setIsLoading(false);
         navigate(PATH.boards);
       } catch (error) {
         if (error instanceof AlreadyExistsError) {
           setAlert(t('LANG_USER_EXISTS_ERROR'));
         }
+        setIsLoading(false);
       }
     },
   });
@@ -124,16 +129,18 @@ export const SignUp: React.FC<SignUp> = ({ changeView }) => {
               />
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            {t('LANG_SUBMIT_BUTTON_TEXT')}
-          </Button>
-          <Grid container justifyContent="center">
-            <Grid item>
-              <Link href="#" variant="body2" onClick={() => changeView(LOGIN_VIEWS.signIn)}>
-                {t('LANG_USER_HAS_ACCOUNT_TEXT')}
-              </Link>
+          <Loader isLoading={isLoading}>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              {t('LANG_SUBMIT_BUTTON_TEXT')}
+            </Button>
+            <Grid container justifyContent="center">
+              <Grid item>
+                <Link href="#" variant="body2" onClick={() => changeView(LOGIN_VIEWS.signIn)}>
+                  {t('LANG_USER_HAS_ACCOUNT_TEXT')}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </Loader>
         </Box>
       </Box>
     </Container>

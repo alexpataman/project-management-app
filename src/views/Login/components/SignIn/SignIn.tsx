@@ -15,8 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { authorization } from '../../../../api/backend';
+import { Loader } from '../../../../components';
 import { PATH } from '../../../../constants';
-import { ForbiddenError } from '../../../../errors/ForbiddenError';
+import { ForbiddenError } from '../../../../errors';
 import { useAppDispatch } from '../../../../store/hooks';
 import { signIn } from '../../../../store/user/user.slice';
 import { LOGIN_VIEWS } from '../../utils/constants';
@@ -29,6 +30,7 @@ export const SignIn: React.FC<SignIn> = ({ changeView }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [alert, setAlert] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const validationSchema = yup.object({
@@ -43,14 +45,17 @@ export const SignIn: React.FC<SignIn> = ({ changeView }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
       try {
         const { token, name, id } = await authorization.signIn(values);
-        dispatch(signIn({ token, name, id }));
+        await dispatch(signIn({ token, name, id }));
+        setIsLoading(false);
         navigate(PATH.boards);
       } catch (error) {
         if (error instanceof ForbiddenError) {
           setAlert(t('LANG_FORBIDDEN_ERROR'));
         }
+        setIsLoading(false);
       }
     },
   });
@@ -102,16 +107,18 @@ export const SignIn: React.FC<SignIn> = ({ changeView }) => {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            {t('LANG_SUBMIT_BUTTON_TEXT')}
-          </Button>
-          <Grid container justifyContent="center">
-            <Grid item>
-              <Link href="#" variant="body2" onClick={() => changeView(LOGIN_VIEWS.signUp)}>
-                {t('LANG_USER_HAS_NO_ACCOUNT_TEXT')}
-              </Link>
+          <Loader isLoading={isLoading}>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              {t('LANG_SUBMIT_BUTTON_TEXT')}
+            </Button>
+            <Grid container justifyContent="center">
+              <Grid item>
+                <Link href="#" variant="body2" onClick={() => changeView(LOGIN_VIEWS.signUp)}>
+                  {t('LANG_USER_HAS_NO_ACCOUNT_TEXT')}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </Loader>
         </Box>
       </Box>
     </Container>
