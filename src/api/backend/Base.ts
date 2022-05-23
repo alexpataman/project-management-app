@@ -1,19 +1,24 @@
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 
 import {
-  ERROR_CODE_AlREADY_EXISTS,
-  ERROR_CODE_CONFLICT,
-  ERROR_CODE_FORBIDDEN,
-  ERROR_CODE_NOT_FOUND,
-  ERROR_CODE_UNAUTHORIZED,
-  ERROR_CODE_VALIDATION_ERROR,
+  ERROR_CODES,
+  ERROR_NAME_AlREADY_EXISTS,
+  ERROR_NAME_BAD_REQUEST,
+  ERROR_NAME_CONFLICT,
+  ERROR_NAME_FORBIDDEN,
+  ERROR_NAME_NOT_FOUND,
+  ERROR_NAME_UNAUTHORIZED,
+  ERROR_NAME_VALIDATION_ERROR,
   LOCAL_STORAGE_TOKEN_ID,
 } from '../../constants';
-import { AlreadyExistsError } from '../../errors/AlreadyExistsError';
-import { ForbiddenError } from '../../errors/ForbiddenError';
-import { NotFoundError } from '../../errors/NotFoundError';
-import { UnauthorizedError } from '../../errors/UnauthorizedError';
-import { ValidationError } from '../../errors/ValidationError';
+import {
+  AlreadyExistsError,
+  BadRequestError,
+  ForbiddenError,
+  NotFoundError,
+  UnauthorizedError,
+  ValidationError,
+} from '../../errors';
 import { storage } from '../../helpers/storage';
 
 export abstract class Base {
@@ -35,16 +40,18 @@ export abstract class Base {
     const { status, statusText = '' } = error.response;
 
     switch (status) {
-      case ERROR_CODE_VALIDATION_ERROR:
+      case ERROR_CODES[ERROR_NAME_BAD_REQUEST]:
+        return new BadRequestError(statusText);
+      case ERROR_CODES[ERROR_NAME_VALIDATION_ERROR]:
         return new ValidationError(statusText);
-      case ERROR_CODE_CONFLICT:
-      case ERROR_CODE_AlREADY_EXISTS:
+      case ERROR_CODES[ERROR_NAME_CONFLICT]:
+      case ERROR_CODES[ERROR_NAME_AlREADY_EXISTS]:
         return new AlreadyExistsError(statusText);
-      case ERROR_CODE_UNAUTHORIZED:
+      case ERROR_CODES[ERROR_NAME_UNAUTHORIZED]:
         return new UnauthorizedError(statusText);
-      case ERROR_CODE_FORBIDDEN:
+      case ERROR_CODES[ERROR_NAME_FORBIDDEN]:
         return new ForbiddenError(statusText);
-      case ERROR_CODE_NOT_FOUND:
+      case ERROR_CODES[ERROR_NAME_NOT_FOUND]:
         return new NotFoundError(statusText);
       default:
         return new Error(statusText);

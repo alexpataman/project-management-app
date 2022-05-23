@@ -1,4 +1,7 @@
-export class ForbiddenError extends Error {
+import { ERROR_CODES, ERROR_NAME_FORBIDDEN } from '../constants';
+import { CustomError } from './CustomError';
+
+export class ForbiddenError extends CustomError {
   constructor(...params: string[]) {
     super(...params);
 
@@ -6,6 +9,7 @@ export class ForbiddenError extends Error {
       Error.captureStackTrace(this, ForbiddenError);
     }
 
-    this.name = 'ForbiddenError';
+    this.name = ERROR_NAME_FORBIDDEN;
+    this.code = ERROR_CODES[ERROR_NAME_FORBIDDEN];
   }
 }

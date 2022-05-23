@@ -1,4 +1,4 @@
-import { User } from '../../types/api';
+import { SignUpRequest, User } from '../../types/api';
 import { Base } from './Base';
 
 class Users extends Base {
@@ -14,7 +14,12 @@ class Users extends Base {
     return this.sendRequest(instance.get(`${this.API_PATH_USERS}/${id}`));
   }
 
-  async deleteUser(id: string): Promise<User | null> {
+  async updateUser(id: string, data: SignUpRequest): Promise<User | null> {
+    const instance = this.getInstance();
+    return this.sendRequest(instance.put(`${this.API_PATH_USERS}/${id}`, data));
+  }
+
+  async deleteUser(id: number): Promise<User | null> {
     const instance = this.getInstance();
     return this.sendRequest(instance.delete(`${this.API_PATH_USERS}/${id}`));
   }

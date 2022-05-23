@@ -7,9 +7,9 @@ import { useParams } from 'react-router-dom';
 
 import { columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
-import { useAuthControl } from '../../hooks/useAuthControl';
 import { BoardActions, getBoardById, getBoardState } from '../../store/board/board.slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
 import { BASE_GREY } from './utils/constants';
@@ -23,7 +23,7 @@ const COLUMNS_LIMIT = 5;
 const BoardsPage = () => {
   const params = useParams();
   const boardId = params.id || '';
-  const authControl = useAuthControl();
+  const backendErrorCatcher = useBackendErrorCatcher();
   const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -44,7 +44,7 @@ const BoardsPage = () => {
   }, [board]);
 
   const addColumn = async (title: string) => {
-    const newColumn = await authControl(columnsApi.createColumn(boardId, { title }));
+    const newColumn = await backendErrorCatcher(columnsApi.createColumn(boardId, { title }));
     if (!newColumn) return;
     dispatch(BoardActions.addColumn({ column: newColumn }));
   };

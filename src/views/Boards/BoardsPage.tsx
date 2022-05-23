@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Loader } from '../../components';
+import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import {
   createBoard,
   deleteBoard,
@@ -18,13 +19,14 @@ import './BoardsPage.scss';
 
 const BoardsPage = () => {
   const { t } = useTranslation();
+  const backendErrorCatcher = useBackendErrorCatcher();
   const dispatch = useAppDispatch();
   const { isLoading, boards } = useAppSelector(getBoardsState);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   useEffect(() => {
-    dispatch(getBoards());
+    backendErrorCatcher(dispatch(getBoards()));
   }, []);
 
   const openCreationModal = () => {
@@ -42,12 +44,12 @@ const BoardsPage = () => {
       color: color,
     };
 
-    dispatch(createBoard(boardInfo));
+    backendErrorCatcher(dispatch(createBoard(boardInfo)));
     closeCreationModal();
   };
 
   const handleDeleteBoard = async (id: string) => {
-    dispatch(deleteBoard(id));
+    backendErrorCatcher(dispatch(deleteBoard(id)));
   };
 
   return (

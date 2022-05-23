@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
-import { useAuthControl } from '../../../../hooks/useAuthControl';
 import { BoardActions, getBoardState } from '../../../../store/board/board.slice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { USER_ID } from '../../TEMP_ID';
 import { BASE_GREY } from '../../utils/constants';
@@ -23,9 +23,9 @@ import { EditColumn, UpdateColumn } from './Components';
 import './Column.scss';
 
 const Column = ({ column }: { column: ColumnResponse }) => {
-  const authControl = useAuthControl();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const backendErrorCatcher = useBackendErrorCatcher();
   const params = useParams();
   const boardId = params.id || '';
   const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
@@ -48,14 +48,16 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   }, [tasks]);
 
   const renameColumn = async (title: string) => {
-    const newParams = await authControl(columns.updateColumn(boardId, id, { title, order }));
+    const newParams = await backendErrorCatcher(
+      columns.updateColumn(boardId, id, { title, order })
+    );
     if (!newParams) return;
     dispatch(BoardActions.editColumn({ columnId: id, column: newParams }));
     setColumnParams(newParams);
   };
 
   const deleteColumn = () => {
-    authControl(
+    backendErrorCatcher(
       columns.deleteColumn(boardId, id).then(() => {
         dispatch(BoardActions.deleteColumn({ columnId: id }));
         const title = '';
@@ -72,7 +74,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
       description: description || ' ',
       userId: responsible || USER_ID,
     };
-    const newTask = await authControl(tasksApi.createTask(boardId, id, data));
+    const newTask = await backendErrorCatcher(tasksApi.createTask(boardId, id, data));
     if (!newTask) return;
     setTaskList((list) => [...list, newTask]);
     setIsAdd(false);

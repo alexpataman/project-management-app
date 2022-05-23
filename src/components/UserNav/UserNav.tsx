@@ -26,16 +26,16 @@ export const UserNav = () => {
   };
 
   const handleLogout = () => {
+    handleClose();
     dispatch(logOut());
     navigate(PATH.home);
-    handleClose();
   };
   return (
     <div>
       <Button
         size="large"
         aria-label="account of current user"
-        aria-controls="menu-appbar"
+        aria-controls="menu-user"
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
@@ -46,24 +46,15 @@ export const UserNav = () => {
         <Typography>{name}</Typography>
       </Button>
       <Menu
-        id="menu-appbar"
+        id="menu-user"
         anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={() => handleClose()}
       >
-        <MenuItem component={Link} to={PATH.boards} onClick={handleClose}>
+        <MenuItem component={Link} to={PATH.boards} onClick={() => handleClose()}>
           {t('LANG_BOARDS_TEXT')}
         </MenuItem>
-        <MenuItem component={Link} to={PATH.profile} onClick={handleClose}>
+        <MenuItem component={Link} to={PATH.profile} onClick={() => handleClose()}>
           {t('LANG_EDIT_PROFILE_TEXT')}
         </MenuItem>
         <MenuItem onClick={handleLogout}>{t('LANG_LOGOUT_TEXT')}</MenuItem>
