@@ -1,15 +1,15 @@
 import { Box, Card, CardContent, Modal, TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
-import { BoardActions, getBoardState } from '../../../../store/board/board.slice';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
-import { ColumnResponse, TaskResponse } from '../../../../types/api';
+import { BoardActions } from '../../../../store/board/board.slice';
+import { useAppDispatch } from '../../../../store/hooks';
+import { ColumnResponse } from '../../../../types/api';
 import { USER_ID } from '../../TEMP_ID';
 import { BASE_GREY } from '../../utils/constants';
 import { getTaskStyle, reorderTasks } from '../../utils/dndHelpers';
@@ -31,39 +31,22 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
 
   const { id, title, order, tasks } = column;
-  const [columnParams, setColumnParams] = useState<ColumnResponse>(column || {});
-  const [taskList, setTaskList] = useState<TaskResponse[]>([]);
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
 
-  useEffect(() => {
-    setColumnParams(column);
-  }, [column]);
-
-  useEffect(() => {
-    if (tasks) {
-      setTaskList([...tasks].sort((a, b) => a.order - b.order));
-    }
-  }, [tasks]);
-
   const renameColumn = async (title: string) => {
-    const newParams = await backendErrorCatcher(
+    const updatedColumn = await backendErrorCatcher(
       columns.updateColumn(boardId, id, { title, order })
     );
-    if (!newParams) return;
-    dispatch(BoardActions.editColumn({ columnId: id, column: newParams }));
-    setColumnParams(newParams);
+    if (!updatedColumn) return;
+    dispatch(BoardActions.editColumn({ columnId: id, column: updatedColumn }));
   };
 
   const deleteColumn = () => {
     backendErrorCatcher(
       columns.deleteColumn(boardId, id).then(() => {
         dispatch(BoardActions.deleteColumn({ columnId: id }));
-        const title = '';
-        setColumnParams((params) => {
-          return { ...params, title };
-        });
       })
     );
   };
@@ -76,7 +59,9 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     };
     const newTask = await backendErrorCatcher(tasksApi.createTask(boardId, id, data));
     if (!newTask) return;
-    setTaskList((list) => [...list, newTask]);
+    const updatedColumn = { ...column };
+    updatedColumn.tasks = tasks ? [...tasks, newTask] : [newTask];
+    dispatch(BoardActions.editColumn({ columnId: id, column: updatedColumn }));
     setIsAdd(false);
   };
 
@@ -94,23 +79,18 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     }
   };
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-    const items = reorderTasks(
-      boardId,
-      id,
-      taskList,
-      result.source.index,
-      result.destination.index
-    );
-    setTaskList(items);
+  const onDragEnd = (res: DropResult) => {
+    if (!res.destination) return;
+    if (!tasks) return;
+    const items = reorderTasks(boardId, id, tasks, res.source.index, res.destination.index);
+    const updatedColumn = { ...column };
+    updatedColumn.tasks = items;
+    dispatch(BoardActions.editColumn({ columnId: id, column: updatedColumn }));
   };
 
   return (
     <>
-      {columnParams.title && (
+      {column.title && (
         <Card className="Column" sx={{ backgroundColor: BASE_GREY }}>
           <CardContent>
             <form
@@ -132,31 +112,33 @@ const Column = ({ column }: { column: ColumnResponse }) => {
               )}
             </form>
           </CardContent>
-          <CardContent className="tasks">
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {taskList.map((task, index) => (
-                      <Draggable key={task.id} draggableId={task.id} index={index}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getTaskStyle(provided.draggableProps.style)}
-                          >
-                            {<TaskItem task={task} key={task.id} column={column} />}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </CardContent>
+          {tasks && (
+            <CardContent className="tasks">
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {tasks.map((task, index) => (
+                        <Draggable key={task.id} draggableId={task.id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getTaskStyle(provided.draggableProps.style)}
+                            >
+                              {<TaskItem task={task} key={task.id} column={column} />}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </CardContent>
+          )}
           <UpdateColumn onAdd={() => setIsAdd(true)} onDelete={() => setIsDelete(true)} />
           <Modal open={isAdd} onClose={() => setIsAdd(false)}>
             <Box sx={modalStyle}>

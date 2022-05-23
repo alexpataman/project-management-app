@@ -55,6 +55,7 @@ const ModalEdit = ({
             variant="outlined"
             label={t('BOARD_MODAL_DESCRIPTION')}
             defaultValue={task.description}
+            multiline
             {...register('description', { required: true })}
           />
         </div>

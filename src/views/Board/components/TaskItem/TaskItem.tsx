@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { tasks } from '../../../../api/backend';
-import { BoardActions, getBoardState } from '../../../../store/board/board.slice';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
+import { BoardActions } from '../../../../store/board/board.slice';
+import { useAppDispatch } from '../../../../store/hooks';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { modalStyle } from '../../utils/modalStyle';
 import { CardInfo } from '../ModalCardInfo';
@@ -20,7 +20,6 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
   const params = useParams();
   const boardId = params.id || '';
   const dispatch = useAppDispatch();
-  const { board } = useAppSelector(getBoardState);
   const backendErrorCatcher = useBackendErrorCatcher();
   const { title, order, id, description } = task;
   const [taskParams, setTaskParams] = useState<{ title: string; description: string }>({
@@ -53,6 +52,9 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
     backendErrorCatcher(
       tasks.deleteTask(boardId, column.id, id).then(() => {
         setTaskParams({ title: '', description: '' });
+        const updatedColumn = { ...column };
+        updatedColumn.tasks = updatedColumn.tasks?.filter((task) => task.id !== id);
+        dispatch(BoardActions.editColumn({ columnId: column.id, column: updatedColumn }));
       })
     );
   };

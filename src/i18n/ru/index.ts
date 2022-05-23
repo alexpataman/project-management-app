@@ -15,5 +15,6 @@ export default {
     ...USER,
     ...BOARDS,
     ...COMMON,
+    ...WELCOME,
   },
 };

@@ -7,9 +7,9 @@ import { useParams } from 'react-router-dom';
 
 import { columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
+import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { BoardActions, getBoardById, getBoardState } from '../../store/board/board.slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
 import { BASE_GREY } from './utils/constants';
