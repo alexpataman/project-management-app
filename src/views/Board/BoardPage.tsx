@@ -58,7 +58,11 @@ const BoardsPage = () => {
 
   return (
     <Loader isLoading={isLoading}>
-      <Container component="main" maxWidth="xl">
+      <Container
+        component="main"
+        maxWidth="xl"
+        sx={{ backgroundColor: `${board ? board.color : '#fff'}`, flexGrow: 1 }}
+      >
         <section className="BoardPage">
           <Stack className="Columns" direction="row" spacing={2}>
             <DragDropContext onDragEnd={onDragEnd}>

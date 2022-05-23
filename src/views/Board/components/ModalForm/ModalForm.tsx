@@ -51,7 +51,7 @@ const ModalForm = ({
 
   return (
     <div className="ModalForm">
-      <Typography variant="h4">{t(`BOARD_MODAL_ADD_${mode.toUpperCase()}`)}</Typography>
+      <Typography variant="h5">{t(`BOARD_MODAL_ADD_${mode.toUpperCase()}`)}</Typography>
       <IconButton className="close-icon" aria-label="delete" onClick={closeModal}>
         <CloseIcon />
       </IconButton>

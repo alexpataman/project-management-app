@@ -113,7 +113,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
             </form>
           </CardContent>
           {tasks && (
-            <CardContent className="tasks">
+            <CardContent className="tasks" sx={{ padding: '16px 8px' }}>
               <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable">
                   {(provided) => (
