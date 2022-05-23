@@ -1,6 +1,6 @@
 export const modalStyle = {
-  width: '40%',
   minWidth: 300,
+  maxWidth: 800,
   position: 'absolute',
   top: '50%',
   left: '50%',
