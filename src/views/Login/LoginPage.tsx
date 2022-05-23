@@ -24,6 +24,7 @@ const LoginPage = ({ defaultView = LOGIN_VIEWS.signIn }: ILoginPage) => {
     if (!isGuest) {
       navigate(PATH.boards);
     }
+    // eslint-disable-next-line
   }, []);
 
   const changeView = (view: LOGIN_VIEWS) => {
