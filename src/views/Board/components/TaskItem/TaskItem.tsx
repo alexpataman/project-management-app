@@ -9,6 +9,7 @@ import { BoardActions } from '../../../../store/board/board.slice';
 import { useAppDispatch } from '../../../../store/hooks';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { modalStyle } from '../../utils/modalStyle';
+import { TaskParams } from '../../utils/types';
 import { CardInfo } from '../ModalCardInfo';
 import { ModalEdit } from '../ModalEdit';
 
@@ -21,10 +22,11 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
   const boardId = params.id || '';
   const dispatch = useAppDispatch();
   const backendErrorCatcher = useBackendErrorCatcher();
-  const { title, order, id, description } = task;
-  const [taskParams, setTaskParams] = useState<{ title: string; description: string }>({
+  const { title, order, id, description, userId } = task;
+  const [taskParams, setTaskParams] = useState<TaskParams>({
     title,
     description,
+    responsible: userId,
   });
   const [isEdit, setIsEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -33,16 +35,20 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
-  const updateTask = async (title: string, description: string) => {
-    const data = { order, title, description, userId: USER_ID, boardId };
+  const updateTask = async (title: string, description: string, userId: string) => {
+    const data = { order, title, description, userId, boardId };
     const newParams = await backendErrorCatcher(tasks.updateTask(boardId, column.id, id, data));
     if (!newParams) return;
-    setTaskParams({ title: newParams.title, description: newParams.description });
+    setTaskParams({
+      title: newParams.title,
+      description: newParams.description,
+      responsible: newParams.userId,
+    });
     const updatedColumn = { ...column };
     updatedColumn.tasks = updatedColumn.tasks
       ? updatedColumn.tasks.map((task) => {
           if (task.id !== id) return task;
-          return { ...task, order, title, description };
+          return { ...task, order, title, description, userId };
         })
       : [{ ...task, order, title, description }];
     dispatch(BoardActions.editColumn({ columnId: column.id, column: updatedColumn }));
@@ -51,7 +57,7 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
   const deleteTask = () => {
     backendErrorCatcher(
       tasks.deleteTask(boardId, column.id, id).then(() => {
-        setTaskParams({ title: '', description: '' });
+        setTaskParams({ title: '', description: '', responsible: '' });
         const updatedColumn = { ...column };
         updatedColumn.tasks = updatedColumn.tasks?.filter((task) => task.id !== id);
         dispatch(BoardActions.editColumn({ columnId: column.id, column: updatedColumn }));
@@ -70,7 +76,11 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
           <Modal open={isEdit} onClose={handleSave}>
             <Box sx={modalStyle}>
               <ModalEdit
-                task={{ title: taskParams.title, description: taskParams.description }}
+                task={{
+                  title: taskParams.title,
+                  description: taskParams.description,
+                  responsible: taskParams.responsible,
+                }}
                 updateTask={updateTask}
                 deleteTask={deleteTask}
                 closeModal={handleSave}

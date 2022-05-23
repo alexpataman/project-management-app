@@ -1,9 +1,22 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, IconButton, Modal, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import {
+  Box,
+  Button,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { users as usersApi } from '../../../../api/backend';
+import { User } from '../../../../types/api';
 import { modalStyle } from '../../utils/modalStyle';
 import { TaskEditForm } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
@@ -16,12 +29,25 @@ const ModalEdit = ({
   deleteTask,
   closeModal,
 }: {
-  task: { title: string; description: string };
-  updateTask: (name: string, description: string) => void;
+  task: { title: string; description: string; responsible: string };
+  updateTask: (name: string, description: string, responsible: string) => void;
   deleteTask: () => void;
   closeModal: () => void;
 }) => {
+  const [responsible, setResponsible] = useState<string>('');
+  const [users, setUsers] = useState<User[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      const users = await usersApi.getUsers();
+      if (!users) return;
+      setUsers(users);
+      setResponsible(task.responsible);
+    };
+    load();
+  }, []);
+
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => {
     setIsOpen(false);
@@ -33,7 +59,7 @@ const ModalEdit = ({
   const onSubmit = (data: TaskEditForm) => {
     if (data) {
       const { name, description } = data;
-      updateTask(name, description);
+      updateTask(name, description, responsible);
       closeModal();
     }
   };
@@ -58,6 +84,23 @@ const ModalEdit = ({
             multiline
             {...register('description', { required: true })}
           />
+          <div className="form-select">
+            <InputLabel id="select-label">{`${t('BOARD_MODAL_RESPONSIBLE')}:`}</InputLabel>
+            <Select
+              labelId="select-label"
+              sx={{ minWidth: 120 }}
+              value={responsible}
+              onChange={(e: SelectChangeEvent) => {
+                setResponsible(e.target.value);
+              }}
+            >
+              {users.map((user, index) => (
+                <MenuItem value={user.id} key={index}>
+                  {user.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
         </div>
         <div className="buttons">
           <Button variant="outlined" onClick={closeModal}>
