@@ -27,6 +27,7 @@ const BoardsPage = () => {
 
   useEffect(() => {
     backendErrorCatcher(dispatch(getBoards()));
+    // eslint-disable-next-line
   }, []);
 
   const openCreationModal = () => {
