@@ -17,6 +17,7 @@ const UsersPage = () => {
       setIsLoading(false);
     };
     load();
+    // eslint-disable-next-line
   }, []);
 
   return (

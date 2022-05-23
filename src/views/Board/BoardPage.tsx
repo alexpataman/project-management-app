@@ -35,6 +35,7 @@ const BoardsPage = () => {
       setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
     };
     load();
+    // eslint-disable-next-line
   }, []);
 
   const addColumn = async (title: string) => {
