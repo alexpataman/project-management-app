@@ -17,17 +17,18 @@
     border-radius: 10px;
     animation: modalAnim 0.2s ease;
   }
-  
+
   @keyframes modalAnim {
     0% {
       opacity: 0;
       transform: translate(-50%, -50%) scale(0.75);
-    } 100% {
+    }
+    100% {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
   }
-  
+
   .title-input {
     display: block;
     width: 100%;
@@ -37,46 +38,46 @@
     border-radius: 5px;
     border: 3px solid $base-color;
     transition: 0.2s ease;
-  
+
     &:focus {
       border: 3px solid $base-color-hover;
     }
   }
-  
+
   .modal__title-wrapper {
     display: flex;
     justify-content: space-between;
   }
-  
+
   .modal__title {
     margin: 0;
-    color:rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.5);
   }
-  
+
   h3.modal__title {
     font-size: 20px;
   }
-  
+
   h4.modal__title {
     font-size: 16px;
     font-weight: 500;
-  
+
     span {
       color: #df4545;
     }
   }
-  
+
   h5.modal__title {
     font-size: 14px;
     font-weight: 500;
   }
-    
+
   .modal__close {
     min-width: unset;
     padding: 0;
     width: 30px;
     height: 30px;
-  
+
     .close-icon {
       opacity: 0.5;
       transition: 0.2s ease;
@@ -118,12 +119,11 @@
       opacity: 1;
     }
   }
-
 }
 
 .board-list__title {
   margin: 15px 0 !important;
-  color:rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
   font-size: 24px !important;
   font-weight: 500;
 }
@@ -198,7 +198,7 @@
   h6.board__title {
     font-size: 14px;
   }
-  
+
   .board__delete {
     min-width: unset;
     padding: 0;
@@ -212,14 +212,14 @@
     transition: 0.2s ease;
     z-index: 10;
   }
-  
+
   .board__create {
     display: flex;
     align-items: center;
     justify-content: center;
     background: #f0f0f0;
     color: rgba(0, 0, 0, 0.5);
-    
+
     &:hover {
       background: #cecece;
     }

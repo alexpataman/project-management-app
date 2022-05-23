@@ -20,7 +20,7 @@ const Confirmation = ({
 
   return (
     <div className="Confirmation">
-      <Typography variant="h4">{t('LANG_CONFIRMATION_MODAL_TEXT')}</Typography>
+      <Typography variant="h5">{t('LANG_CONFIRMATION_MODAL_TEXT')}</Typography>
       <IconButton className="close-icon" aria-label="delete" onClick={closeModal}>
         <CloseIcon />
       </IconButton>

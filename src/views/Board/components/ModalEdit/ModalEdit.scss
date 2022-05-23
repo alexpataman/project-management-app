@@ -1,12 +1,15 @@
 .ModalEdit {
-  align-items: center;
-  background-color: white;
-  text-align: center;
   margin: 0;
-  min-height: 400px;
+  min-width: 400px;
+  padding: 30px;
+  background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
+  row-gap: 40px;
+  text-align: center;
+  border-radius: 10px;
 
   h4 {
     width: 85%;
