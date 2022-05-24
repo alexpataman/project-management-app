@@ -6,6 +6,14 @@
     overflow-y: scroll;
     align-items: flex-start;
   }
+  .add-column-button {
+    height: 50px;
+    width: 50px;
+    background-color: #ebecf0;
+    &:hover {
+      background-color: #d8d8dd;
+    }
+  }
 }
 
 .BoardPage__background {

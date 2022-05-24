@@ -43,7 +43,7 @@ export type BoardResponse = {
 
 export type ColumnRequest = {
   title: string;
-  order: number;
+  order?: number;
 };
 
 export type ColumnResponse = {
@@ -55,7 +55,6 @@ export type ColumnResponse = {
 
 export type TaskRequest = {
   title: string;
-  order: number;
   description: string;
   userId: string;
   boardId?: string;
@@ -64,7 +63,6 @@ export type TaskRequest = {
 
 export type UpdateTaskRequest = {
   title: string;
-  order: number;
   description: string;
   userId: string;
   boardId: string;

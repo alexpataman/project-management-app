@@ -2,14 +2,17 @@ import { Box, Card, CardContent, Modal, TextField } from '@mui/material';
 import { useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { columns, tasks as tasksApi } from '../../../../api/backend';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
-import { ColumnResponse, TaskResponse } from '../../../../types/api';
-import { USER_ID } from '../../TEMP_ID';
+import { BoardActions } from '../../../../store/board/board.slice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { getUserState } from '../../../../store/user/user.slice';
+import { ColumnResponse } from '../../../../types/api';
 import { BASE_GREY } from '../../utils/constants';
-import { getItemStyle } from '../../utils/dndHelpers';
+import { getTaskStyle, reorderTasks } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
 import { ColumnEditForm } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
@@ -20,48 +23,47 @@ import { EditColumn, UpdateColumn } from './Components';
 import './Column.scss';
 
 const Column = ({ column }: { column: ColumnResponse }) => {
+  const { t } = useTranslation();
   const backendErrorCatcher = useBackendErrorCatcher();
+  const dispatch = useAppDispatch();
   const params = useParams();
   const boardId = params.id || '';
+  const userId = useAppSelector(getUserState).id;
+
   const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
+
   const { id, title, order, tasks } = column;
-  const [columnParams, setColumnParams] = useState<ColumnResponse>(column || {});
-  const [taskList, setTaskList] = useState<TaskResponse[]>(
-    tasks?.sort((a, b) => a.order - b.order) || []
-  );
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
 
   const renameColumn = async (title: string) => {
-    const newParams = await backendErrorCatcher(
+    const updatedColumn = await backendErrorCatcher(
       columns.updateColumn(boardId, id, { title, order })
     );
-    if (!newParams) return;
-    setColumnParams(newParams);
+    if (!updatedColumn) return;
+    dispatch(BoardActions.editColumn({ columnId: id, column: updatedColumn }));
   };
 
   const deleteColumn = () => {
     backendErrorCatcher(
-      columns.deleteColumn(boardId, column.id).then(() => {
-        const title = '';
-        setColumnParams((params) => {
-          return { ...params, title };
-        });
+      columns.deleteColumn(boardId, id).then(() => {
+        dispatch(BoardActions.deleteColumn({ columnId: id }));
       })
     );
   };
 
-  const addTask = async (title: string, description: string) => {
+  const addTask = async (title: string, description: string, responsible: string) => {
     const data = {
       title,
       description: description || ' ',
-      order: taskList?.length || 0,
-      userId: USER_ID,
+      userId: responsible || userId,
     };
-    const newTask = await backendErrorCatcher(tasksApi.createTask(boardId, column.id, data));
+    const newTask = await backendErrorCatcher(tasksApi.createTask(boardId, id, data));
     if (!newTask) return;
-    setTaskList((list) => [...list, newTask]);
+    const updatedColumn = { ...column };
+    updatedColumn.tasks = tasks ? [...tasks, newTask] : [newTask];
+    dispatch(BoardActions.editColumn({ columnId: id, column: updatedColumn }));
     setIsAdd(false);
   };
 
@@ -79,29 +81,18 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     }
   };
 
-  const reorderTasks = (tasks: TaskResponse[], startIndex: number, endIndex: number) => {
-    const result = [...tasks];
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    result.forEach((task, index) => {
-      const { title, description, userId } = task;
-      const data = { title, description, userId, boardId, order: index };
-      tasksApi.updateTask(boardId, column.id, task.id, data);
-    });
-    return result;
-  };
-
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-    const items = reorderTasks(taskList, result.source.index, result.destination.index);
-    setTaskList(items);
+  const onDragEnd = (res: DropResult) => {
+    if (!res.destination) return;
+    if (!tasks) return;
+    const items = reorderTasks(boardId, id, tasks, res.source.index, res.destination.index);
+    const updatedColumn = { ...column };
+    updatedColumn.tasks = items;
+    dispatch(BoardActions.editColumn({ columnId: id, column: updatedColumn }));
   };
 
   return (
     <>
-      {columnParams.title && (
+      {column.title && (
         <Card className="Column" sx={{ backgroundColor: BASE_GREY }}>
           <CardContent>
             <form
@@ -117,41 +108,43 @@ const Column = ({ column }: { column: ColumnResponse }) => {
               />
               {isEdit && (
                 <EditColumn
-                  titles={{ cancel: 'Отменить', save: 'Сохранить' }}
+                  titles={{ cancel: t('BOARD_MODAL_CANCEL'), save: t('BOARD_MODAL_SAVE') }}
                   callback={resetColumnTitle}
                 />
               )}
             </form>
           </CardContent>
-          <CardContent className="tasks">
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {taskList.map((task, index) => (
-                      <Draggable key={task.id} draggableId={task.id} index={index}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(provided.draggableProps.style)}
-                          >
-                            {<TaskItem task={task} key={task.id} column={column} />}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </CardContent>
+          {tasks && (
+            <CardContent className="tasks" sx={{ padding: '16px 8px' }}>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {tasks.map((task, index) => (
+                        <Draggable key={task.id} draggableId={task.id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getTaskStyle(provided.draggableProps.style)}
+                            >
+                              {<TaskItem task={task} key={task.id} column={column} />}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </CardContent>
+          )}
           <UpdateColumn onAdd={() => setIsAdd(true)} onDelete={() => setIsDelete(true)} />
           <Modal open={isAdd} onClose={() => setIsAdd(false)}>
             <Box sx={modalStyle}>
-              <ModalForm saveTask={addTask} closeModal={() => setIsAdd(false)} />
+              <ModalForm mode="task" saveTask={addTask} closeModal={() => setIsAdd(false)} />
             </Box>
           </Modal>
           <Modal open={isDelete} onClose={() => setIsDelete(false)}>

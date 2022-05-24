@@ -53,7 +53,7 @@ const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
               setIsDelete(true);
             }}
           >
-            <DeleteForeverRoundedIcon htmlColor="#fff"></DeleteForeverRoundedIcon>
+            <DeleteForeverRoundedIcon htmlColor="#000"></DeleteForeverRoundedIcon>
           </Button>
         </Box>
       ))}

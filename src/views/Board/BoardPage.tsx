@@ -2,15 +2,19 @@ import AddIcon from '@mui/icons-material/Add';
 import { Container, IconButton, Modal, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 
-import { boards, columns as columnsApi } from '../../api/backend';
+import { columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
 import { RESOLUTION } from '../../constants/resolution';
 import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
+import { BoardActions, getBoardById, getBoardState } from '../../store/board/board.slice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
 import { BASE_GREY, HOVER_GREY } from './utils/constants';
+import { getColumnStyle, reorderColumns } from './utils/dndHelpers';
 import { modalStyle } from './utils/modalStyle';
 
 import './BoardPage.scss';
@@ -21,35 +25,42 @@ const BoardsPage = () => {
   const params = useParams();
   const boardId = params.id || '';
   const backendErrorCatcher = useBackendErrorCatcher();
+  const dispatch = useAppDispatch();
   const [columns, setColumns] = useState<ColumnResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
   const [background, setBackground] = useState('');
+  const { isLoading, board } = useAppSelector(getBoardState);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
   useEffect(() => {
-    const load = async () => {
-      const data = await backendErrorCatcher(boards.getBoardById(boardId));
-      setIsLoading(false);
-      if (!data || !data.columns) return;
-      setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
-      setBackground(data.color);
-    };
-    load();
+    dispatch(getBoardById(boardId));
+
     // eslint-disable-next-line
-  }, []);
+  }, [boardId]);
+
+  useEffect(() => {
+    if (board) {
+      setBackground(board.color);
+      if (board.columns) {
+        setColumns(board.columns);
+      }
+    }
+  }, [board]);
 
   const addColumn = async (title: string) => {
-    const newColumn = await backendErrorCatcher(
-      columnsApi.createColumn(boardId, {
-        title: title,
-        order: columns.length,
-      })
-    );
+    const newColumn = await backendErrorCatcher(columnsApi.createColumn(boardId, { title }));
     if (!newColumn) return;
-    setColumns((columns) => [...columns, newColumn]);
+    dispatch(BoardActions.addColumn({ column: newColumn }));
+  };
+
+  const onDragEnd = (res: DropResult) => {
+    if (!res.destination) return;
+    if (!columns) return;
+    const items = reorderColumns(boardId, columns, res.source.index, res.destination.index);
+    dispatch(BoardActions.reorderColumns({ columns: items }));
   };
 
   return (
@@ -63,12 +74,37 @@ const BoardsPage = () => {
         ></Box>
         <section className="BoardPage">
           <Stack className="Columns" direction="row" spacing={2}>
-            {columns.map((items, index) => (
-              <Column column={items} key={index} />
-            ))}
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable" direction="horizontal">
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    style={{ display: 'flex' }}
+                  >
+                    {columns.map((column, index) => (
+                      <Draggable key={column.id} draggableId={column.id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getColumnStyle(provided.draggableProps.style)}
+                          >
+                            {<Column column={column} key={column.id} />}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
             {columns.length < COLUMNS_LIMIT && (
               <IconButton
                 aria-label="add"
+                className="add-column-button"
                 size="large"
                 sx={{
                   height: 50,
@@ -90,7 +126,7 @@ const BoardsPage = () => {
             aria-describedby="modal-modal-description"
           >
             <Box sx={modalStyle}>
-              <ModalForm saveTask={addColumn} closeModal={handleClose} />
+              <ModalForm mode="column" saveTask={addColumn} closeModal={handleClose} />
             </Box>
           </Modal>
         </section>
