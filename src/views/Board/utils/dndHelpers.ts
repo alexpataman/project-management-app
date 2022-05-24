@@ -3,7 +3,7 @@ import { DraggingStyle, NotDraggingStyle } from 'react-beautiful-dnd';
 type DraggableStyle = DraggingStyle | NotDraggingStyle | undefined;
 
 export const getTaskStyle = (draggableStyle: DraggableStyle) => ({
-  marginBottom: '8px',
+  height: '40px',
   ...draggableStyle,
 });
 

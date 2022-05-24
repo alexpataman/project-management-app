@@ -15,6 +15,17 @@
     align-items: center;
   }
 
+  .column-title {
+    padding: 5px;
+  }
+
+  .column-title-input {
+    background-color: #fff;
+    input {
+      padding: 5px;
+    }
+  }
+
   .tasks {
     display: flex;
     flex-direction: column;
@@ -23,7 +34,7 @@
 
   .delete-icon {
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     right: 2px;
   }
 }

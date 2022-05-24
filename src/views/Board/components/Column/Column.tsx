@@ -76,12 +76,18 @@ const Column = ({ column }: { column: ColumnResponse }) => {
               onSubmit={handleSubmit(onSubmit)}
               onInput={() => setIsEdit(true)}
             >
-              <TextField
-                InputProps={{ disableUnderline: true }}
-                defaultValue={title}
-                variant="standard"
-                {...register('name', { required: true })}
-              />
+              {isEdit ? (
+                <TextField
+                  className="column-title-input"
+                  variant="outlined"
+                  defaultValue={title}
+                  {...register('name', { required: true })}
+                />
+              ) : (
+                <p className="column-title" onClick={() => setIsEdit(true)}>
+                  {title}
+                </p>
+              )}
               {isEdit && (
                 <EditColumn
                   titles={{ cancel: t('BOARD_MODAL_CANCEL'), save: t('BOARD_MODAL_SAVE') }}

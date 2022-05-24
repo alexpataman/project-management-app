@@ -81,8 +81,8 @@ const ModalForm = ({
                   setResponsible(e.target.value);
                 }}
               >
-                {users.map((user, index) => (
-                  <MenuItem value={user.id} key={index}>
+                {users.map((user) => (
+                  <MenuItem value={user.id} key={user.id}>
                     {user.name}
                   </MenuItem>
                 ))}
