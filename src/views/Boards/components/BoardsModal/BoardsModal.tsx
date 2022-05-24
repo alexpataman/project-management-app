@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { RESOLUTION } from '../../../../constants/resolution';
 import { COLORS_ARRAY, MODAL_DEFAULT_VALUES } from './constants';
 
 interface IBoardsModal {
@@ -88,7 +89,7 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
               component="div"
               className="color__wrapper"
               sx={{
-                background: `${currentColor}`,
+                background: `url(${currentColor}${RESOLUTION.small})`,
               }}
               onClick={() => setColor(currentColor)}
             >

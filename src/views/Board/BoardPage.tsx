@@ -6,10 +6,11 @@ import { useParams } from 'react-router-dom';
 
 import { boards, columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
+import { RESOLUTION } from '../../constants/resolution';
 import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
-import { BASE_GREY } from './utils/constants';
+import { BASE_GREY, HOVER_GREY } from './utils/constants';
 import { modalStyle } from './utils/modalStyle';
 
 import './BoardPage.scss';
@@ -23,6 +24,7 @@ const BoardsPage = () => {
   const [columns, setColumns] = useState<ColumnResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [background, setBackground] = useState('');
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
@@ -33,6 +35,7 @@ const BoardsPage = () => {
       setIsLoading(false);
       if (!data || !data.columns) return;
       setColumns(data.columns.sort((a, b) => a.order - b.order) || []);
+      setBackground(data.color);
     };
     load();
     // eslint-disable-next-line
@@ -52,6 +55,12 @@ const BoardsPage = () => {
   return (
     <Loader isLoading={isLoading}>
       <Container component="main" maxWidth="xl">
+        <Box
+          className="BoardPage__background"
+          sx={{
+            backgroundImage: `url(${background}${RESOLUTION.big})`,
+          }}
+        ></Box>
         <section className="BoardPage">
           <Stack className="Columns" direction="row" spacing={2}>
             {columns.map((items, index) => (
@@ -61,7 +70,13 @@ const BoardsPage = () => {
               <IconButton
                 aria-label="add"
                 size="large"
-                sx={{ height: 50, width: 50, backgroundColor: BASE_GREY }}
+                sx={{
+                  height: 50,
+                  width: 50,
+                  backgroundColor: BASE_GREY,
+                  transition: '0.2s ease',
+                  '&:hover': { backgroundColor: HOVER_GREY },
+                }}
                 onClick={handleOpen}
               >
                 <AddIcon />

@@ -42,7 +42,7 @@ const BoardsPage = () => {
     const boardInfo: BoardRequest = {
       title: title,
       description: description,
-      color: color,
+      color: `${color}`,
     };
 
     backendErrorCatcher(dispatch(createBoard(boardInfo)));
