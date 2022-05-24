@@ -102,7 +102,11 @@ const Column = ({ column }: { column: ColumnResponse }) => {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={{ minHeight: '20px' }}
+                  style={{
+                    minHeight: '20px',
+                    maxHeight: '50vh',
+                    overflowY: 'scroll',
+                  }}
                 >
                   {tasks &&
                     [...tasks]
