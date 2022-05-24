@@ -91,7 +91,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
             </form>
           </CardContent>
           <CardContent className="tasks" sx={{ padding: '16px 8px' }}>
-            <Droppable droppableId={id}>
+            <Droppable droppableId={id} type="TASKS">
               {(provided) => (
                 <div
                   {...provided.droppableProps}

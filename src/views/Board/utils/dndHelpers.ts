@@ -8,6 +8,6 @@ export const getTaskStyle = (draggableStyle: DraggableStyle) => ({
 });
 
 export const getColumnStyle = (draggableStyle: DraggableStyle) => ({
-  margin: '0 8px',
+  marginRight: '16px',
   ...draggableStyle,
 });
