@@ -58,6 +58,7 @@ const ModalForm = ({
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputs">
           <TextField
+            autoFocus
             variant="outlined"
             label={t('BOARD_MODAL_NAME')}
             {...register('name', { required: true })}
@@ -91,7 +92,7 @@ const ModalForm = ({
           )}
         </div>
         <div className="buttons">
-          <Button type="submit" variant="outlined" onClick={closeModal}>
+          <Button type="button" variant="outlined" onClick={closeModal}>
             {t('BOARD_MODAL_CANCEL')}
           </Button>
           <Button type="submit" variant="contained">

@@ -75,6 +75,7 @@ const ModalEdit = ({
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputs">
           <TextField
+            autoFocus
             variant="outlined"
             label={t('BOARD_MODAL_NAME')}
             defaultValue={task.title}
@@ -106,14 +107,14 @@ const ModalEdit = ({
           </div>
         </div>
         <div className="buttons">
-          <Button variant="outlined" onClick={closeModal}>
+          <Button type="button" variant="outlined" onClick={closeModal}>
             {t('BOARD_MODAL_CANCEL')}
           </Button>
           <Button type="submit" variant="contained">
             {t('BOARD_MODAL_CHANGE')}
           </Button>
         </div>
-        <Button variant="outlined" color="error" onClick={handleOpen}>
+        <Button variant="outlined" type="button" color="error" onClick={handleOpen}>
           {t('BOARD_MODAL_DELETE_CARD')}
         </Button>
       </form>

@@ -28,7 +28,7 @@ const Confirmation = ({
         <Button variant="outlined" color="success" onClick={closeModal}>
           {t('LANG_CONFIRMATION_MODAL_CANCEL')}
         </Button>
-        <Button variant="outlined" color="error" onClick={onDelete}>
+        <Button variant="outlined" color="error" autoFocus onClick={onDelete}>
           {t('LANG_CONFIRMATION_MODAL_DELETE')}
         </Button>
       </div>
