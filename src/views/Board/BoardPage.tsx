@@ -7,11 +7,13 @@ import { useParams } from 'react-router-dom';
 
 import { columns as columnsApi } from '../../api/backend';
 import { Loader } from '../../components';
+import { RESOLUTION } from '../../constants/resolution';
 import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { BoardActions, getBoardById, getBoardState } from '../../store/board/board.slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
+import { BASE_GREY, HOVER_GREY } from './utils/constants';
 import { getColumnStyle, reorderColumns } from './utils/dndHelpers';
 import { modalStyle } from './utils/modalStyle';
 
@@ -26,6 +28,8 @@ const BoardsPage = () => {
   const dispatch = useAppDispatch();
   const [columns, setColumns] = useState<ColumnResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [background, setBackground] = useState('');
   const { isLoading, board } = useAppSelector(getBoardState);
 
   const handleOpen = () => setIsOpen(true);
@@ -33,12 +37,16 @@ const BoardsPage = () => {
 
   useEffect(() => {
     dispatch(getBoardById(boardId));
+
     // eslint-disable-next-line
   }, [boardId]);
 
   useEffect(() => {
-    if (board?.columns) {
-      setColumns(board.columns);
+    if (board) {
+      setBackground(board.color);
+      if (board.columns) {
+        setColumns(board.columns);
+      }
     }
   }, [board]);
 
@@ -58,6 +66,12 @@ const BoardsPage = () => {
   return (
     <Loader isLoading={isLoading}>
       <Container component="main" maxWidth="xl">
+        <Box
+          className="BoardPage__background"
+          sx={{
+            backgroundImage: `url(${background}${RESOLUTION.big})`,
+          }}
+        ></Box>
         <section className="BoardPage">
           <Stack className="Columns" direction="row" spacing={2}>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -92,6 +106,13 @@ const BoardsPage = () => {
                 aria-label="add"
                 className="add-column-button"
                 size="large"
+                sx={{
+                  height: 50,
+                  width: 50,
+                  backgroundColor: BASE_GREY,
+                  transition: '0.2s ease',
+                  '&:hover': { backgroundColor: HOVER_GREY },
+                }}
                 onClick={handleOpen}
               >
                 <AddIcon />

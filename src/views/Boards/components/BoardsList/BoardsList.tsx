@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { RESOLUTION } from '../../../../constants/resolution';
 import { BoardResponse } from '../../../../types/api';
 import { Confirmation } from '../../../Board/components/ModalConfirmation';
 import { modalStyle } from '../../../Board/utils/modalStyle';
@@ -23,23 +24,25 @@ const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
   return (
     <Box className="boards-list">
       {boards.map((board) => (
-        <Box
-          className="board"
-          key={board.id}
-          sx={{
-            background: `${board.color}`,
-          }}
-        >
+        <Box className="board" key={board.id}>
           <Box className="board__overlay"></Box>
 
           <Link to={`../board/${board.id}`} className="board__link">
             <Box className="board__click-area">
-              <Typography variant="h2" component="h2" className="board__title">
-                {board.title}
-              </Typography>
-              <Typography variant="h6" component="h6" className="board__title">
-                {board.description}
-              </Typography>
+              <Box
+                className="board__background"
+                sx={{
+                  background: `url(${board.color}${RESOLUTION.medium})`,
+                }}
+              ></Box>
+              <Box className="board__text-container">
+                <Typography variant="h2" component="h2" className="board__title">
+                  {board.title}
+                </Typography>
+                <Typography variant="h6" component="h6" className="board__title">
+                  {board.description}
+                </Typography>
+              </Box>
             </Box>
           </Link>
 
@@ -50,7 +53,7 @@ const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
               setIsDelete(true);
             }}
           >
-            <DeleteForeverRoundedIcon htmlColor="#fff"></DeleteForeverRoundedIcon>
+            <DeleteForeverRoundedIcon htmlColor="#000"></DeleteForeverRoundedIcon>
           </Button>
         </Box>
       ))}

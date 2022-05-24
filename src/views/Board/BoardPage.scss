@@ -1,6 +1,7 @@
 .BoardPage {
   margin-top: 50px;
-
+  
+  
   .Columns {
     overflow-y: scroll;
     align-items: flex-start;
@@ -13,4 +14,14 @@
       background-color: #d8d8dd;
     }
   }
+}
+
+.BoardPage__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
 }

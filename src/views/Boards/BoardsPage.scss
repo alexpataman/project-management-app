@@ -6,7 +6,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width: 420px;
+    min-width: 320px;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -101,6 +101,7 @@
     height: 56px;
     padding: 0;
     border-radius: 5px;
+    background-size: cover;
     overflow: hidden;
   }
 
@@ -130,19 +131,20 @@
 
 .boards-list {
   display: flex;
-  flex-wrap: wrap;
-  width: fit-content;
+  flex-direction: column;
+  width: 100%;
   gap: 50px;
   padding: 0;
+  margin-bottom: 50px;
 
   .board {
     justify-self: start;
     position: relative;
-    width: 200px;
     height: 100px;
     border-radius: 5px;
     padding: 5px 10px;
-    color: #fff;
+    color: #000;
+    background: #f0f0f0;
     overflow: hidden;
     cursor: pointer;
 
@@ -156,22 +158,28 @@
         transform: translateX(0);
       }
     }
-
-    .board__click-area {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      border-radius: 5px;
-      padding: 5px 10px;
-      overflow: hidden;
-    }
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  }
+  
+  .board__click-area {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    overflow: hidden;
   }
 
   .board__link {
     text-decoration: none;
-    color: #fff;
+    color: #000;
+  }
+
+  .board__background {
+    width: 20%;
+    height: 100%;
+    background-size: cover;
   }
 
   .board__overlay {
@@ -183,6 +191,11 @@
     opacity: 0;
     backdrop-filter: brightness(0.85);
     transition: 0.3s ease;
+  }
+
+  .board__text-container {
+    border-radius: 5px;
+    padding: 5px 10px;
   }
 
   .board__title {
