@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import type { RootState } from '..';
 import { boards as boardApi, columns as columnsApi, tasks as tasksApi } from '../../api/backend';
@@ -8,6 +8,7 @@ import {
   ACTION_DELETE_COLUMN,
   ACTION_DELETE_TASK,
   ACTION_GET_BOARD,
+  ACTION_GET_COLUMN,
   ACTION_UPDATE_COLUMN,
   ACTION_UPDATE_TASK,
   BOARD_SLICE_NAME,
@@ -42,11 +43,20 @@ const slice = createSlice({
         state.columns = state.columns.filter((col) => col.id != action.payload);
       })
       .addCase(updateColumn.fulfilled, (state, action) => {
-        const { id, title, order } = action.payload;
+        state.columns = state.columns
+          .map((col) => {
+            col.order = action.payload.find((e) => e.id === col.id)?.order || col.order;
+            return col;
+          })
+          .sort((a, b) => a.order - b.order);
+      })
+      .addCase(getColumnById.fulfilled, (state, action) => {
+        const { id, title, order, tasks } = action.payload;
         state.columns.map((col) => {
           if (col.id === id) {
             col.title = title;
             col.order = order;
+            col.tasks = tasks;
           }
           return col;
         });
@@ -57,19 +67,6 @@ const slice = createSlice({
           if (col.id === columnId) {
             if (col.tasks) {
               col.tasks = [...col.tasks, action.payload];
-            } else {
-              col.tasks = [action.payload];
-            }
-          }
-        });
-      })
-      .addCase(updateTask.fulfilled, (state, action) => {
-        const { id, columnId } = action.payload;
-        state.columns.map((col) => {
-          if (col.id === columnId) {
-            if (col.tasks) {
-              const index = col.tasks.findIndex((t) => t.id === id);
-              col.tasks[index] = action.payload;
             } else {
               col.tasks = [action.payload];
             }
@@ -94,6 +91,13 @@ const loading = (state: BoardState) => {
 export const getBoardById = createAsyncThunk(ACTION_GET_BOARD, async (boardId: string) => {
   return boardApi.getBoardById(boardId);
 });
+
+export const getColumnById = createAsyncThunk(
+  ACTION_GET_COLUMN,
+  async ({ boardId, columnId }: { boardId: string; columnId: string }) => {
+    return columnsApi.getColumnsById(boardId, columnId);
+  }
+);
 
 export const addColumn = createAsyncThunk(
   ACTION_ADD_COLUMN,
@@ -121,7 +125,8 @@ export const updateColumn = createAsyncThunk(
     columnId: string;
     data: ColumnRequest;
   }) => {
-    return columnsApi.updateColumn(boardId, columnId, data);
+    await columnsApi.updateColumn(boardId, columnId, data);
+    return columnsApi.getColumns(boardId);
   }
 );
 
@@ -134,18 +139,25 @@ export const addTask = createAsyncThunk(
 
 export const updateTask = createAsyncThunk(
   ACTION_UPDATE_TASK,
-  async ({
-    boardId,
-    columnId,
-    taskId,
-    data,
-  }: {
-    boardId: string;
-    columnId: string;
-    taskId: string;
-    data: UpdateTaskRequest;
-  }) => {
-    return tasksApi.updateTask(boardId, columnId, taskId, data);
+  async (
+    {
+      boardId,
+      columnId,
+      taskId,
+      data,
+    }: {
+      boardId: string;
+      columnId: string;
+      taskId: string;
+      data: UpdateTaskRequest;
+    },
+    { dispatch }
+  ) => {
+    const resp = await tasksApi.updateTask(boardId, columnId, taskId, data);
+    if (resp.columnId !== columnId) {
+      dispatch(getColumnById({ boardId, columnId: resp.columnId }));
+    }
+    dispatch(getColumnById({ boardId, columnId }));
   }
 );
 
