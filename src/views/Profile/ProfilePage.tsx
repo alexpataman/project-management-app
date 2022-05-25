@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { users } from '../../api/backend';
 import { Loader } from '../../components';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import { useAppSelector } from '../../store/hooks';
 import { getUserState } from '../../store/user/user.slice';
@@ -28,13 +27,7 @@ const ProfilePage = () => {
 
   return (
     <Container component="main" maxWidth="xl">
-      <Loader isLoading={isLoading}>
-        {userData && (
-          <ErrorBoundary>
-            <EditUser data={userData} />
-          </ErrorBoundary>
-        )}
-      </Loader>
+      <Loader isLoading={isLoading}>{userData && <EditUser data={userData} />}</Loader>
     </Container>
   );
 };
