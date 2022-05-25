@@ -1,4 +1,4 @@
-import { ERROR_CODES, ERROR_NAME_UNAUTHORIZED } from '../constants';
+import { ERROR_CODES, ERROR_NAMES } from '../constants';
 import { CustomError } from './CustomError';
 
 export class UnauthorizedError extends CustomError {
@@ -9,7 +9,7 @@ export class UnauthorizedError extends CustomError {
       Error.captureStackTrace(this, UnauthorizedError);
     }
 
-    this.name = ERROR_NAME_UNAUTHORIZED;
-    this.code = ERROR_CODES[ERROR_NAME_UNAUTHORIZED];
+    this.name = ERROR_NAMES.UNAUTHORIZED;
+    this.code = ERROR_CODES[ERROR_NAMES.UNAUTHORIZED];
   }
 }

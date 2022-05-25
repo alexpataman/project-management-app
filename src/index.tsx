@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './App';
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
-import { ERROR_CODES, ERROR_NAME_NOT_FOUND, PATH } from './constants';
+import { ERROR_CODES, ERROR_NAMES, PATH } from './constants';
 import './helpers/i18n';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
@@ -52,7 +52,7 @@ if (container) {
               />
             </Route>
             <Route path={PATH.error} element={<ErrorPage />} />
-            <Route path="*" element={<ErrorPage code={ERROR_CODES[ERROR_NAME_NOT_FOUND]} />} />
+            <Route path="*" element={<ErrorPage code={ERROR_CODES[ERROR_NAMES.NOT_FOUND]} />} />
           </Route>
         </Routes>
       </BrowserRouter>
