@@ -35,8 +35,8 @@ const loading = (state: BoardsState) => {
   state.isLoading = true;
 };
 
-export const getBoards = createAsyncThunk(BOARDS_ACTIONS.GET_BOARDS, async () => {
-  return await boards.getBoards();
+export const getBoards = createAsyncThunk(BOARDS_ACTIONS.GET_BOARDS, () => {
+  return boards.getBoards();
 });
 
 export const createBoard = createAsyncThunk(
