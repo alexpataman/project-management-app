@@ -28,21 +28,17 @@ const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
           <Box className="board__overlay"></Box>
 
           <Link to={`../board/${board.id}`} className="board__link">
+            <Box
+              className="board__background"
+              sx={{ background: `url(${board.color}${RESOLUTION.medium})` }}
+            ></Box>
             <Box className="board__click-area">
-              <Box
-                className="board__background"
-                sx={{
-                  background: `url(${board.color}${RESOLUTION.medium})`,
-                }}
-              ></Box>
-              <Box className="board__text-container">
-                <Typography variant="h2" component="h2" className="board__title">
-                  {board.title}
-                </Typography>
-                <Typography variant="h6" component="h6" className="board__title">
-                  {board.description}
-                </Typography>
-              </Box>
+              <Typography variant="h2" component="h2" className="board__title">
+                {board.title}
+              </Typography>
+              <Typography variant="h6" component="h6" className="board__title">
+                {board.description}
+              </Typography>
             </Box>
           </Link>
 
@@ -53,7 +49,7 @@ const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
               setIsDelete(true);
             }}
           >
-            <DeleteForeverRoundedIcon htmlColor="#000"></DeleteForeverRoundedIcon>
+            <DeleteForeverRoundedIcon htmlColor="#fff"></DeleteForeverRoundedIcon>
           </Button>
         </Box>
       ))}

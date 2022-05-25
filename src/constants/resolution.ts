@@ -1,5 +1,5 @@
 export const RESOLUTION = {
-  small: '720',
-  medium: '1080',
+  small: '400',
+  medium: '720',
   big: '1920',
 };
