@@ -9,15 +9,12 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { UserNav } from '..';
-import { GuestNav } from '..';
 import { APP_NAME, PATH } from '../../constants';
-import { useIsGuest } from '../../hooks/useIsGuest';
 import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
 
 import './Header.scss';
 
 export const Header = () => {
-  const isGuest = useIsGuest();
   const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
 
   return (
@@ -42,9 +39,8 @@ export const Header = () => {
           >
             {APP_NAME}
           </Button>
-
           <LanguageSwitcher />
-          {isGuest ? <GuestNav /> : <UserNav />}
+          <UserNav />
         </Toolbar>
       </Container>
     </AppBar>

@@ -7,12 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { PATH } from '../../constants';
+import { useIsGuest } from '../../hooks/useIsGuest';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getUserState, logOut } from '../../store/user/user.slice';
 
 export const UserNav = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { t } = useTranslation();
+  const isGuest = useIsGuest();
   const { name } = useAppSelector(getUserState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -30,6 +32,28 @@ export const UserNav = () => {
     dispatch(logOut());
     navigate(PATH.home);
   };
+
+  const menuItems = isGuest ? (
+    <>
+      <MenuItem component={Link} to={PATH.login} onClick={handleClose}>
+        {t('LANG_LOGIN_TEXT')}
+      </MenuItem>
+      <MenuItem component={Link} to={PATH.signup} onClick={handleClose}>
+        {t('LANG_SIGNUP_TEXT')}
+      </MenuItem>
+    </>
+  ) : (
+    <>
+      <MenuItem component={Link} to={PATH.boards} onClick={handleClose}>
+        {t('LANG_BOARDS_TEXT')}
+      </MenuItem>
+      <MenuItem component={Link} to={PATH.profile} onClick={handleClose}>
+        {t('LANG_EDIT_PROFILE_TEXT')}
+      </MenuItem>
+      <MenuItem onClick={handleLogout}>{t('LANG_LOGOUT_TEXT')}</MenuItem>
+    </>
+  );
+
   return (
     <div>
       <Button
@@ -43,21 +67,10 @@ export const UserNav = () => {
         className="user-nav"
       >
         <AccountCircle sx={{ mr: '5px' }} />
-        <Typography>{name}</Typography>
+        <Typography>{isGuest ? t('LANG_GUEST_TITLE') : name}</Typography>
       </Button>
-      <Menu
-        id="menu-user"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => handleClose()}
-      >
-        <MenuItem component={Link} to={PATH.boards} onClick={() => handleClose()}>
-          {t('LANG_BOARDS_TEXT')}
-        </MenuItem>
-        <MenuItem component={Link} to={PATH.profile} onClick={() => handleClose()}>
-          {t('LANG_EDIT_PROFILE_TEXT')}
-        </MenuItem>
-        <MenuItem onClick={handleLogout}>{t('LANG_LOGOUT_TEXT')}</MenuItem>
+      <Menu id="menu-user" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        {menuItems}
       </Menu>
     </div>
   );
