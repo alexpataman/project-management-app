@@ -33,26 +33,29 @@ export const UserNav = () => {
     navigate(PATH.home);
   };
 
-  const menuItems = isGuest ? (
-    <>
-      <MenuItem component={Link} to={PATH.login} onClick={handleClose}>
+  let menuItems;
+  if (isGuest) {
+    menuItems = [
+      <MenuItem component={Link} to={PATH.login} onClick={handleClose} key={PATH.login}>
         {t('LANG_LOGIN_TEXT')}
-      </MenuItem>
-      <MenuItem component={Link} to={PATH.signup} onClick={handleClose}>
+      </MenuItem>,
+      <MenuItem component={Link} to={PATH.signup} onClick={handleClose} key={PATH.signup}>
         {t('LANG_SIGNUP_TEXT')}
-      </MenuItem>
-    </>
-  ) : (
-    <>
-      <MenuItem component={Link} to={PATH.boards} onClick={handleClose}>
+      </MenuItem>,
+    ];
+  } else {
+    menuItems = [
+      <MenuItem component={Link} to={PATH.boards} onClick={handleClose} key={PATH.boards}>
         {t('LANG_BOARDS_TEXT')}
-      </MenuItem>
-      <MenuItem component={Link} to={PATH.profile} onClick={handleClose}>
+      </MenuItem>,
+      <MenuItem component={Link} to={PATH.profile} onClick={handleClose} key={PATH.profile}>
         {t('LANG_EDIT_PROFILE_TEXT')}
-      </MenuItem>
-      <MenuItem onClick={handleLogout}>{t('LANG_LOGOUT_TEXT')}</MenuItem>
-    </>
-  );
+      </MenuItem>,
+      <MenuItem onClick={handleLogout} key="logout">
+        {t('LANG_LOGOUT_TEXT')}
+      </MenuItem>,
+    ];
+  }
 
   return (
     <div>
