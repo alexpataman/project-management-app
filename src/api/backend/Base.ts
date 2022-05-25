@@ -67,7 +67,7 @@ export abstract class Base {
     });
   }
 
-  async sendRequest(response: Promise<AxiosResponse>) {
+  sendRequest(response: Promise<AxiosResponse>) {
     return response
       .then((result) => result.data)
       .catch((error) => {
