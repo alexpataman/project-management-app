@@ -41,6 +41,15 @@ $transition-timeout: 0.5s;
     margin-top: 10px;
     transition: all $transition-timeout;
 
+    @media screen and (max-width: 400px) {
+      padding-left: 0 !important;
+      margin-top: 0;
+
+      &::before {
+        opacity: 0;
+      }
+    }
+
     &::before {
       content: '';
       width: 45px;
