@@ -30,7 +30,6 @@ export const Header = () => {
               {APP_NAME}
             </Box>
           </Box>
-
           <Button
             component={Link}
             to="/"
