@@ -9,22 +9,21 @@ interface Props {
 }
 
 interface State {
-  hasError: boolean;
   error: string;
 }
 
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: '' };
+    this.state = { error: '' };
   }
 
-  public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error: error.message };
+  public static getDerivedStateFromError({ message }: Error): State {
+    return { error: message };
   }
 
   public render() {
-    if (this.state.hasError) {
+    if (this.state.error) {
       return (
         <Alert severity="error">
           <AlertTitle>{this.props.t('LANG_SOMETHING_WENT_WRONG_TEXT')}</AlertTitle>

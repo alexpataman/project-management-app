@@ -9,7 +9,15 @@ export const storage = {
     return this.prefix + fieldName;
   },
 
-  set(fieldName: string, data: storeType) {
+  set(fieldName: string | { [key: string]: storeType }, data?: storeType) {
+    if (typeof fieldName === 'string' && data) {
+      this.setField(fieldName, data);
+    } else {
+      Object.entries(fieldName).forEach(([key, value]) => this.setField(key, value));
+    }
+  },
+
+  setField(fieldName: string, data: storeType) {
     localStorage.setItem(this.computeFieldName(fieldName), JSON.stringify(data));
   },
 
