@@ -1,4 +1,4 @@
-import { ERROR_CODES, ERROR_NAME_BAD_REQUEST } from '../constants';
+import { ERROR_CODES, ERROR_NAMES } from '../constants';
 import { CustomError } from './CustomError';
 
 export class BadRequestError extends CustomError {
@@ -9,7 +9,7 @@ export class BadRequestError extends CustomError {
       Error.captureStackTrace(this, BadRequestError);
     }
 
-    this.name = ERROR_NAME_BAD_REQUEST;
-    this.code = ERROR_CODES[ERROR_NAME_BAD_REQUEST];
+    this.name = ERROR_NAMES.BAD_REQUEST;
+    this.code = ERROR_CODES[ERROR_NAMES.BAD_REQUEST];
   }
 }

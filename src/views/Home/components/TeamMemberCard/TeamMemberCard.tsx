@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
+import { EXTERNAL_LINKS } from '../../../../constants';
+
 import './TeamMemberCard.scss';
 
 interface ITeamMemberCard {
@@ -37,7 +39,12 @@ export default function TeamMemberCard(props: ITeamMemberCard) {
         </Typography>
       </Grid>
       <Grid item sx={{ p: 0 }}>
-        <Button size="small" startIcon={<GitHub />} href={`https://github.com/${github}`}>
+        <Button
+          size="small"
+          startIcon={<GitHub />}
+          href={`${EXTERNAL_LINKS.github}/${github}`}
+          target="_blank"
+        >
           {github}
         </Button>
       </Grid>

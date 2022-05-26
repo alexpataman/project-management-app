@@ -6,8 +6,9 @@ import {
   LOCAL_STORAGE_USER_ID,
   LOCAL_STORAGE_USER_NAME_ID,
 } from '../../constants';
-import { ACTION_LOG_OUT, ACTION_SIGN_IN, USER_SLICE_NAME } from '../../constants/store';
+import { USER_ACTIONS, USER_SLICE_NAME } from '../../constants/store';
 import { storage } from '../../helpers/storage';
+import { LoginResponse } from '../../types/api';
 import { UserState } from '../../types/store/user';
 
 export const initialState: UserState = {
@@ -36,16 +37,18 @@ const slice = createSlice({
 });
 
 export const signIn = createAsyncThunk(
-  ACTION_SIGN_IN,
-  (data: { token: string; name: string; id: string }) => {
-    storage.set(LOCAL_STORAGE_TOKEN_ID, data.token);
-    storage.set(LOCAL_STORAGE_USER_NAME_ID, data.name);
-    storage.set(LOCAL_STORAGE_USER_ID, data.id);
-    return { name: data.name, id: data.id };
+  USER_ACTIONS.SIGN_IN,
+  ({ token, name, id }: LoginResponse) => {
+    storage.set({
+      [LOCAL_STORAGE_TOKEN_ID]: token,
+      [LOCAL_STORAGE_USER_NAME_ID]: name,
+      [LOCAL_STORAGE_USER_ID]: id,
+    });
+    return { name, id };
   }
 );
 
-export const logOut = createAsyncThunk(ACTION_LOG_OUT, () => {
+export const logOut = createAsyncThunk(USER_ACTIONS.LOG_OUT, () => {
   storage.clear();
 });
 
