@@ -7,16 +7,29 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { RESOLUTION } from '../../../../constants/resolution';
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
+import { createBoard, updateBoard } from '../../../../store/boards/boards.slice';
+import { useAppDispatch } from '../../../../store/hooks';
+import { BoardRequest } from '../../../../types/api';
 import { COLORS_ARRAY, MODAL_DEFAULT_VALUES } from './constants';
 
 interface IBoardsModal {
   isModalOpened: boolean;
   closeModal: () => void;
-  createBoard: (title: string, description: string, color: string) => void;
+  isEditingMode: boolean;
+  editingBoardId: string;
 }
 
-const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) => {
+const BoardsModal = ({
+  isModalOpened,
+  closeModal,
+  isEditingMode,
+  editingBoardId,
+}: IBoardsModal) => {
   const { t } = useTranslation();
+
+  const backendErrorCatcher = useBackendErrorCatcher();
+  const dispatch = useAppDispatch();
 
   const [color, setColor] = useState(MODAL_DEFAULT_VALUES.color);
 
@@ -34,10 +47,37 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
     onSubmit: async (values) => {
       const { title, description } = values;
 
-      createBoard(title, description, color);
+      if (isEditingMode) {
+        handleEditBoard(title, description, color, editingBoardId);
+      } else {
+        handleCreateBoard(title, description, color);
+      }
+
       resetValues();
     },
   });
+
+  const handleCreateBoard = async (title: string, description: string, color: string) => {
+    const data: BoardRequest = {
+      title: title,
+      description: description,
+      color: `${color}`,
+    };
+
+    backendErrorCatcher(dispatch(createBoard(data)));
+    closeModal();
+  };
+
+  const handleEditBoard = async (title: string, description: string, color: string, id: string) => {
+    const data: BoardRequest = {
+      title: title,
+      description: description,
+      color: `${color}`,
+    };
+
+    backendErrorCatcher(dispatch(updateBoard({ id, data })));
+    closeModal();
+  };
 
   const resetValues = () => {
     formik.resetForm();
@@ -54,7 +94,7 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
       <Box component="form" onSubmit={formik.handleSubmit} className="modal-container">
         <Box component="div" sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h3" component="h3" className="modal__title">
-            {t('LANG_CREATE_BOARD_BUTTON_TEXT')}
+            {isEditingMode ? t('LANG_EDIT_BOARD_TEXT') : t('LANG_CREATE_BOARD_TEXT')}
           </Typography>
 
           <Button onClick={closeAndReset} className="modal__close">
@@ -103,9 +143,15 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
           ))}
         </Box>
 
-        <Button type="submit" variant="contained" className="modal__submit">
-          {t('LANG_CREATE_BUTTON_TEXT')}
-        </Button>
+        {isEditingMode ? (
+          <Button type="submit" variant="contained" className="modal__submit">
+            SAVE
+          </Button>
+        ) : (
+          <Button type="submit" variant="contained" className="modal__submit">
+            {t('LANG_CREATE_BUTTON_TEXT')}
+          </Button>
+        )}
       </Box>
     </Modal>
   );

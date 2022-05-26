@@ -1,6 +1,7 @@
 export const BOARDS = {
   LANG_CREATE_BUTTON_TEXT: 'Create',
-  LANG_CREATE_BOARD_BUTTON_TEXT: 'Create board',
+  LANG_CREATE_BOARD_TEXT: 'Create board',
+  LANG_EDIT_BOARD_TEXT: 'Edit board',
   LANG_BOARDS_TITLE_TEXT: 'Title',
   LANG_BOARDS_DESCRIPTION_TEXT: 'Description',
   LANG_ENTER_BOARDS_TITLE: '👋 Enter the title of the board.',

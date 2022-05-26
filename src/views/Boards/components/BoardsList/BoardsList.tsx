@@ -1,24 +1,44 @@
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Modal, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { RESOLUTION } from '../../../../constants/resolution';
-import { BoardResponse } from '../../../../types/api';
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
+import { deleteBoard, getBoardsState } from '../../../../store/boards/boards.slice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { Confirmation } from '../../../Board/components/ModalConfirmation';
 import { modalStyle } from '../../../Board/utils/modalStyle';
+import BoardsModal from '../BoardsModal/BoardsModal';
 
-interface IBoardsList {
-  boards: BoardResponse[];
-  openModal: () => void;
-  deleteBoard: (id: string) => void;
-}
-
-const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
+const BoardsList = () => {
   const { t } = useTranslation();
 
-  const [isDelete, setIsDelete] = useState(false);
+  const backendErrorCatcher = useBackendErrorCatcher();
+  const dispatch = useAppDispatch();
+  const { boards } = useAppSelector(getBoardsState);
+
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpened(true);
+  };
+
+  const closeModal = () => {
+    setIsEditing(false);
+    setIsModalOpened(false);
+  };
+
+  const handleDeleteBoard = async (id: string) => {
+    backendErrorCatcher(dispatch(deleteBoard(id)));
+  };
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingBoard, setEditingBoard] = useState('');
+
+  const [isDeleting, setIsDeleting] = useState(false);
   const [deletingBoard, setDeletingBoard] = useState('');
 
   return (
@@ -46,25 +66,42 @@ const BoardsList = ({ boards, openModal, deleteBoard }: IBoardsList) => {
             className="board__delete"
             onClick={() => {
               setDeletingBoard(board.id);
-              setIsDelete(true);
+              setIsDeleting(true);
             }}
           >
             <DeleteForeverRoundedIcon htmlColor="#fff"></DeleteForeverRoundedIcon>
           </Button>
+          <Button
+            className="board__edit"
+            onClick={() => {
+              setEditingBoard(board.id);
+              setIsEditing(true);
+              openModal();
+            }}
+          >
+            <EditIcon htmlColor="#fff"></EditIcon>
+          </Button>
         </Box>
       ))}
 
-      <Modal open={isDelete} onClose={() => setIsDelete(false)}>
+      <Modal open={isDeleting} onClose={() => setIsDeleting(false)}>
         <Box sx={modalStyle}>
           <Confirmation
-            deleteCallback={() => deleteBoard(deletingBoard)}
-            closeModal={() => setIsDelete(false)}
+            deleteCallback={() => handleDeleteBoard(deletingBoard)}
+            closeModal={() => setIsDeleting(false)}
           />
         </Box>
       </Modal>
 
+      <BoardsModal
+        isModalOpened={isModalOpened}
+        closeModal={closeModal}
+        isEditingMode={isEditing}
+        editingBoardId={editingBoard}
+      ></BoardsModal>
+
       <Button variant="contained" className="board board__create" onClick={openModal}>
-        {t('LANG_CREATE_BOARD_BUTTON_TEXT')}
+        {t('LANG_CREATE_BOARD_TEXT')}
       </Button>
     </Box>
   );

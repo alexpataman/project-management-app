@@ -1,6 +1,7 @@
 export const BOARDS = {
   LANG_CREATE_BUTTON_TEXT: 'Создать',
-  LANG_CREATE_BOARD_BUTTON_TEXT: 'Создать доску',
+  LANG_CREATE_BOARD_TEXT: 'Создать доску',
+  LANG_EDIT_BOARD_TEXT: 'Редактировать доску',
   LANG_BOARDS_TITLE_TEXT: 'Название',
   LANG_BOARDS_DESCRIPTION_TEXT: 'Описание',
   LANG_ENTER_BOARDS_TITLE: '👋 Введите название доски.',

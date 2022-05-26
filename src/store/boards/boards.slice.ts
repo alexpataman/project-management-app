@@ -6,6 +6,7 @@ import {
   ACTION_CREATE_BOARD,
   ACTION_DELETE_BOARD,
   ACTION_GET_BOARDS,
+  ACTION_UPDATE_BOARD,
   BOARDS_SLICE_NAME,
 } from '../../constants/store';
 import { BoardRequest } from '../../types/api';
@@ -56,6 +57,14 @@ export const deleteBoard = createAsyncThunk(
   ACTION_DELETE_BOARD,
   async (id: string, { dispatch }) => {
     await boards.deleteBoard(id);
+    dispatch(getBoards());
+  }
+);
+
+export const updateBoard = createAsyncThunk(
+  ACTION_UPDATE_BOARD,
+  async ({ id, data }: { id: string; data: BoardRequest }, { dispatch }) => {
+    await boards.updateBoard(id, data);
     dispatch(getBoards());
   }
 );
