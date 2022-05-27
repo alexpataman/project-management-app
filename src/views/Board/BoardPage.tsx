@@ -13,6 +13,7 @@ import { BoardActions, getBoardById, getBoardState } from '../../store/board/boa
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { ColumnResponse } from '../../types/api';
 import { Column, ModalForm } from '../Board/components';
+import { MODAL_DEFAULT_VALUES } from '../Boards/components/BoardsModal/constants';
 import { BASE_GREY, HOVER_GREY } from './utils/constants';
 import { getColumnStyle, reorderColumns } from './utils/dndHelpers';
 import { modalStyle } from './utils/modalStyle';
@@ -29,7 +30,7 @@ const BoardsPage = () => {
   const [columns, setColumns] = useState<ColumnResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [background, setBackground] = useState('');
+  const [background, setBackground] = useState(MODAL_DEFAULT_VALUES.color);
   const { isLoading, board } = useAppSelector(getBoardState);
 
   const handleOpen = () => setIsOpen(true);

@@ -55,6 +55,14 @@ export const deleteBoard = createAsyncThunk(
   }
 );
 
+export const updateBoard = createAsyncThunk(
+  BOARDS_ACTIONS.UPDATE_BOARD,
+  async ({ id, data }: { id: string; data: BoardRequest }, { dispatch }) => {
+    await boards.updateBoard(id, data);
+    dispatch(getBoards());
+  }
+);
+
 export const {} = slice.actions;
 export const getBoardsState = (state: RootState) => state[BOARDS_SLICE_NAME];
 export const boardsReducer = slice.reducer;

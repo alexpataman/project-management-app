@@ -19,6 +19,11 @@ class Boards extends Base {
     return this.sendRequest(instance.delete(`${this.API_PATH_BOARDS}/${id}`));
   }
 
+  updateBoard(id: string, board: BoardRequest): Promise<BoardResponse[] | null> {
+    const instance = this.getInstance();
+    return this.sendRequest(instance.put(`${this.API_PATH_BOARDS}/${id}`, board));
+  }
+
   getBoardById(id: string): Promise<BoardResponse | null> {
     const instance = this.getInstance();
     return this.sendRequest(instance.get(`${this.API_PATH_BOARDS}/${id}`));
