@@ -1,10 +1,11 @@
 import CloseIcon from '@mui/icons-material/Close';
 import WorkIcon from '@mui/icons-material/Work';
 import { Avatar, Card, CardContent, IconButton, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { users } from '../../../../api/backend';
+import { useAppSelector } from '../../../../store/hooks';
+import { getUsersState } from '../../../../store/users/users.slice';
 import { TaskResponse } from '../../../../types/api';
 
 import './CardInfo.scss';
@@ -20,18 +21,10 @@ const CardInfo = ({
   column: string;
   closeModal: () => void;
 }) => {
-  const [userName, setUserName] = useState('');
+  const { users } = useAppSelector(getUsersState);
+  const [userName] = useState(users.find((u) => u.id === task.userId)?.name || '');
 
   const { t } = useTranslation();
-
-  useEffect(() => {
-    const load = async () => {
-      const user = await users.getUser(task.userId);
-      if (!user) return;
-      setUserName(user.name);
-    };
-    load();
-  }, [task]);
 
   return (
     <Card className="CardInfo">

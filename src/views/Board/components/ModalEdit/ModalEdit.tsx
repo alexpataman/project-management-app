@@ -15,8 +15,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { users as usersApi } from '../../../../api/backend';
-import { User } from '../../../../types/api';
+import { useAppSelector } from '../../../../store/hooks';
+import { getUsersState } from '../../../../store/users/users.slice';
 import { modalStyle } from '../../utils/modalStyle';
 import { TaskEditForm } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
@@ -35,17 +35,8 @@ const ModalEdit = ({
   closeModal: () => void;
 }) => {
   const [responsible, setResponsible] = useState<string>('');
-  const [users, setUsers] = useState<User[]>([]);
+  const { users } = useAppSelector(getUsersState);
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const load = async () => {
-      const users = await usersApi.getUsers();
-      if (!users) return;
-      setUsers(users);
-    };
-    load();
-  }, []);
 
   useEffect(() => {
     setResponsible(task.userId);

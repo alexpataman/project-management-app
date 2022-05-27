@@ -14,6 +14,7 @@ import {
   updateTask,
 } from '../../store/board/board.slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { getUsers } from '../../store/users/users.slice';
 import { Column, ModalForm } from '../Board/components';
 import { getColumnStyle } from './utils/dndHelpers';
 import { modalStyle } from './utils/modalStyle';
@@ -35,6 +36,10 @@ const BoardsPage = () => {
   useEffect(() => {
     dispatch(getBoardById(boardId));
   }, [boardId]);
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
 
   const handleAddColumn = async (title: string) => {
     dispatch(addColumn({ boardId, title }));

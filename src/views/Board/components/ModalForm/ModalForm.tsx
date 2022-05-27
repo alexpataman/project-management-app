@@ -9,12 +9,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { users as usersApi } from '../../../../api/backend';
-import { User } from '../../../../types/api';
+import { useAppSelector } from '../../../../store/hooks';
+import { getUserState } from '../../../../store/user/user.slice';
+import { getUsersState } from '../../../../store/users/users.slice';
 import { TaskEditForm } from '../../utils/types';
 
 import './ModalForm.scss';
@@ -28,17 +29,9 @@ const ModalForm = ({
   saveTask: (title: string, description: string, responsible: string) => void;
   closeModal: () => void;
 }) => {
-  const [responsible, setResponsible] = useState<string>('');
-  const [users, setUsers] = useState<User[]>([]);
-
-  useEffect(() => {
-    const load = async () => {
-      const users = await usersApi.getUsers();
-      if (!users) return;
-      setUsers(users);
-    };
-    load();
-  }, []);
+  const userId = useAppSelector(getUserState).id;
+  const [responsible, setResponsible] = useState<string>(userId);
+  const { users } = useAppSelector(getUsersState);
   const { register, handleSubmit } = useForm<TaskEditForm>();
   const { t } = useTranslation();
   const onSubmit = (data: TaskEditForm) => {
