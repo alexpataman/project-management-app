@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import type { RootState } from '..';
 import { boards as boardApi, columns as columnsApi, tasks as tasksApi } from '../../api/backend';
@@ -88,27 +88,27 @@ const loading = (state: BoardState) => {
   state.isLoading = true;
 };
 
-export const getBoardById = createAsyncThunk(ACTION_GET_BOARD, async (boardId: string) => {
+export const getBoardById = createAsyncThunk(ACTION_GET_BOARD, (boardId: string) => {
   return boardApi.getBoardById(boardId);
 });
 
 export const getColumnById = createAsyncThunk(
   ACTION_GET_COLUMN,
-  async ({ boardId, columnId }: { boardId: string; columnId: string }) => {
+  ({ boardId, columnId }: { boardId: string; columnId: string }) => {
     return columnsApi.getColumnsById(boardId, columnId);
   }
 );
 
 export const addColumn = createAsyncThunk(
   ACTION_ADD_COLUMN,
-  async ({ boardId, title }: { boardId: string; title: string }) => {
+  ({ boardId, title }: { boardId: string; title: string }) => {
     return columnsApi.createColumn(boardId, { title });
   }
 );
 
 export const deleteColumn = createAsyncThunk(
   ACTION_DELETE_COLUMN,
-  async ({ boardId, columnId }: { boardId: string; columnId: string }) => {
+  ({ boardId, columnId }: { boardId: string; columnId: string }) => {
     columnsApi.deleteColumn(boardId, columnId);
     return columnId;
   }
@@ -132,7 +132,7 @@ export const updateColumn = createAsyncThunk(
 
 export const addTask = createAsyncThunk(
   ACTION_ADD_TASK,
-  async ({ boardId, columnId, data }: { boardId: string; columnId: string; data: TaskRequest }) => {
+  ({ boardId, columnId, data }: { boardId: string; columnId: string; data: TaskRequest }) => {
     return tasksApi.createTask(boardId, columnId, data);
   }
 );
@@ -163,7 +163,7 @@ export const updateTask = createAsyncThunk(
 
 export const deleteTask = createAsyncThunk(
   ACTION_DELETE_TASK,
-  async ({ boardId, columnId, taskId }: { boardId: string; columnId: string; taskId: string }) => {
+  ({ boardId, columnId, taskId }: { boardId: string; columnId: string; taskId: string }) => {
     tasksApi.deleteTask(boardId, columnId, taskId);
     return { columnId, taskId };
   }

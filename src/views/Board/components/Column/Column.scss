@@ -17,11 +17,16 @@
 
   .column-title {
     padding: 5px;
+    font-weight: 600;
+    font-size: 1.2rem;
   }
 
   .column-title-input {
     background-color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
     input {
+      font-weight: 600;
       padding: 5px;
     }
   }
@@ -30,6 +35,12 @@
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+
+    .tasks-container {
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
   }
 
   .delete-icon {
