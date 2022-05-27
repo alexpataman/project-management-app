@@ -2,12 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import type { RootState } from '..';
 import { boards } from '../../api/backend';
-import {
-  ACTION_CREATE_BOARD,
-  ACTION_DELETE_BOARD,
-  ACTION_GET_BOARDS,
-  BOARDS_SLICE_NAME,
-} from '../../constants/store';
+import { BOARDS_ACTIONS, BOARDS_SLICE_NAME } from '../../constants/store';
 import { BoardRequest } from '../../types/api';
 import { BoardsState } from '../../types/store/boards';
 import { throwThunkError } from '../utils/helper';
@@ -40,12 +35,12 @@ const loading = (state: BoardsState) => {
   state.isLoading = true;
 };
 
-export const getBoards = createAsyncThunk(ACTION_GET_BOARDS, async () => {
-  return await boards.getBoards();
+export const getBoards = createAsyncThunk(BOARDS_ACTIONS.GET_BOARDS, () => {
+  return boards.getBoards();
 });
 
 export const createBoard = createAsyncThunk(
-  ACTION_CREATE_BOARD,
+  BOARDS_ACTIONS.CREATE_BOARD,
   async (data: BoardRequest, { dispatch }) => {
     await boards.createBoard(data);
     dispatch(getBoards());
@@ -53,9 +48,17 @@ export const createBoard = createAsyncThunk(
 );
 
 export const deleteBoard = createAsyncThunk(
-  ACTION_DELETE_BOARD,
+  BOARDS_ACTIONS.DELETE_BOARD,
   async (id: string, { dispatch }) => {
     await boards.deleteBoard(id);
+    dispatch(getBoards());
+  }
+);
+
+export const updateBoard = createAsyncThunk(
+  BOARDS_ACTIONS.UPDATE_BOARD,
+  async ({ id, data }: { id: string; data: BoardRequest }, { dispatch }) => {
+    await boards.updateBoard(id, data);
     dispatch(getBoards());
   }
 );

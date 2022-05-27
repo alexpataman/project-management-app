@@ -2,22 +2,37 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { RESOLUTION } from '../../../../constants/resolution';
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
+import { createBoard, updateBoard } from '../../../../store/boards/boards.slice';
+import { useAppDispatch } from '../../../../store/hooks';
+import { BoardRequest, BoardResponse } from '../../../../types/api';
 import { COLORS_ARRAY, MODAL_DEFAULT_VALUES } from './constants';
 
 interface IBoardsModal {
   isModalOpened: boolean;
   closeModal: () => void;
-  createBoard: (title: string, description: string, color: string) => void;
+  isEditingMode: boolean;
+  editingBoard: BoardResponse;
 }
 
-const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) => {
+const BoardsModal = ({ isModalOpened, closeModal, isEditingMode, editingBoard }: IBoardsModal) => {
   const { t } = useTranslation();
 
-  const [color, setColor] = useState(MODAL_DEFAULT_VALUES.color);
+  const INITIAL_VALUES = {
+    title: isEditingMode ? editingBoard.title : MODAL_DEFAULT_VALUES.title,
+    description: isEditingMode ? editingBoard.description : MODAL_DEFAULT_VALUES.description,
+    color: isEditingMode ? editingBoard.color : MODAL_DEFAULT_VALUES.color,
+  };
+
+  const [color, setColor] = useState(INITIAL_VALUES.color);
+  useEffect(() => {
+    setColor(INITIAL_VALUES.color);
+  }, [INITIAL_VALUES.color]);
 
   const validationSchema = yup.object({
     title: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -26,17 +41,48 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
 
   const formik = useFormik({
     initialValues: {
-      title: MODAL_DEFAULT_VALUES.title,
-      description: MODAL_DEFAULT_VALUES.description,
+      title: INITIAL_VALUES.title,
+      description: INITIAL_VALUES.description,
     },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      const { title, description } = values;
 
-      createBoard(title, description, color);
+    validationSchema: validationSchema,
+    enableReinitialize: true,
+
+    onSubmit: (values) => {
+      const { title, description } = values;
+      if (isEditingMode) {
+        handleEditBoard(title, description, color, editingBoard.id);
+      } else {
+        handleCreateBoard(title, description, color);
+      }
       resetValues();
     },
   });
+
+  const backendErrorCatcher = useBackendErrorCatcher();
+  const dispatch = useAppDispatch();
+
+  const handleCreateBoard = (title: string, description: string, color: string) => {
+    const data: BoardRequest = {
+      title: title,
+      description: description,
+      color: `${color}`,
+    };
+
+    backendErrorCatcher(dispatch(createBoard(data)));
+    closeModal();
+  };
+
+  const handleEditBoard = (title: string, description: string, color: string, id: string) => {
+    const data: BoardRequest = {
+      title: title,
+      description: description,
+      color: `${color}`,
+    };
+
+    backendErrorCatcher(dispatch(updateBoard({ id, data })));
+    closeModal();
+  };
 
   const resetValues = () => {
     formik.resetForm();
@@ -53,7 +99,7 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
       <Box component="form" onSubmit={formik.handleSubmit} className="modal-container">
         <Box component="div" sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h3" component="h3" className="modal__title">
-            {t('LANG_CREATE_BOARD_BUTTON_TEXT')}
+            {isEditingMode ? t('LANG_EDIT_BOARD_TEXT') : t('LANG_CREATE_BOARD_TEXT')}
           </Typography>
 
           <Button onClick={closeAndReset} className="modal__close">
@@ -88,7 +134,7 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
               component="div"
               className="color__wrapper"
               sx={{
-                background: `${currentColor}`,
+                background: `url(${currentColor}${RESOLUTION.small})`,
               }}
               onClick={() => setColor(currentColor)}
             >
@@ -102,9 +148,15 @@ const BoardsModal = ({ isModalOpened, closeModal, createBoard }: IBoardsModal) =
           ))}
         </Box>
 
-        <Button type="submit" variant="contained" className="modal__submit">
-          {t('LANG_CREATE_BUTTON_TEXT')}
-        </Button>
+        {isEditingMode ? (
+          <Button type="submit" variant="contained" className="modal__submit">
+            {t('LANG_SAVE_TEXT')}
+          </Button>
+        ) : (
+          <Button type="submit" variant="contained" className="modal__submit">
+            {t('LANG_CREATE_BUTTON_TEXT')}
+          </Button>
+        )}
       </Box>
     </Modal>
   );

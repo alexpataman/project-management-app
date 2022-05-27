@@ -4,35 +4,35 @@ import { Base } from './Base';
 class Tasks extends Base {
   public API_PATH_BOARDS = `${this.API_HOST}/boards`;
 
-  async getTasks(boardId: string, columnId: string): Promise<TaskResponse[]> {
+  getTasks(boardId: string, columnId: string): Promise<TaskResponse[]> {
     const instance = this.getInstance();
     return this.sendRequest(
       instance.get(`${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks`)
     );
   }
 
-  async createTask(boardId: string, columnId: string, data: TaskRequest): Promise<TaskResponse> {
+  createTask(boardId: string, columnId: string, data: TaskRequest): Promise<TaskResponse> {
     const instance = this.getInstance();
     return this.sendRequest(
       instance.post(`${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks`, data)
     );
   }
 
-  async getTaskById(boardId: string, columnId: string, taskId: string): Promise<TaskResponse[]> {
+  getTaskById(boardId: string, columnId: string, taskId: string): Promise<TaskResponse[]> {
     const instance = this.getInstance();
     return this.sendRequest(
       instance.get(`${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`)
     );
   }
 
-  async deleteTask(boardId: string, columnId: string, taskId: string): Promise<null> {
+  deleteTask(boardId: string, columnId: string, taskId: string): Promise<null> {
     const instance = this.getInstance();
     return this.sendRequest(
       instance.delete(`${this.API_PATH_BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`)
     );
   }
 
-  async updateTask(
+  updateTask(
     boardId: string,
     columnId: string,
     taskId: string,

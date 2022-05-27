@@ -17,11 +17,13 @@ import { ColumnRequest, ColumnResponse, TaskRequest, UpdateTaskRequest } from '.
 
 type BoardState = {
   isLoading: boolean;
+  background: string;
   columns: ColumnResponse[];
 };
 
 export const initialState: BoardState = {
   isLoading: false,
+  background: '#fff',
   columns: [],
 };
 
@@ -35,6 +37,7 @@ const slice = createSlice({
       .addCase(getBoardById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.columns = action.payload?.columns?.sort((a, b) => a.order - b.order) || [];
+        state.background = action.payload?.color || '#fff';
       })
       .addCase(addColumn.fulfilled, (state, action) => {
         state.columns = [...state.columns, action.payload];

@@ -1,16 +1,6 @@
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 
-import {
-  ERROR_CODES,
-  ERROR_NAME_AlREADY_EXISTS,
-  ERROR_NAME_BAD_REQUEST,
-  ERROR_NAME_CONFLICT,
-  ERROR_NAME_FORBIDDEN,
-  ERROR_NAME_NOT_FOUND,
-  ERROR_NAME_UNAUTHORIZED,
-  ERROR_NAME_VALIDATION_ERROR,
-  LOCAL_STORAGE_TOKEN_ID,
-} from '../../constants';
+import { ERROR_CODES, ERROR_NAMES, LOCAL_STORAGE_TOKEN_ID } from '../../constants';
 import {
   AlreadyExistsError,
   BadRequestError,
@@ -40,18 +30,18 @@ export abstract class Base {
     const { status, statusText = '' } = error.response;
 
     switch (status) {
-      case ERROR_CODES[ERROR_NAME_BAD_REQUEST]:
+      case ERROR_CODES[ERROR_NAMES.BAD_REQUEST]:
         return new BadRequestError(statusText);
-      case ERROR_CODES[ERROR_NAME_VALIDATION_ERROR]:
+      case ERROR_CODES[ERROR_NAMES.VALIDATION_ERROR]:
         return new ValidationError(statusText);
-      case ERROR_CODES[ERROR_NAME_CONFLICT]:
-      case ERROR_CODES[ERROR_NAME_AlREADY_EXISTS]:
+      case ERROR_CODES[ERROR_NAMES.CONFLICT]:
+      case ERROR_CODES[ERROR_NAMES.AlREADY_EXISTS]:
         return new AlreadyExistsError(statusText);
-      case ERROR_CODES[ERROR_NAME_UNAUTHORIZED]:
+      case ERROR_CODES[ERROR_NAMES.UNAUTHORIZED]:
         return new UnauthorizedError(statusText);
-      case ERROR_CODES[ERROR_NAME_FORBIDDEN]:
+      case ERROR_CODES[ERROR_NAMES.FORBIDDEN]:
         return new ForbiddenError(statusText);
-      case ERROR_CODES[ERROR_NAME_NOT_FOUND]:
+      case ERROR_CODES[ERROR_NAMES.NOT_FOUND]:
         return new NotFoundError(statusText);
       default:
         return new Error(statusText);
@@ -67,7 +57,7 @@ export abstract class Base {
     });
   }
 
-  async sendRequest(response: Promise<AxiosResponse>) {
+  sendRequest(response: Promise<AxiosResponse>) {
     return response
       .then((result) => result.data)
       .catch((error) => {

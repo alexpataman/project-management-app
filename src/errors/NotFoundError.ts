@@ -1,4 +1,4 @@
-import { ERROR_CODES, ERROR_NAME_NOT_FOUND } from '../constants';
+import { ERROR_CODES, ERROR_NAMES } from '../constants';
 import { CustomError } from './CustomError';
 
 export class NotFoundError extends CustomError {
@@ -9,7 +9,7 @@ export class NotFoundError extends CustomError {
       Error.captureStackTrace(this, NotFoundError);
     }
 
-    this.name = ERROR_NAME_NOT_FOUND;
-    this.code = ERROR_CODES[ERROR_NAME_NOT_FOUND];
+    this.name = ERROR_NAMES.NOT_FOUND;
+    this.code = ERROR_CODES[ERROR_NAMES.NOT_FOUND];
   }
 }

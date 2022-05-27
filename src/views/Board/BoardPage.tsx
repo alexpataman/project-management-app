@@ -6,6 +6,7 @@ import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautif
 import { useParams } from 'react-router-dom';
 
 import { Loader } from '../../components';
+import { RESOLUTION } from '../../constants/resolution';
 import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import {
   addColumn,
@@ -17,6 +18,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getUsers } from '../../store/users/users.slice';
 import { Column, ModalForm } from '../Board/components';
+import { BASE_GREY, HOVER_GREY } from './utils/constants';
 import { getColumnStyle } from './utils/dndHelpers';
 import { modalStyle } from './utils/modalStyle';
 
@@ -26,11 +28,12 @@ const COLUMNS_LIMIT = 5;
 
 const BoardsPage = () => {
   const params = useParams();
-  const boardId = params.id || '';
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, columns } = useAppSelector(getBoardState);
+  const { isLoading, columns, background } = useAppSelector(getBoardState);
   const backendErrorCatcher = useBackendErrorCatcher();
+
+  const boardId = params.id || '';
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
@@ -87,6 +90,12 @@ const BoardsPage = () => {
   return (
     <Loader isLoading={isLoading}>
       <Container component="main" maxWidth="xl">
+        <Box
+          className="BoardPage__background"
+          sx={{
+            backgroundImage: `url(${background}${RESOLUTION.big})`,
+          }}
+        ></Box>
         <section className="BoardPage">
           <Stack className="Columns" direction="row" spacing={2}>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -121,6 +130,13 @@ const BoardsPage = () => {
                 aria-label="add"
                 className="add-column-button"
                 size="large"
+                sx={{
+                  height: 50,
+                  width: 50,
+                  backgroundColor: BASE_GREY,
+                  transition: '0.2s ease',
+                  '&:hover': { backgroundColor: HOVER_GREY },
+                }}
                 onClick={handleOpen}
               >
                 <AddIcon />
