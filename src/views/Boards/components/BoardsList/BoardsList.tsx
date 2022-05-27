@@ -31,7 +31,7 @@ const BoardsList = () => {
     setIsModalOpened(false);
   };
 
-  const handleDeleteBoard = async (id: string) => {
+  const handleDeleteBoard = (id: string) => {
     backendErrorCatcher(dispatch(deleteBoard(id)));
   };
 

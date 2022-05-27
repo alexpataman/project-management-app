@@ -48,7 +48,7 @@ const BoardsModal = ({ isModalOpened, closeModal, isEditingMode, editingBoard }:
     validationSchema: validationSchema,
     enableReinitialize: true,
 
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       const { title, description } = values;
       if (isEditingMode) {
         handleEditBoard(title, description, color, editingBoard.id);
@@ -62,7 +62,7 @@ const BoardsModal = ({ isModalOpened, closeModal, isEditingMode, editingBoard }:
   const backendErrorCatcher = useBackendErrorCatcher();
   const dispatch = useAppDispatch();
 
-  const handleCreateBoard = async (title: string, description: string, color: string) => {
+  const handleCreateBoard = (title: string, description: string, color: string) => {
     const data: BoardRequest = {
       title: title,
       description: description,
@@ -73,7 +73,7 @@ const BoardsModal = ({ isModalOpened, closeModal, isEditingMode, editingBoard }:
     closeModal();
   };
 
-  const handleEditBoard = async (title: string, description: string, color: string, id: string) => {
+  const handleEditBoard = (title: string, description: string, color: string, id: string) => {
     const data: BoardRequest = {
       title: title,
       description: description,
