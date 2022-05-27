@@ -36,7 +36,7 @@ const BoardsList = () => {
   };
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editingBoard, setEditingBoard] = useState('');
+  const [editingBoard, setEditingBoard] = useState(boards[0]);
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletingBoard, setDeletingBoard] = useState('');
@@ -74,7 +74,7 @@ const BoardsList = () => {
           <Button
             className="board__edit"
             onClick={() => {
-              setEditingBoard(board.id);
+              setEditingBoard(board);
               setIsEditing(true);
               openModal();
             }}
@@ -97,7 +97,7 @@ const BoardsList = () => {
         isModalOpened={isModalOpened}
         closeModal={closeModal}
         isEditingMode={isEditing}
-        editingBoardId={editingBoard}
+        editingBoard={editingBoard}
       ></BoardsModal>
 
       <Button variant="contained" className="board board__create" onClick={openModal}>

@@ -11,4 +11,5 @@ export const BOARDS = {
   LANG_CONFIRMATION_MODAL_TEXT: 'Вы уверены, что хотите удалить этот элемент?',
   LANG_CONFIRMATION_MODAL_CANCEL: 'Отмена',
   LANG_CONFIRMATION_MODAL_DELETE: 'Удалить',
+  LANG_SAVE_TEXT: 'Сохранить',
 };

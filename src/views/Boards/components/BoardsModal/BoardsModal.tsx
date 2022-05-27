@@ -2,7 +2,7 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -10,28 +10,29 @@ import { RESOLUTION } from '../../../../constants/resolution';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { createBoard, updateBoard } from '../../../../store/boards/boards.slice';
 import { useAppDispatch } from '../../../../store/hooks';
-import { BoardRequest } from '../../../../types/api';
+import { BoardRequest, BoardResponse } from '../../../../types/api';
 import { COLORS_ARRAY, MODAL_DEFAULT_VALUES } from './constants';
 
 interface IBoardsModal {
   isModalOpened: boolean;
   closeModal: () => void;
   isEditingMode: boolean;
-  editingBoardId: string;
+  editingBoard: BoardResponse;
 }
 
-const BoardsModal = ({
-  isModalOpened,
-  closeModal,
-  isEditingMode,
-  editingBoardId,
-}: IBoardsModal) => {
+const BoardsModal = ({ isModalOpened, closeModal, isEditingMode, editingBoard }: IBoardsModal) => {
   const { t } = useTranslation();
 
-  const backendErrorCatcher = useBackendErrorCatcher();
-  const dispatch = useAppDispatch();
+  const INITIAL_VALUES = {
+    title: isEditingMode ? editingBoard.title : MODAL_DEFAULT_VALUES.title,
+    description: isEditingMode ? editingBoard.description : MODAL_DEFAULT_VALUES.description,
+    color: isEditingMode ? editingBoard.color : MODAL_DEFAULT_VALUES.color,
+  };
 
-  const [color, setColor] = useState(MODAL_DEFAULT_VALUES.color);
+  const [color, setColor] = useState(INITIAL_VALUES.color);
+  useEffect(() => {
+    setColor(INITIAL_VALUES.color);
+  }, [INITIAL_VALUES.color]);
 
   const validationSchema = yup.object({
     title: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
@@ -40,22 +41,26 @@ const BoardsModal = ({
 
   const formik = useFormik({
     initialValues: {
-      title: MODAL_DEFAULT_VALUES.title,
-      description: MODAL_DEFAULT_VALUES.description,
+      title: INITIAL_VALUES.title,
+      description: INITIAL_VALUES.description,
     },
+
     validationSchema: validationSchema,
+    enableReinitialize: true,
+
     onSubmit: async (values) => {
       const { title, description } = values;
-
       if (isEditingMode) {
-        handleEditBoard(title, description, color, editingBoardId);
+        handleEditBoard(title, description, color, editingBoard.id);
       } else {
         handleCreateBoard(title, description, color);
       }
-
       resetValues();
     },
   });
+
+  const backendErrorCatcher = useBackendErrorCatcher();
+  const dispatch = useAppDispatch();
 
   const handleCreateBoard = async (title: string, description: string, color: string) => {
     const data: BoardRequest = {
@@ -145,7 +150,7 @@ const BoardsModal = ({
 
         {isEditingMode ? (
           <Button type="submit" variant="contained" className="modal__submit">
-            SAVE
+            {t('LANG_SAVE_TEXT')}
           </Button>
         ) : (
           <Button type="submit" variant="contained" className="modal__submit">

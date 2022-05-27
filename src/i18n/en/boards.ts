@@ -11,4 +11,5 @@ export const BOARDS = {
   LANG_CONFIRMATION_MODAL_TEXT: 'Are you sure you want to delete this item?',
   LANG_CONFIRMATION_MODAL_CANCEL: 'Cancel',
   LANG_CONFIRMATION_MODAL_DELETE: 'Delete',
+  LANG_SAVE_TEXT: 'Save',
 };
