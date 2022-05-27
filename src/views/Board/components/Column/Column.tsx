@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { addTask, deleteColumn, updateColumn } from '../../../../store/board/board.slice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { getUserState } from '../../../../store/user/user.slice';
@@ -23,6 +24,7 @@ import './Column.scss';
 const Column = ({ column }: { column: ColumnResponse }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const backendErrorCatcher = useBackendErrorCatcher();
   const params = useParams();
   const boardId = params.id || '';
   const userId = useAppSelector(getUserState).id;
@@ -35,11 +37,11 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   const [isDelete, setIsDelete] = useState(false);
 
   const handleRenameColumn = async (title: string) => {
-    dispatch(updateColumn({ boardId, columnId: id, data: { title, order } }));
+    backendErrorCatcher(dispatch(updateColumn({ boardId, columnId: id, data: { title, order } })));
   };
 
   const handleDeleteColumn = () => {
-    dispatch(deleteColumn({ boardId, columnId: id }));
+    backendErrorCatcher(dispatch(deleteColumn({ boardId, columnId: id })));
   };
 
   const handleAddTask = async (title: string, description: string, responsible: string) => {
@@ -48,7 +50,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
       description: description || ' ',
       userId: responsible || userId,
     };
-    dispatch(addTask({ boardId, columnId: id, data }));
+    backendErrorCatcher(dispatch(addTask({ boardId, columnId: id, data })));
     setIsAdd(false);
   };
 
@@ -70,7 +72,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     <>
       {column.title && (
         <Card className="Column" sx={{ backgroundColor: BASE_GREY }}>
-          <CardContent>
+          <CardContent sx={{ padding: '8px' }}>
             <form
               autoComplete="off"
               onSubmit={handleSubmit(onSubmit)}
@@ -96,10 +98,11 @@ const Column = ({ column }: { column: ColumnResponse }) => {
               )}
             </form>
           </CardContent>
-          <CardContent className="tasks" sx={{ padding: '16px 8px' }}>
+          <CardContent className="tasks" sx={{ padding: '8px 8px' }}>
             <Droppable droppableId={id} type="TASKS">
               {(provided) => (
                 <div
+                  className="tasks-container"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                   style={{

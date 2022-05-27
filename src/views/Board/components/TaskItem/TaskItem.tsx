@@ -3,6 +3,7 @@ import { Box, IconButton, Modal } from '@mui/material';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { deleteTask, updateTask } from '../../../../store/board/board.slice';
 import { useAppDispatch } from '../../../../store/hooks';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
@@ -15,6 +16,7 @@ import './TaskItem.scss';
 const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse }) => {
   const params = useParams();
   const dispatch = useAppDispatch();
+  const backendErrorCatcher = useBackendErrorCatcher();
 
   const boardId = params.id || '';
   const columnId = column.id;
@@ -30,11 +32,11 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
 
   const handleUpdateTask = async (title: string, description: string, userId: string) => {
     const data = { order, title, description, userId, boardId, columnId };
-    dispatch(updateTask({ boardId, columnId, taskId: id, data }));
+    backendErrorCatcher(dispatch(updateTask({ boardId, columnId, taskId: id, data })));
   };
 
   const handleDeleteTask = () => {
-    dispatch(deleteTask({ boardId, columnId, taskId: id }));
+    backendErrorCatcher(dispatch(deleteTask({ boardId, columnId, taskId: id })));
     handleClose();
   };
 

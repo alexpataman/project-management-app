@@ -6,6 +6,7 @@ import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautif
 import { useParams } from 'react-router-dom';
 
 import { Loader } from '../../components';
+import { useBackendErrorCatcher } from '../../hooks/useBackendErrorCatcher';
 import {
   addColumn,
   getBoardById,
@@ -29,16 +30,19 @@ const BoardsPage = () => {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const { isLoading, columns } = useAppSelector(getBoardState);
+  const backendErrorCatcher = useBackendErrorCatcher();
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
   useEffect(() => {
-    dispatch(getBoardById(boardId));
+    backendErrorCatcher(dispatch(getBoardById(boardId)));
+    // eslint-disable-next-line
   }, [boardId]);
 
   useEffect(() => {
-    dispatch(getUsers());
+    backendErrorCatcher(dispatch(getUsers()));
+    // eslint-disable-next-line
   }, []);
 
   const handleAddColumn = async (title: string) => {
