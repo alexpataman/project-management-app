@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { PATH } from '../../constants';
 import { useIsGuest } from '../../hooks/useIsGuest';
+import { useSearchModal } from '../../hooks/useSearchModal';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getUserState, logOut } from '../../store/user/user.slice';
 
@@ -18,17 +19,23 @@ export const UserNav = () => {
   const { name } = useAppSelector(getUserState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { SearchPortal, setIsModalOpen } = useSearchModal();
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
+  const handleSearch = () => {
+    handleMenuClose();
+    setIsModalOpen(true);
+  };
+
   const handleLogout = () => {
-    handleClose();
+    handleMenuClose();
     dispatch(logOut());
     navigate(PATH.home);
   };
@@ -36,19 +43,22 @@ export const UserNav = () => {
   let menuItems;
   if (isGuest) {
     menuItems = [
-      <MenuItem component={Link} to={PATH.login} onClick={handleClose} key={PATH.login}>
+      <MenuItem component={Link} to={PATH.login} onClick={handleMenuClose} key={PATH.login}>
         {t('LANG_LOGIN_TEXT')}
       </MenuItem>,
-      <MenuItem component={Link} to={PATH.signup} onClick={handleClose} key={PATH.signup}>
+      <MenuItem component={Link} to={PATH.signup} onClick={handleMenuClose} key={PATH.signup}>
         {t('LANG_SIGNUP_TEXT')}
       </MenuItem>,
     ];
   } else {
     menuItems = [
-      <MenuItem component={Link} to={PATH.boards} onClick={handleClose} key={PATH.boards}>
+      <MenuItem onClick={handleSearch} key="search">
+        {t('LANG_SEARCH_TEXT')}
+      </MenuItem>,
+      <MenuItem component={Link} to={PATH.boards} onClick={handleMenuClose} key={PATH.boards}>
         {t('LANG_BOARDS_TEXT')}
       </MenuItem>,
-      <MenuItem component={Link} to={PATH.profile} onClick={handleClose} key={PATH.profile}>
+      <MenuItem component={Link} to={PATH.profile} onClick={handleMenuClose} key={PATH.profile}>
         {t('LANG_EDIT_PROFILE_TEXT')}
       </MenuItem>,
       <MenuItem onClick={handleLogout} key="logout">
@@ -64,7 +74,7 @@ export const UserNav = () => {
         aria-label="account of current user"
         aria-controls="menu-user"
         aria-haspopup="true"
-        onClick={handleMenu}
+        onClick={handleMenuOpen}
         color="inherit"
         sx={{ textTransform: 'none' }}
         className="user-nav"
@@ -72,9 +82,10 @@ export const UserNav = () => {
         <AccountCircle sx={{ mr: '5px' }} />
         <Typography>{isGuest ? t('LANG_GUEST_TITLE') : name}</Typography>
       </Button>
-      <Menu id="menu-user" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+      <Menu id="menu-user" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         {menuItems}
       </Menu>
+      {SearchPortal}
     </div>
   );
 };

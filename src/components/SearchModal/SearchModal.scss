@@ -1,0 +1,9 @@
+.SearchModal {
+  .content {
+    width: 500px;
+    max-width: 100%;
+    .MuiAutocomplete-root {
+      padding: 10px 0;
+    }
+  }
+}

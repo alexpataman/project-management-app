@@ -77,3 +77,20 @@ export type TaskResponse = {
   boardId: string;
   columnId: string;
 };
+
+export type SearchResponse = {
+  id: string;
+  title: string;
+  userId: string;
+  boardId: string;
+  columnId: string;
+  user: {
+    name: string;
+  };
+  board: {
+    title: string;
+  };
+  column: {
+    title: string;
+  };
+};
