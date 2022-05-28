@@ -52,11 +52,11 @@ export const UserNav = () => {
     ];
   } else {
     menuItems = [
-      <MenuItem onClick={handleSearch} key="search">
-        {t('LANG_SEARCH_TEXT')}
-      </MenuItem>,
       <MenuItem component={Link} to={PATH.boards} onClick={handleMenuClose} key={PATH.boards}>
         {t('LANG_BOARDS_TEXT')}
+      </MenuItem>,
+      <MenuItem onClick={handleSearch} key="search">
+        {t('LANG_SEARCH_TEXT')}
       </MenuItem>,
       <MenuItem component={Link} to={PATH.profile} onClick={handleMenuClose} key={PATH.profile}>
         {t('LANG_EDIT_PROFILE_TEXT')}

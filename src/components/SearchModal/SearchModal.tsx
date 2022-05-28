@@ -43,14 +43,18 @@ export const SearchModal = ({ closeModal }: ISearchModal) => {
           disableClearable
           options={options}
           groupBy={(option) => `${option.board.title} / ${option.column.title}`}
+          getOptionLabel={() => ''}
           filterOptions={(options: SearchResponse[], state) => {
             return options.filter(
               (el) => state.inputValue && el.title.match(new RegExp(state.inputValue, 'gi'))
             );
           }}
           onChange={(event, newValue) => {
-            const value = newValue as SearchResponse;
-            handleNavigate(`${PATH.board}/${value.boardId}/${value.id}`);
+            const { boardId, id } = newValue as SearchResponse;
+            if (!boardId || !id) {
+              return;
+            }
+            handleNavigate(`${PATH.board}/${boardId}/${id}`);
           }}
           renderOption={(props, option: SearchResponse) => {
             return (
