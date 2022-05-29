@@ -15,15 +15,42 @@
     align-items: center;
   }
 
+  .column-title {
+    padding: 5px;
+    font-weight: 300;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 1.4rem;
+  }
+
+  .column-title-input {
+    background-color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    input {
+      font-weight: 600;
+      padding: 5px;
+    }
+  }
+
   .tasks {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+
+    .tasks-container {
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
   }
 
   .delete-icon {
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     right: 2px;
+  }
+
+  @media only screen and (max-width: 640px) {
+    width: 270px;
   }
 }

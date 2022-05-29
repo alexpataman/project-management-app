@@ -66,6 +66,8 @@ export type UpdateTaskRequest = {
   description: string;
   userId: string;
   boardId: string;
+  order?: number;
+  columnId: string;
 };
 
 export type TaskResponse = {

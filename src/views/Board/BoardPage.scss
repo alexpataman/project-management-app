@@ -1,11 +1,12 @@
 .BoardPage {
   position: relative;
-  margin-top: 50px;
   z-index: 5;
-  
-  
+
+  .back-btn {
+    color: #fff;
+  }
   .Columns {
-    overflow-y: scroll;
+    overflow-y: auto;
     align-items: flex-start;
   }
   .add-column-button {
@@ -27,7 +28,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  
+
   &::after {
     content: '';
     position: absolute;
