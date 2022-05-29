@@ -14,7 +14,6 @@ import { ColumnResponse } from '../../../../types/api';
 import { BASE_GREY } from '../../utils/constants';
 import { getTaskStyle } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
-import { ColumnEditForm } from '../../utils/types';
 import { Confirmation } from '../ModalConfirmation';
 import { ModalForm } from '../ModalForm';
 import { TaskItem } from '../TaskItem';
