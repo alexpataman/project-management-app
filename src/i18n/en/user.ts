@@ -1,10 +1,11 @@
 export const USER = {
   LANG_GUEST_TITLE: 'Guest',
   LANG_PROFILE_TITLE: 'Profile',
-  LANG_LOGIN_TEXT: 'Login',
+  LANG_LOGIN_TEXT: 'Sign In',
   LANG_SIGNUP_TEXT: 'Sign Up',
   LANG_LOGOUT_TEXT: 'Logout',
   LANG_BOARDS_TEXT: 'Boards',
+  LANG_SEARCH_TEXT: 'Search',
   LANG_EDIT_PROFILE_TEXT: 'Edit Profile',
   LANG_EDIT_PROFILE_SUCCESS_TEXT: 'Information was updated successfully',
   LANG_REGISTRATION_TEXT: 'Registration',
