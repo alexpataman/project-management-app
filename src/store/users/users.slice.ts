@@ -3,11 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '..';
 import { users } from '../../api/backend';
 import { ACTION_GET_USERS, USERS_SLICE_NAME } from '../../constants/store';
-import { User } from '../../types/api';
-
-type UsersState = {
-  users: User[];
-};
+import { UsersState } from '../../types/store/users';
 
 export const initialState: UsersState = {
   users: [],

@@ -13,13 +13,9 @@ import {
   ACTION_UPDATE_TASK,
   BOARD_SLICE_NAME,
 } from '../../constants/store/board.constants';
-import { ColumnRequest, ColumnResponse, TaskRequest, UpdateTaskRequest } from '../../types/api';
-
-type BoardState = {
-  isLoading: boolean;
-  background: string;
-  columns: ColumnResponse[];
-};
+import { ColumnRequest, TaskRequest, UpdateTaskRequest } from '../../types/api';
+import { BoardState } from '../../types/store/board';
+import { throwThunkError } from '../utils/helper';
 
 export const initialState: BoardState = {
   isLoading: false,
@@ -34,6 +30,13 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getBoardById.pending, loading)
+      .addCase(getBoardById.rejected, throwThunkError)
+      .addCase(addColumn.rejected, throwThunkError)
+      .addCase(getColumnById.rejected, throwThunkError)
+      .addCase(deleteColumn.rejected, throwThunkError)
+      .addCase(updateColumn.rejected, throwThunkError)
+      .addCase(addTask.rejected, throwThunkError)
+      .addCase(deleteTask.rejected, throwThunkError)
       .addCase(getBoardById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.columns = action.payload?.columns?.sort((a, b) => a.order - b.order) || [];
@@ -49,6 +52,7 @@ const slice = createSlice({
         state.columns = state.columns
           .map((col) => {
             col.order = action.payload.find((e) => e.id === col.id)?.order || col.order;
+            col.title = action.payload.find((e) => e.id === col.id)?.title || col.title;
             return col;
           })
           .sort((a, b) => a.order - b.order);
