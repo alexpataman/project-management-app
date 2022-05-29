@@ -2,6 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Button, Container, IconButton, Modal, Stack } from '@mui/material';
 import { Box } from '@mui/system';
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
@@ -112,54 +113,56 @@ const BoardsPage = () => {
           >
             {t('BOARD_BACK_BUTTON')}
           </Button>
-          <Loader isLoading={columnsLoading}>
-            <Stack className="Columns" direction="row" spacing={2}>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId={boardId} type="COLUMNS" direction="horizontal">
-                  {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      style={{ display: 'flex' }}
-                    >
-                      {columns.map((column, index) => (
-                        <Draggable key={column.id} draggableId={column.id} index={index}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={getColumnStyle(provided.draggableProps.style)}
-                            >
-                              {<Column column={column} key={column.id} />}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-              {columns.length < COLUMNS_LIMIT && (
-                <IconButton
-                  aria-label="add"
-                  className="add-column-button"
-                  size="large"
-                  sx={{
-                    height: 50,
-                    width: 50,
-                    backgroundColor: BASE_GREY,
-                    transition: '0.2s ease',
-                    '&:hover': { backgroundColor: HOVER_GREY },
-                  }}
-                  onClick={handleOpen}
-                >
-                  <AddIcon />
-                </IconButton>
-              )}
-            </Stack>
-          </Loader>
+          <Stack
+            className={classNames(['Columns', { columnsLoading }])}
+            direction="row"
+            spacing={2}
+          >
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId={boardId} type="COLUMNS" direction="horizontal">
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={{ display: 'flex' }}
+                  >
+                    {columns.map((column, index) => (
+                      <Draggable key={column.id} draggableId={column.id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getColumnStyle(provided.draggableProps.style)}
+                          >
+                            {<Column column={column} key={column.id} />}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+            {columns.length < COLUMNS_LIMIT && (
+              <IconButton
+                aria-label="add"
+                className="add-column-button"
+                size="large"
+                sx={{
+                  height: 50,
+                  width: 50,
+                  backgroundColor: BASE_GREY,
+                  transition: '0.2s ease',
+                  '&:hover': { backgroundColor: HOVER_GREY },
+                }}
+                onClick={handleOpen}
+              >
+                <AddIcon />
+              </IconButton>
+            )}
+          </Stack>
           <Modal
             open={isOpen}
             onClose={handleClose}
