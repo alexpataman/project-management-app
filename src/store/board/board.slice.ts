@@ -41,6 +41,7 @@ const slice = createSlice({
       .addCase(getColumnById.rejected, throwThunkError)
       .addCase(deleteColumn.rejected, throwThunkError)
       .addCase(updateColumn.rejected, throwThunkError)
+      .addCase(updateTask.rejected, throwThunkError)
       .addCase(addTask.rejected, throwThunkError)
       .addCase(deleteTask.rejected, throwThunkError)
       .addCase(getBoardById.fulfilled, (state, action) => {

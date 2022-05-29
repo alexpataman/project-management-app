@@ -7,3 +7,4 @@ export const EXTERNAL_LINKS = {
   rsSchool: 'https://rs.school',
   github: 'https://github.com',
 };
+export const SNACKBAR_TIMEOUT = 3000;
