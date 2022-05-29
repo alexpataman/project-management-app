@@ -1,6 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, IconButton, Modal } from '@mui/material';
-import { useState } from 'react';
+import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
@@ -14,9 +15,11 @@ import { ModalEdit } from '../ModalEdit';
 import './TaskItem.scss';
 
 const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse }) => {
+  const [highlighted, setHighlighted] = useState(false);
   const params = useParams();
   const dispatch = useAppDispatch();
   const backendErrorCatcher = useBackendErrorCatcher();
+  const taskId = params.taskId || '';
 
   const boardId = params.id || '';
   const columnId = column.id;
@@ -40,10 +43,17 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
     handleClose();
   };
 
+  useEffect(() => {
+    if (taskId === id) {
+      setHighlighted(true);
+      setTimeout(() => setHighlighted(false), 3000);
+    }
+  }, [id, taskId]);
+
   return (
     <>
       {task.title && (
-        <div className="TaskItem">
+        <div className={classNames(['TaskItem', { highlighted }])}>
           <p onClick={handleOpen}>{task.title}</p>
           <IconButton className="edit-icon" onClick={handleEdit} size="small">
             <EditIcon />
