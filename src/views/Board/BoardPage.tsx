@@ -28,7 +28,7 @@ import { modalStyle } from './utils/modalStyle';
 
 import './BoardPage.scss';
 
-const COLUMNS_LIMIT = 5;
+const COLUMNS_LIMIT = 100;
 
 const BoardPage = () => {
   const { t } = useTranslation();
