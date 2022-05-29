@@ -1,9 +1,10 @@
 import { Box, Card, CardContent, Modal, TextField } from '@mui/material';
+import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
 
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { addTask, deleteColumn, updateColumn } from '../../../../store/board/board.slice';
@@ -29,7 +30,22 @@ const Column = ({ column }: { column: ColumnResponse }) => {
   const boardId = params.id || '';
   const userId = useAppSelector(getUserState).id;
 
-  const { register, reset, handleSubmit } = useForm<ColumnEditForm>();
+  const validationSchema = yup.object({
+    title: yup.string().required(t('LANG_FIELD_IS_REQUIRED')),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      title: column.title || '',
+    },
+    validationSchema: validationSchema,
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      const { title } = values;
+      handleRenameColumn(title);
+      setIsEdit(false);
+    },
+  });
 
   const { id, title, order, tasks } = column;
   const [isAdd, setIsAdd] = useState(false);
@@ -54,36 +70,20 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     setIsAdd(false);
   };
 
-  const handleReset = () => {
-    setIsEdit(false);
-    reset({
-      name: title,
-    });
-  };
-
-  const onSubmit = (data: ColumnEditForm) => {
-    if (data) {
-      setIsEdit(false);
-      handleRenameColumn(data.name);
-    }
-  };
-
   return (
     <>
       {column.title && (
         <Card className="Column" sx={{ backgroundColor: BASE_GREY }}>
           <CardContent sx={{ padding: '8px' }}>
-            <form
-              autoComplete="off"
-              onSubmit={handleSubmit(onSubmit)}
-              onInput={() => setIsEdit(true)}
-            >
+            <Box component="form" onSubmit={formik.handleSubmit} onInput={() => setIsEdit(true)}>
               {isEdit ? (
                 <TextField
                   className="column-title-input"
                   variant="outlined"
-                  defaultValue={title}
-                  {...register('name', { required: true })}
+                  id="title"
+                  value={formik.values.title}
+                  onChange={formik.handleChange}
+                  helperText={formik.touched.title && formik.errors.title}
                 />
               ) : (
                 <p className="column-title" onClick={() => setIsEdit(true)}>
@@ -93,10 +93,10 @@ const Column = ({ column }: { column: ColumnResponse }) => {
               {isEdit && (
                 <EditColumn
                   titles={{ cancel: t('BOARD_MODAL_CANCEL'), save: t('BOARD_MODAL_SAVE') }}
-                  callback={handleReset}
+                  callback={() => {}}
                 />
               )}
-            </form>
+            </Box>
           </CardContent>
           <CardContent className="tasks" sx={{ padding: '8px 8px' }}>
             <Droppable droppableId={id} type="TASKS">

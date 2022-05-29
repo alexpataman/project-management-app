@@ -49,7 +49,7 @@ const BoardsPage = () => {
   }, []);
 
   const handleAddColumn = async (title: string) => {
-    dispatch(addColumn({ boardId, title }));
+    backendErrorCatcher(dispatch(addColumn({ boardId, title })));
   };
 
   const onDragEnd = (res: DropResult) => {
@@ -61,7 +61,7 @@ const BoardsPage = () => {
       const movedColumn = columns.find((col) => col.id === res.draggableId);
       if (movedColumn) {
         const data = { title: movedColumn?.title, order: destination.index + 1 };
-        dispatch(updateColumn({ boardId, columnId: movedColumn.id, data }));
+        backendErrorCatcher(dispatch(updateColumn({ boardId, columnId: movedColumn.id, data })));
         return;
       }
     }
@@ -76,13 +76,15 @@ const BoardsPage = () => {
         order: destination.index + 1,
         userId: movedTask.userId,
       };
-      dispatch(
-        updateTask({
-          boardId,
-          columnId: source.droppableId,
-          taskId,
-          data,
-        })
+      backendErrorCatcher(
+        dispatch(
+          updateTask({
+            boardId,
+            columnId: source.droppableId,
+            taskId,
+            data,
+          })
+        )
       );
     }
   };
