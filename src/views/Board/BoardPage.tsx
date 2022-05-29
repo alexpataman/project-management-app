@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Button, Container, IconButton, Modal, Stack } from '@mui/material';
+import { Button, Container, IconButton, Modal, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
@@ -35,7 +35,7 @@ const BoardsPage = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, columns, background, columnsLoading } = useAppSelector(getBoardState);
+  const { title, isLoading, columns, background, columnsLoading } = useAppSelector(getBoardState);
   const backendErrorCatcher = useBackendErrorCatcher();
 
   const boardId = params.id || '';
@@ -113,6 +113,7 @@ const BoardsPage = () => {
           >
             {t('BOARD_BACK_BUTTON')}
           </Button>
+          <Typography variant="h1">{title}</Typography>
           <Stack
             className={classNames(['Columns', { columnsLoading }])}
             direction="row"

@@ -18,6 +18,7 @@ import { BoardState } from '../../types/store/board';
 import { throwThunkError } from '../utils/helper';
 
 export const initialState: BoardState = {
+  title: '',
   isLoading: false,
   columnsLoading: false,
   background: '#fff',
@@ -43,6 +44,7 @@ const slice = createSlice({
       .addCase(addTask.rejected, throwThunkError)
       .addCase(deleteTask.rejected, throwThunkError)
       .addCase(getBoardById.fulfilled, (state, action) => {
+        state.title = action.payload?.title || '';
         state.isLoading = false;
         state.columns = action.payload?.columns?.sort((a, b) => a.order - b.order) || [];
         state.background = action.payload?.color || '#fff';

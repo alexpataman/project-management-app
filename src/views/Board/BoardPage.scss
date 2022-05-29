@@ -2,8 +2,15 @@
   position: relative;
   z-index: 5;
 
+  h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
   .back-btn {
     color: #fff;
+    margin: 10px 0;
   }
   .Columns {
     overflow-y: auto;
