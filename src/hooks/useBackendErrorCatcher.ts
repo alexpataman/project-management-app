@@ -32,6 +32,7 @@ export const useBackendErrorCatcher = () => {
               snackbar.setMessage(t('LANG_NOT_FOUND_TEXT'));
               break;
             default:
+              navigate(PATH.boards);
               snackbar.setMessage(message || t('LANG_SOMETHING_WENT_WRONG_TEXT'));
           }
         }

@@ -5,7 +5,7 @@ import { CustomError } from './CustomError';
 
 export class ThunkError extends CustomError {
   constructor(data: SerializedError) {
-    super();
+    super(data.message);
 
     const { name } = data;
 
