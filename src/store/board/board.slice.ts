@@ -12,13 +12,15 @@ import {
   ACTION_UPDATE_COLUMN,
   ACTION_UPDATE_TASK,
   BOARD_SLICE_NAME,
-} from '../../constants/store/board.constants';
+} from '../../constants/store';
 import { ColumnRequest, TaskRequest, UpdateTaskRequest } from '../../types/api';
 import { BoardState } from '../../types/store/board';
 import { throwThunkError } from '../utils/helper';
 
 export const initialState: BoardState = {
+  title: '',
   isLoading: false,
+  columnsLoading: false,
   background: '#fff',
   columns: [],
 };
@@ -26,7 +28,11 @@ export const initialState: BoardState = {
 const slice = createSlice({
   name: BOARD_SLICE_NAME,
   initialState,
-  reducers: {},
+  reducers: {
+    startColumnsLoading: (state) => {
+      state.columnsLoading = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getBoardById.pending, loading)
@@ -35,9 +41,11 @@ const slice = createSlice({
       .addCase(getColumnById.rejected, throwThunkError)
       .addCase(deleteColumn.rejected, throwThunkError)
       .addCase(updateColumn.rejected, throwThunkError)
+      .addCase(updateTask.rejected, throwThunkError)
       .addCase(addTask.rejected, throwThunkError)
       .addCase(deleteTask.rejected, throwThunkError)
       .addCase(getBoardById.fulfilled, (state, action) => {
+        state.title = action.payload?.title || '';
         state.isLoading = false;
         state.columns = action.payload?.columns?.sort((a, b) => a.order - b.order) || [];
         state.background = action.payload?.color || '#fff';
@@ -49,6 +57,7 @@ const slice = createSlice({
         state.columns = state.columns.filter((col) => col.id != action.payload);
       })
       .addCase(updateColumn.fulfilled, (state, action) => {
+        state.columnsLoading = false;
         state.columns = state.columns
           .map((col) => {
             col.order = action.payload.find((e) => e.id === col.id)?.order || col.order;
@@ -58,6 +67,7 @@ const slice = createSlice({
           .sort((a, b) => a.order - b.order);
       })
       .addCase(getColumnById.fulfilled, (state, action) => {
+        state.columnsLoading = false;
         const { id, title, order, tasks } = action.payload;
         state.columns.map((col) => {
           if (col.id === id) {
@@ -123,15 +133,19 @@ export const deleteColumn = createAsyncThunk(
 
 export const updateColumn = createAsyncThunk(
   ACTION_UPDATE_COLUMN,
-  async ({
-    boardId,
-    columnId,
-    data,
-  }: {
-    boardId: string;
-    columnId: string;
-    data: ColumnRequest;
-  }) => {
+  async (
+    {
+      boardId,
+      columnId,
+      data,
+    }: {
+      boardId: string;
+      columnId: string;
+      data: ColumnRequest;
+    },
+    { dispatch }
+  ) => {
+    dispatch(BoardActions.startColumnsLoading());
     await columnsApi.updateColumn(boardId, columnId, data);
     return columnsApi.getColumns(boardId);
   }
@@ -160,6 +174,7 @@ export const updateTask = createAsyncThunk(
     },
     { dispatch }
   ) => {
+    dispatch(BoardActions.startColumnsLoading());
     const resp = await tasksApi.updateTask(boardId, columnId, taskId, data);
     if (resp.columnId !== columnId) {
       dispatch(getColumnById({ boardId, columnId: resp.columnId }));

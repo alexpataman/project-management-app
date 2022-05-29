@@ -43,24 +43,22 @@ if (container) {
                   </PrivateRoute>
                 }
               />
-              <Route path={PATH.board}>
+              <Route
+                path={`${PATH.board}/:id`}
+                element={
+                  <PrivateRoute>
+                    <BoardPage />
+                  </PrivateRoute>
+                }
+              >
                 <Route
-                  path=":id"
+                  path=":taskId"
                   element={
                     <PrivateRoute>
                       <BoardPage />
                     </PrivateRoute>
                   }
-                >
-                  <Route
-                    path=":taskId"
-                    element={
-                      <PrivateRoute>
-                        <BoardPage />
-                      </PrivateRoute>
-                    }
-                  />
-                </Route>
+                />
               </Route>
               <Route path={PATH.error} element={<ErrorPage />} />
               <Route path="*" element={<ErrorPage code={ERROR_CODES[ERROR_NAMES.NOT_FOUND]} />} />

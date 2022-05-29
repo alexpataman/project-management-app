@@ -1,7 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Button, Container, IconButton, Modal, Stack } from '@mui/material';
+import { Button, Container, IconButton, Modal, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
@@ -29,12 +30,12 @@ import './BoardPage.scss';
 
 const COLUMNS_LIMIT = 5;
 
-const BoardsPage = () => {
+const BoardPage = () => {
   const { t } = useTranslation();
   const params = useParams();
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, columns, background } = useAppSelector(getBoardState);
+  const { title, isLoading, columns, background, columnsLoading } = useAppSelector(getBoardState);
   const backendErrorCatcher = useBackendErrorCatcher();
 
   const boardId = params.id || '';
@@ -112,7 +113,12 @@ const BoardsPage = () => {
           >
             {t('BOARD_BACK_BUTTON')}
           </Button>
-          <Stack className="Columns" direction="row" spacing={2}>
+          <Typography variant="h1">{title}</Typography>
+          <Stack
+            className={classNames(['Columns', { columnsLoading }])}
+            direction="row"
+            spacing={2}
+          >
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId={boardId} type="COLUMNS" direction="horizontal">
                 {(provided) => (
@@ -174,4 +180,4 @@ const BoardsPage = () => {
   );
 };
 
-export default BoardsPage;
+export default BoardPage;
