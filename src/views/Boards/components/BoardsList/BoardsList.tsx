@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { ModalConfirmation } from '../../../../components';
 import { RESOLUTION } from '../../../../constants/resolution';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { deleteBoard, getBoardsState } from '../../../../store/boards/boards.slice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { Confirmation } from '../../../Board/components/ModalConfirmation';
 import { modalStyle } from '../../../Board/utils/modalStyle';
 import BoardsModal from '../BoardsModal/BoardsModal';
 
@@ -86,7 +86,7 @@ const BoardsList = () => {
 
       <Modal open={isDeleting} onClose={() => setIsDeleting(false)}>
         <Box sx={modalStyle}>
-          <Confirmation
+          <ModalConfirmation
             deleteCallback={() => handleDeleteBoard(deletingBoard)}
             closeModal={() => setIsDeleting(false)}
           />

@@ -16,10 +16,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { ModalConfirmation } from '../../../../components';
 import { useAppSelector } from '../../../../store/hooks';
 import { getUsersState } from '../../../../store/users/users.slice';
 import { modalStyle } from '../../utils/modalStyle';
-import { Confirmation } from '../ModalConfirmation';
 
 import './ModalEdit.scss';
 
@@ -127,7 +127,7 @@ const ModalEdit = ({
       </Box>
       <Modal open={isOpen} onClose={handleClose}>
         <Box sx={modalStyle}>
-          <Confirmation deleteCallback={deleteTask} closeModal={handleClose} />
+          <ModalConfirmation deleteCallback={deleteTask} closeModal={handleClose} />
         </Box>
       </Modal>
     </div>

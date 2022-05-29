@@ -2,9 +2,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Button, IconButton, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import './Confirmation.scss';
+import './ModalConfirmation.scss';
 
-const Confirmation = ({
+const ModalConfirmation = ({
   deleteCallback,
   closeModal,
 }: {
@@ -19,7 +19,7 @@ const Confirmation = ({
   const { t } = useTranslation();
 
   return (
-    <div className="Confirmation">
+    <div className="ModalConfirmation">
       <Typography variant="h5">{t('LANG_CONFIRMATION_MODAL_TEXT')}</Typography>
       <IconButton className="close-icon" aria-label="delete" onClick={closeModal}>
         <CloseIcon />
@@ -36,4 +36,4 @@ const Confirmation = ({
   );
 };
 
-export default Confirmation;
+export default ModalConfirmation;

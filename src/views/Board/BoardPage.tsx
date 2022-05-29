@@ -30,7 +30,7 @@ import './BoardPage.scss';
 
 const COLUMNS_LIMIT = 5;
 
-const BoardsPage = () => {
+const BoardPage = () => {
   const { t } = useTranslation();
   const params = useParams();
   const dispatch = useAppDispatch();
@@ -180,4 +180,4 @@ const BoardsPage = () => {
   );
 };
 
-export default BoardsPage;
+export default BoardPage;

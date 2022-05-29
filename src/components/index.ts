@@ -3,3 +3,4 @@ export { Footer } from './Footer/Footer';
 export { Loader } from './Loader/Loader';
 export { UserNav } from './UserNav/UserNav';
 export { LanguageSwitcher } from './LanguageSwitcher/LanguageSwitcher';
+export { ModalConfirmation } from './ModalConfirmation';

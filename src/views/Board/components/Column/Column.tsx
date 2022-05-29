@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { ModalConfirmation } from '../../../../components';
 import { useBackendErrorCatcher } from '../../../../hooks/useBackendErrorCatcher';
 import { addTask, deleteColumn, updateColumn } from '../../../../store/board/board.slice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
@@ -14,7 +15,6 @@ import { ColumnResponse } from '../../../../types/api';
 import { BASE_GREY } from '../../utils/constants';
 import { getTaskStyle } from '../../utils/dndHelpers';
 import { modalStyle } from '../../utils/modalStyle';
-import { Confirmation } from '../ModalConfirmation';
 import { ModalForm } from '../ModalForm';
 import { TaskItem } from '../TaskItem';
 import { EditColumn, UpdateColumn } from './Components';
@@ -140,7 +140,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
           </Modal>
           <Modal open={isDelete} onClose={() => setIsDelete(false)}>
             <Box sx={modalStyle}>
-              <Confirmation
+              <ModalConfirmation
                 deleteCallback={handleDeleteColumn}
                 closeModal={() => setIsDelete(false)}
               />
