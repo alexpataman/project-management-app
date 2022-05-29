@@ -5,6 +5,7 @@ export const USER = {
   LANG_SIGNUP_TEXT: 'Регистрация',
   LANG_LOGOUT_TEXT: 'Выход',
   LANG_BOARDS_TEXT: 'Доски',
+  LANG_SEARCH_TEXT: 'Поиск',
   LANG_EDIT_PROFILE_TEXT: 'Изменить профиль',
   LANG_EDIT_PROFILE_SUCCESS_TEXT: 'Информация успешно изменена',
   LANG_REGISTRATION_TEXT: 'Регистрация',
