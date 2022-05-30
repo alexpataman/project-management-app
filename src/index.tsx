@@ -8,6 +8,7 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import { ERROR_CODES, ERROR_NAMES, PATH } from './constants';
 import './helpers/i18n';
+import './helpers/taskCheck';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
 import { BoardPage, BoardsPage, ErrorPage, HomePage, LoginPage, ProfilePage } from './views';

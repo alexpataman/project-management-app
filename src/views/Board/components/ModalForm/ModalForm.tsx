@@ -92,6 +92,7 @@ const ModalForm = ({
                 variant="outlined"
                 label={t('BOARD_MODAL_DESCRIPTION')}
                 multiline
+                rows={3}
                 maxRows={INPUT_MAX_ROWS}
                 value={formik.values.description}
                 onChange={formik.handleChange}

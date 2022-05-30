@@ -33,17 +33,17 @@ const CardInfo = ({
         <CloseIcon />
       </IconButton>
       <CardContent>
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack direction="row" alignItems="center" spacing={1} className="head">
           <CallToActionOutlinedIcon />
           <Typography variant="h5">{task.title}</Typography>
         </Stack>
         <Stack
           direction="row"
-          divider={<Divider orientation="vertical" flexItem sx={{ borderRightWidth: 2 }} />}
-          spacing={1}
+          divider={<Divider orientation="vertical" flexItem sx={{ borderRightWidth: 1 }} />}
+          spacing={1.5}
         >
           <Typography variant="subtitle1" color="text.secondary">
-            {`${t('BOARD_MODAL_IN_COLUMN')}  `} <span className="underlined">{column}</span>
+            {`${t('BOARD_MODAL_IN_COLUMN')}  `} <i>{column}</i>
           </Typography>
           <Stack direction="row" alignItems="center" spacing={1}>
             <PersonOutlineOutlinedIcon color="action" />
@@ -65,7 +65,7 @@ const CardInfo = ({
               {t('BOARD_MODAL_NO_DESCRIPTION')}
             </Typography>
           ) : (
-            <span>{task.description}</span>
+            <Typography>{task.description}</Typography>
           )}
         </div>
       </CardContent>
