@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import { useAppSelector } from '../../../../store/hooks';
 import { getUserState } from '../../../../store/user/user.slice';
 import { getUsersState } from '../../../../store/users/users.slice';
+import { INPUT_MAX_ROWS } from '../../utils/constants';
 
 import './ModalForm.scss';
 
@@ -78,6 +79,7 @@ const ModalForm = ({
                 variant="outlined"
                 label={t('BOARD_MODAL_DESCRIPTION')}
                 multiline
+                maxRows={INPUT_MAX_ROWS}
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 error={formik.touched.description && Boolean(formik.errors.description)}

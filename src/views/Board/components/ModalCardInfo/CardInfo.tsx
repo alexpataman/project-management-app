@@ -1,16 +1,17 @@
+import CallToActionOutlinedIcon from '@mui/icons-material/CallToActionOutlined';
 import CloseIcon from '@mui/icons-material/Close';
-import WorkIcon from '@mui/icons-material/Work';
-import { Avatar, Card, CardContent, IconButton, Typography } from '@mui/material';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import { Card, CardContent, Divider, IconButton, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../../store/hooks';
 import { getUsersState } from '../../../../store/users/users.slice';
 import { TaskResponse } from '../../../../types/api';
+import { BASE_GREY } from '../../utils/constants';
 
 import './CardInfo.scss';
-
-const USER_AVATAR_COLOR = '#f81018';
 
 const CardInfo = ({
   task,
@@ -27,35 +28,47 @@ const CardInfo = ({
   const { t } = useTranslation();
 
   return (
-    <Card className="CardInfo">
+    <Card className="CardInfo" sx={{ background: BASE_GREY }}>
       <IconButton className="close-icon" aria-label="delete" onClick={closeModal}>
         <CloseIcon />
       </IconButton>
       <CardContent>
-        <Typography variant="h4" sx={{ textAlign: 'center' }}>
-          <WorkIcon />
-          {`  ${task.title}`}
-        </Typography>
-        <Typography variant="h5" color="text.secondary">
-          {`${t('BOARD_MODAL_IN_COLUMN')}  `} <span className="underlined">{column}</span>
-        </Typography>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <CallToActionOutlinedIcon />
+          <Typography variant="h5">{task.title}</Typography>
+        </Stack>
+        <Stack
+          direction="row"
+          divider={<Divider orientation="vertical" flexItem sx={{ borderRightWidth: 2 }} />}
+          spacing={1}
+        >
+          <Typography variant="subtitle1" color="text.secondary">
+            {`${t('BOARD_MODAL_IN_COLUMN')}  `} <span className="underlined">{column}</span>
+          </Typography>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <PersonOutlineOutlinedIcon color="action" />
+            <Typography variant="subtitle1" color="text.secondary">
+              {userName}
+            </Typography>
+          </Stack>
+        </Stack>
       </CardContent>
 
-      <div className="card-about">
-        <Typography variant="h5">{`${t('BOARD_MODAL_DESCRIPTION')}:`}</Typography>
-        {task.description === ' ' ? (
-          <Typography variant="caption" color="text.secondary">
-            {t('BOARD_MODAL_NO_DESCRIPTION')}
-          </Typography>
-        ) : (
-          <span>{task.description}</span>
-        )}
-      </div>
-
-      <div className="card-about inline">
-        <Avatar sx={{ bgcolor: USER_AVATAR_COLOR }}>{userName.charAt(0).toUpperCase()}</Avatar>
-        <span className="underlined">{userName}</span>
-      </div>
+      <CardContent>
+        <div className="card-about">
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <MenuOutlinedIcon />
+            <Typography variant="h5">{`${t('BOARD_MODAL_DESCRIPTION')}`}</Typography>
+          </Stack>
+          {task.description === ' ' ? (
+            <Typography variant="subtitle1" color="text.secondary">
+              {t('BOARD_MODAL_NO_DESCRIPTION')}
+            </Typography>
+          ) : (
+            <span>{task.description}</span>
+          )}
+        </div>
+      </CardContent>
     </Card>
   );
 };
