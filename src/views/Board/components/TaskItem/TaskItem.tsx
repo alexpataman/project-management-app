@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../../../store/hooks';
 import { ColumnResponse, TaskResponse } from '../../../../types/api';
 import { modalStyle } from '../../utils/modalStyle';
 import { CardInfo } from '../ModalCardInfo';
-import { ModalEdit } from '../ModalEdit';
+import { ModalForm } from '../ModalForm';
 
 import './TaskItem.scss';
 
@@ -60,9 +60,10 @@ const TaskItem = ({ task, column }: { task: TaskResponse; column: ColumnResponse
           </IconButton>
           <Modal open={isEdit} onClose={handleSave}>
             <Box sx={modalStyle}>
-              <ModalEdit
+              <ModalForm
+                mode="edit"
                 task={task}
-                updateTask={handleUpdateTask}
+                saveTask={handleUpdateTask}
                 deleteTask={handleDeleteTask}
                 closeModal={handleSave}
               />
