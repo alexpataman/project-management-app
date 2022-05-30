@@ -69,6 +69,11 @@ const Column = ({ column }: { column: ColumnResponse }) => {
     setIsAdd(false);
   };
 
+  const handleReset = () => {
+    formik.resetForm();
+    setIsEdit(false);
+  };
+
   return (
     <>
       {column.title && (
@@ -92,7 +97,7 @@ const Column = ({ column }: { column: ColumnResponse }) => {
               {isEdit && (
                 <EditColumn
                   titles={{ cancel: t('BOARD_MODAL_CANCEL'), save: t('BOARD_MODAL_SAVE') }}
-                  callback={() => {}}
+                  onReset={handleReset}
                 />
               )}
             </Box>

@@ -5,10 +5,10 @@ import Fade from '@mui/material/Fade';
 
 interface IEditColumn {
   titles: { cancel: string; save: string };
-  callback: () => void;
+  onReset: () => void;
 }
 
-export const EditColumn = ({ titles, callback }: IEditColumn) => (
+export const EditColumn = ({ titles, onReset }: IEditColumn) => (
   <>
     <Tooltip
       enterDelay={600}
@@ -17,7 +17,7 @@ export const EditColumn = ({ titles, callback }: IEditColumn) => (
       TransitionProps={{ timeout: 300 }}
       title={titles.cancel}
     >
-      <IconButton aria-label="cancel" onClick={callback}>
+      <IconButton aria-label="cancel" onClick={onReset}>
         <CancelIcon />
       </IconButton>
     </Tooltip>
