@@ -47,6 +47,7 @@ const slice = createSlice({
       .addCase(getBoardById.fulfilled, (state, action) => {
         state.title = action.payload?.title || '';
         state.isLoading = false;
+        state.columnsLoading = false;
         state.columns = action.payload?.columns?.sort((a, b) => a.order - b.order) || [];
         state.background = action.payload?.color || '#fff';
       })
