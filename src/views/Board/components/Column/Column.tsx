@@ -140,7 +140,13 @@ const Column = ({ column }: { column: ColumnResponse }) => {
           <UpdateColumn onAdd={() => setIsAdd(true)} onDelete={() => setIsDelete(true)} />
           <Modal open={isAdd} onClose={() => setIsAdd(false)}>
             <Box sx={modalStyle}>
-              <ModalForm mode="task" saveTask={handleAddTask} closeModal={() => setIsAdd(false)} />
+              <ModalForm
+                mode="task"
+                saveTask={handleAddTask}
+                closeModal={() => setIsAdd(false)}
+                task={undefined}
+                deleteTask={undefined}
+              />
             </Box>
           </Modal>
           <Modal open={isDelete} onClose={() => setIsDelete(false)}>
