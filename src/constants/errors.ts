@@ -1,0 +1,19 @@
+export const ERROR_NAMES = {
+  BAD_REQUEST: 'BadRequestError',
+  UNAUTHORIZED: 'UnauthorizedError',
+  FORBIDDEN: 'ForbiddenError',
+  NOT_FOUND: 'NotFoundError',
+  CONFLICT: 'ConflictError',
+  AlREADY_EXISTS: 'AlreadyExistsError',
+  VALIDATION_ERROR: 'ValidationError',
+};
+
+export const ERROR_CODES = {
+  [ERROR_NAMES.BAD_REQUEST]: 400,
+  [ERROR_NAMES.UNAUTHORIZED]: 401,
+  [ERROR_NAMES.FORBIDDEN]: 403,
+  [ERROR_NAMES.NOT_FOUND]: 404,
+  [ERROR_NAMES.CONFLICT]: 409,
+  [ERROR_NAMES.AlREADY_EXISTS]: 417,
+  [ERROR_NAMES.VALIDATION_ERROR]: 422,
+};

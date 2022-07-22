@@ -1,0 +1,25 @@
+.ModalConfirmation {
+  margin: 0 auto;
+  padding: 40px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  text-align: center;
+  border-radius: 10px;
+
+  h5 {
+    font-weight: 300;
+  }
+
+  .close-icon {
+    position: absolute;
+    right: 30px;
+    top: 5px;
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+  }
+}

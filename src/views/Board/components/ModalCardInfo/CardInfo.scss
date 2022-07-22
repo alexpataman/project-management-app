@@ -1,0 +1,45 @@
+.CardInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  background-color: #fff;
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+
+  .head {
+    margin-bottom: 5px;
+  }
+
+  h4,
+  h5 {
+    font-weight: 300;
+  }
+
+  .text-icon {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+  }
+
+  .underlined {
+    text-decoration: underline;
+  }
+
+  .close-icon {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+  }
+
+  .card-about {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px 0;
+  }
+}
