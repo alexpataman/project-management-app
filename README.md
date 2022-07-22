@@ -1,4 +1,5 @@
-# Project Management App ()
+# Project Management App
+[RS School](https://rs.school) final project, React Course
 
 ## 1. Task 
 https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/final-task-project-management-app.md
